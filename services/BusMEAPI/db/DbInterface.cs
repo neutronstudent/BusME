@@ -1,15 +1,20 @@
+
+
 namespace BusMEAPI
 {
     public abstract class DbInterface
     {
-        public abstract User GetUser(int id);
 
-        public abstract User GetUser(string username);
+        public abstract Task<User> GetUser(int id);
 
-        public abstract int InsertUser(User user);
+        public abstract Task<User> GetUser(string username);
 
-        public abstract int DeleteUser(int id);
+        public abstract Task<int> InsertUser(User user);
 
-        public abstract int DeleteUser(string username);
+        public abstract Task<int> DeleteUser(int id);
+
+        public abstract Task<int> DeleteUser(string username);
+
+        public abstract Task<int> UpdateUser(User user);
     }
 }

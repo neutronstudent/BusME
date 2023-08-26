@@ -5,9 +5,9 @@ namespace BusMEAPI
     public class User
     {
 
-        public int ID;
+        public int Id;
         //user type enumerator 
-        public static enum UserType
+        public enum UserType
         {
             User = 0,
             Admin = 1,
@@ -15,23 +15,34 @@ namespace BusMEAPI
 
 
         //define user varaibles
-        public String? name;
-        public String  username = "";
-        public String? email;
-        public String? phone;
+        public String Name;
+        public String Username;
+        public String Email;
+        public String Phone;
 
         //type of user
-        public UserType userType;
+        public UserType Type;
 
 
         //define generic user constructor
-        public User(int ID, String username, String? name, String? email, String? phone)
+        public User(int ID, String username, String name, String email, String phone, int Type)
         {
-            this.ID = ID;
-            this.username = username;
-            this.name = name;
-            this.email = email;
-            this.phone = phone;
+            this.Id = ID;
+            this.Username = username;
+            this.Name = name;
+            this.Email = email;
+            this.Phone = phone;
+            this.Type = (UserType)Type;
+        }
+
+        public User(int ID, String username, String name, String email, String phone, UserType Type)
+        {
+            this.Id = ID;
+            this.Username = username;
+            this.Name = name;
+            this.Email = email;
+            this.Phone = phone;
+            this.Type = Type;
         }
     }
 }

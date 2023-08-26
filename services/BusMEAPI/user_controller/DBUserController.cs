@@ -6,12 +6,13 @@ namespace BusMEAPI
     {
         private DbInterface db;
         private IAuthenticationService auth;
-        
+
         public DBUserController(DbInterface db, IAuthenticationService auth)
         {
             this.db = db;
             this.auth = auth;
         }
+        
 
 
         public override int CreateUser(User user)
