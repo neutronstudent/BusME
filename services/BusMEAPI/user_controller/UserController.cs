@@ -14,5 +14,7 @@ namespace BusMEAPI
         
         public abstract Task<int> DeleteUser(int id);
 
+        public abstract Task<List<User>> SearchUser(string username_part);
+
     }
 }

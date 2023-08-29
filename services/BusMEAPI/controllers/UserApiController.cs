@@ -26,6 +26,7 @@ namespace BusMEAPI
                 else
                     return StatusCode(201);
         }
+
         /*
         [HttpGet]
         [Route("{id:id}")]
@@ -58,6 +59,16 @@ namespace BusMEAPI
                 return new NotFoundResult();
             
             return new JsonResult(user);
+        }
+
+        [HttpGet]
+        [Route("search")]
+        public async Task<ActionResult<List<User>>> SearchUser(string query)
+        {
+            if (!(query.Length > 0))
+                return StatusCode(404);
+            
+            return new JsonResult(await _userMang.SearchUser(query));
         }
 
 

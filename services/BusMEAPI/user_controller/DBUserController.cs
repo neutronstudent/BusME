@@ -63,6 +63,13 @@ namespace BusMEAPI
 
         }
 
+        public override async Task<List<User>> SearchUser(string username_part)
+        {
+            var query = from u in _context.Users where u.Name.Contains(username_part) select u;
+
+            //query async
+            return await query.ToListAsync();
+        }
 
         public async override Task<int> UpdateUser(User user)
         {
