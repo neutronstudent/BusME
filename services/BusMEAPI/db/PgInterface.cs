@@ -6,38 +6,16 @@ namespace BusMEAPI
     public class PgInterface : DbInterface
     {
 
+        private IConfiguration _config;
         //private user class for query responses, can be translated into users
-        private class UserQueryRes
-        {
-            public int Id;
-            public string Username;
-            public string PName;
-            public int UserType;
-            public string Email;
-            public string Phone;
-
-            public UserQueryRes(int Id, string Username, string PName, int UserType, string Email, string Phone)
-            {
-                this.Id = Id;
-                this.Username = Username;
-                this.PName = PName;
-                this.UserType = UserType;
-                this.Email = Email;
-                this.Phone = Phone;
-            }
-
-            public User GetUserObject()
-            {
-                return new User(Id, Username, PName, Email, Phone, UserType);
-            }
-        }
 
         private NpgsqlConnection _connection;
 
         //takes in a connection and opens it with the Npgsql server
-        public PgInterface(string conString)
+        public PgInterface(IConfiguration configuration)
         {
-            this._connection = new NpgsqlConnection(conString);
+            _config = configuration;
+            this._connection = new NpgsqlConnection(_config.GetConnectionString("PosgresConnection"));
 
         }
 
@@ -58,16 +36,6 @@ namespace BusMEAPI
 
         }
 
-        public override async Task<int> DeleteUser(string username)
-        {
-            //await on query and delete user using asyncronius methods 
-            var parameters = new {TargerUser = username};
-            String sql = "DELETE FROM users WHERE username = @TargerUser";
-            
-            //response 
-            return await _connection.ExecuteAsync(sql, parameters);
-        }
-
         async public override Task<User> GetUser(int id)
         {
             //create new object with parameter infomation
@@ -76,7 +44,7 @@ namespace BusMEAPI
             string sql = "SELECT * FROM users WHERE Id=@TargetId";
             
             //execute async (non blocking query )
-            return (await _connection.QueryAsync<UserQueryRes>(sql, parameters)).First().GetUserObject();
+            return (await _connection.QueryAsync<User>(sql, parameters)).First();
         }
 
         //same as above but with username
@@ -86,7 +54,7 @@ namespace BusMEAPI
             string sql = "SELECT * FROM users WHERE Id=@TargetUsername";
             
 
-            return (await _connection.QueryAsync<UserQueryRes>(sql, parameters)).First().GetUserObject();
+            return (await _connection.QueryAsync<User>(sql, parameters)).First();
         }
 
         async public override Task<int> InsertUser(User user)

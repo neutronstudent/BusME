@@ -5,12 +5,10 @@ namespace BusMEAPI
     public class DBUserController : UserController
     {
         private DbInterface db;
-        private IAuthenticationService auth;
 
-        public DBUserController(DbInterface db, IAuthenticationService auth)
+        public DBUserController(DbInterface db)
         {
             this.db = db;
-            this.auth = auth;
         }
         
 
@@ -19,6 +17,22 @@ namespace BusMEAPI
         {
             throw new NotImplementedException();
         }
+
+        public override int DeleteUser(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override User GetUser(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override User GetUser(string username)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public override int UpdateUser(User user)
         {
