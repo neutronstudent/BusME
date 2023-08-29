@@ -26,24 +26,33 @@ namespace BusMEAPI
                 else
                     return StatusCode(201);
         }
-
+        /*
         [HttpGet]
-        [Route("{id}")]
+        [Route("{id:id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
-            User user = await _userMang.GetUser(id);
+            User? user = await _userMang.GetUser(id);
             
             if (user == null)
                 return new NotFoundResult();
             
             return new JsonResult(user);
         }
+        */
 
         [HttpGet]
-        [Route("{username}")]
-        public async Task<ActionResult<User>> GetUser(string username)
+        public async Task<ActionResult<User>> GetUser(string? username, int? id)
         {
-            User user = await _userMang.GetUser(username);
+            User? user = null;
+            if (id != null)
+            {
+                user = await _userMang.GetUser(id.Value); 
+            }
+            else if (username != null)
+            {
+                user = await _userMang.GetUser(username); 
+            }
+            
             
             if (user == null)
                 return new NotFoundResult();

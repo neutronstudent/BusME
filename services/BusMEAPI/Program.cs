@@ -12,6 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<BusMEContext>();
+builder.Services.AddScoped<UserController, DBUserController>();
 
 var app = builder.Build();
 
