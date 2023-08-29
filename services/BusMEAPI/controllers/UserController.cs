@@ -16,10 +16,10 @@ namespace BusMEAPI
 
         [HttpPost]
 
-        public ActionResult AddUser(User user)
+        public async Task<ActionResult> AddUser(User user)
         {
                 //attempt to create user with the above infomation
-               int status = _userMang.CreateUser(user);
+               int status = await _userMang.CreateUser(user);
 
                if (status != 0)
                     return StatusCode(304);
@@ -29,9 +29,9 @@ namespace BusMEAPI
 
         [HttpGet]
         [Route("{id}")]
-        public ActionResult<User> GetUser(int id)
+        public async Task<ActionResult<User>> GetUser(int id)
         {
-            User user = _userMang.GetUser(id);
+            User user = await _userMang.GetUser(id);
             
             if (user == null)
                 return new NotFoundResult();
@@ -41,9 +41,9 @@ namespace BusMEAPI
 
         [HttpGet]
         [Route("{username}")]
-        public ActionResult<User> GetUser(string username)
+        public async Task<ActionResult<User>> GetUser(string username)
         {
-            User user = _userMang.GetUser(username);
+            User user = await _userMang.GetUser(username);
             
             if (user == null)
                 return new NotFoundResult();
@@ -51,7 +51,7 @@ namespace BusMEAPI
             return new JsonResult(user);
         }
 
-        
+
 
     } 
 }

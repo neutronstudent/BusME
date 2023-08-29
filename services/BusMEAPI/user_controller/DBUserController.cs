@@ -4,39 +4,41 @@ namespace BusMEAPI
 {
     public class DBUserController : UserController
     {
-        private DbInterface db;
+        private DbInterface _db;
 
         public DBUserController(DbInterface db)
         {
-            this.db = db;
+            this._db = db;
         }
         
 
 
-        public override int CreateUser(User user)
+        public async override Task<int> CreateUser(User user)
         {
+            return await _db.InsertUser(user);
             throw new NotImplementedException();
         }
 
-        public override int DeleteUser(int id)
+        public async override Task<int> DeleteUser(int id)
         {
+            return await _db.DeleteUser(id);
+        }
+
+        public async override Task<User> GetUser(int id)
+        {
+            return await _db.GetUser(id);
             throw new NotImplementedException();
         }
 
-        public override User GetUser(int id)
+        public async override Task<User> GetUser(string username)
         {
-            throw new NotImplementedException();
-        }
-
-        public override User GetUser(string username)
-        {
-            throw new NotImplementedException();
+            return await _db.GetUser(username);
         }
 
 
-        public override int UpdateUser(User user)
+        public async override Task<int> UpdateUser(User user)
         {
-            throw new NotImplementedException();
+            return await _db.UpdateUser(user);
         }
     }
 }

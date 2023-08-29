@@ -1,3 +1,4 @@
+using System.Data;
 using Dapper;
 using Npgsql;
 
@@ -9,21 +10,16 @@ namespace BusMEAPI
         private IConfiguration _config;
         //private user class for query responses, can be translated into users
 
-        private NpgsqlConnection _connection;
+        private readonly IDbConnection _connection;
 
         //takes in a connection and opens it with the Npgsql server
-        public PgInterface(IConfiguration configuration)
+        public PgInterface(IDbConnection connection, IConfiguration configuration)
         {
             _config = configuration;
-            this._connection = new NpgsqlConnection(_config.GetConnectionString("PosgresConnection"));
+            this._connection = connection;
 
         }
 
-        //opens a connection
-        public void Open()
-        {
-            _connection.Open();
-        }
 
         public override async Task<int> DeleteUser(int id)
         {
