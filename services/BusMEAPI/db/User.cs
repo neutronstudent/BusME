@@ -27,5 +27,12 @@ namespace BusMEAPI
         //type of user
         public UserType Type { get; set; }
 
+
+        //Password and salt sequences
+        [JsonIgnore]
+        public String Hash {get; set;}
+        
+        [JsonIgnore]
+        public String Salt {get; set;}
     }
 }

@@ -4,6 +4,7 @@ namespace BusMEAPI.Database
 {
     public class BusMEContext : DbContext
     {
+        
         protected readonly IConfiguration Configuration;
 
         public BusMEContext(IConfiguration configuration)

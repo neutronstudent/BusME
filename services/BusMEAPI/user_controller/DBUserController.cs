@@ -7,17 +7,22 @@ namespace BusMEAPI
 {
     public class DBUserController : UserController
     {
-        private BusMEContext _context;
+        private readonly BusMEContext _context;
+        private readonly BaseAuthService _auth;
 
-        public DBUserController(BusMEContext context)
+        public DBUserController(BusMEContext context, BaseAuthService auth)
         {
             this._context = context;
+            _auth = auth;
         }
         
 
 
-        public async override Task<int> CreateUser(User user)
+        public async override Task<int> CreateUser(User user, string password)
         {
+            //generate hashed user password
+            _auth.GeneratePasswordInfo(user, password);
+            
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
 

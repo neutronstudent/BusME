@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BusMEAPI
 {
@@ -15,11 +17,11 @@ namespace BusMEAPI
         }
 
         [HttpPost]
-
-        public async Task<ActionResult> AddUser(User user)
+        [Authorize(policy:"UserOnly")]
+        public async Task<ActionResult> AddUser(User user, string password)
         {
                 //attempt to create user with the above infomation
-               int status = await _userMang.CreateUser(user);
+               int status = await _userMang.CreateUser(user, password);
 
                if (status != 0)
                     return StatusCode(304);
@@ -42,6 +44,7 @@ namespace BusMEAPI
         */
 
         [HttpGet]
+        [Authorize(policy:"UserOnly")]
         public async Task<ActionResult<User>> GetUser(string? username, int? id)
         {
             User? user = null;
@@ -63,6 +66,7 @@ namespace BusMEAPI
 
         [HttpGet]
         [Route("search")]
+        [Authorize(policy:"AdminOnly")]
         public async Task<ActionResult<List<User>>> SearchUser(string query)
         {
             if (!(query.Length > 0))
