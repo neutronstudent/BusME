@@ -30,9 +30,9 @@ namespace BusMEAPI
 
         //Password and salt sequences
         [JsonIgnore]
-        public String Hash {get; set;}
+        public String Hash {get; set;} = "";
         
         [JsonIgnore]
-        public String Salt {get; set;}
+        public String Salt {get; set;} = "";
     }
 }

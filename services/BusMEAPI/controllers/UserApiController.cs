@@ -2,14 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 
-namespace BusMEAPI
+namespace BusMEAPI.Controllers
 {
     [ApiController]
-    [Route("users")]
+    [Route("api/users")]
     public class UserApiController : ControllerBase 
     {
         private UserController _userMang;
-
 
         public UserApiController(UserController userController)
         {
@@ -17,7 +16,7 @@ namespace BusMEAPI
         }
 
         [HttpPost]
-        [Authorize(policy:"UserOnly")]
+        [AllowAnonymous]
         public async Task<ActionResult> AddUser(User user, string password)
         {
                 //attempt to create user with the above infomation
@@ -29,19 +28,8 @@ namespace BusMEAPI
                     return StatusCode(201);
         }
 
-        /*
-        [HttpGet]
-        [Route("{id:id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
-        {
-            User? user = await _userMang.GetUser(id);
-            
-            if (user == null)
-                return new NotFoundResult();
-            
-            return new JsonResult(user);
-        }
-        */
+        
+        
 
         [HttpGet]
         [Authorize(policy:"UserOnly")]
@@ -73,9 +61,6 @@ namespace BusMEAPI
                 return StatusCode(404);
             
             return new JsonResult(await _userMang.SearchUser(query));
-        }
-
-
-
+        }       
     } 
 }

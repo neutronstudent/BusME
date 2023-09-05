@@ -4,25 +4,23 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
-namespace BusMEAPI
+namespace BusMEAPI.Controllers
 {
     [ApiController]
-    [Route("auth")]
-    class AuthController : ControllerBase
+    [Route("api/auth")]
+    public class AuthController : ControllerBase 
     {
 
-        private readonly BusMEContext _context;
-        private readonly BaseAuthService _auth; 
-        public AuthController(BusMEContext dbContext, BaseAuthService service)
+        private BaseAuthService _auth;
+
+        public AuthController(BaseAuthService auth)
         {
-            _context = dbContext;
-            _auth = service;
+            _auth = auth;
         }
-
-
-        [AllowAnonymous]
+        
         [HttpGet]
         [Route("login")]
+        [AllowAnonymous]
         public async Task<ActionResult> Login(Login login)
         {
             if (login == null)
@@ -35,5 +33,5 @@ namespace BusMEAPI
 
             return new JsonResult(token);
         }
-    }
+    } 
 }
