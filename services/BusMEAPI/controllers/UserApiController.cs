@@ -15,12 +15,18 @@ namespace BusMEAPI.Controllers
             _userMang = userController;
         }
 
+        public class UserCreateRequest
+        {
+            public User user {get; set;}
+            public string password {get; set;}
+        }
+        
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> AddUser(User user, string password)
+        public async Task<ActionResult> AddUser(UserCreateRequest user)
         {
                 //attempt to create user with the above infomation
-               int status = await _userMang.CreateUser(user, password);
+               int status = await _userMang.CreateUser(user.user, user.password);
 
                if (status != 0)
                     return StatusCode(304);
@@ -55,7 +61,7 @@ namespace BusMEAPI.Controllers
         [HttpGet]
         [Route("search")]
         [Authorize(policy:"AdminOnly")]
-        public async Task<ActionResult<List<User>>> SearchUser(string query)
+        public async Task<ActionResult> SearchUser(string query)
         {
             if (!(query.Length > 0))
                 return StatusCode(404);

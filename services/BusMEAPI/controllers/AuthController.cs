@@ -1,9 +1,10 @@
+using System.IdentityModel.Tokens.Jwt;
 using BusMEAPI.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-
 namespace BusMEAPI.Controllers
 {
     [ApiController]
@@ -21,7 +22,7 @@ namespace BusMEAPI.Controllers
         [HttpGet]
         [Route("login")]
         [AllowAnonymous]
-        public async Task<ActionResult> Login(Login login)
+        public async Task<ActionResult<String>> Login(Login login)
         {
             if (login == null)
                 return new StatusCodeResult(403);
@@ -30,8 +31,8 @@ namespace BusMEAPI.Controllers
 
             if (token == null)
                 return new ForbidResult();
-
-            return new JsonResult(token);
+            
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     } 
 }

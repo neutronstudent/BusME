@@ -16,10 +16,15 @@ namespace BusMEAPI
         private readonly Encoding encoding = Encoding.UTF8;
         private readonly BusMEContext _context;
         private readonly IConfiguration _config;
+
+        private readonly string _audience;
+        private readonly string _issuer;
         public JwtAuthService(BusMEContext dbContext, IConfiguration configuration)
         {
             _context = dbContext;
             _config = configuration;
+            _audience = configuration["Jwt:Audience"];
+            _issuer = configuration["Jwt:Issuer"];
         }
 
         public override async Task<SecurityToken?> LoginUser(Login login)
@@ -33,21 +38,24 @@ namespace BusMEAPI
                 return null;
             
             //check hash with salt
-            byte[] hashed = hash(login.Password, user.Salt);
+            string hashed = encoding.GetString(hash(login.Password, user.Salt));
+
+            Console.WriteLine(user.Hash);
+            Console.WriteLine(hashed);
             
             //ensure that both are the same
-            if (!hashed.SequenceEqual(Encoding.UTF8.GetBytes(user.Hash)))
+            if (!encoding.GetBytes(hashed).SequenceEqual(encoding.GetBytes(user.Hash)))
                 return null;
             
             //since both are the same then generate auth token
-            
 
             //add secity claims depeding on user type 
-            List<Claim> claims = new List<Claim>();
-
-            //add claim to current user to self 
-            claims.Add(new Claim("id", user.Id.ToString()));
-            claims.Add(new Claim("user", user.Id.ToString()));
+            List<Claim> claims = new List<Claim>
+            {
+                //add claim to current user to self 
+                new Claim("id", user.Id.ToString()),
+                new Claim("user", user.Id.ToString())
+            };
             
             //add claim to admin users 
             if (user.Type == User.UserType.Admin)
@@ -65,8 +73,9 @@ namespace BusMEAPI
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddDays(7),
-                SigningCredentials = creds
-                
+                SigningCredentials = creds,
+                Audience = _audience,
+                Issuer = _issuer
             };
 
             SecurityToken token = new JwtSecurityTokenHandler().CreateToken(descriptor);
@@ -89,6 +98,8 @@ namespace BusMEAPI
             byte[] hashed = hash(password, user.Salt);
 
             user.Hash = encoding.GetString(hashed);
+            
+            Console.WriteLine(user.Hash);
         }
 
     }

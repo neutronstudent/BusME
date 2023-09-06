@@ -1,6 +1,7 @@
 using BusMEAPI.Database;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 
 namespace BusMEAPI
@@ -20,8 +21,16 @@ namespace BusMEAPI
 
         public async override Task<int> CreateUser(User user, string password)
         {
+
             //generate hashed user password
             _auth.GeneratePasswordInfo(user, password);
+            
+            var query =  from u in _context.Users where u.Username == user.Username select u;
+
+            if (!query.IsNullOrEmpty())
+            {
+                return 1;
+            }
             
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
