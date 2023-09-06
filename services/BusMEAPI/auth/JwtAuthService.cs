@@ -40,8 +40,6 @@ namespace BusMEAPI
             //check hash with salt
             string hashed = encoding.GetString(hash(login.Password, user.Salt));
 
-            Console.WriteLine(user.Hash);
-            Console.WriteLine(hashed);
             
             //ensure that both are the same
             if (!encoding.GetBytes(hashed).SequenceEqual(encoding.GetBytes(user.Hash)))
@@ -99,7 +97,6 @@ namespace BusMEAPI
 
             user.Hash = encoding.GetString(hashed);
             
-            Console.WriteLine(user.Hash);
         }
 
     }
