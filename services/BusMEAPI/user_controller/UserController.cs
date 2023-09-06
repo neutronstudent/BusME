@@ -1,6 +1,6 @@
 namespace BusMEAPI
 {
-    public abstract class UserController
+    public abstract class BaseUserService
     {
         //create target user 
         public abstract Task<int> CreateUser(User user, string password);

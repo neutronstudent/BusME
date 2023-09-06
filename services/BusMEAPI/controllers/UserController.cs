@@ -6,11 +6,11 @@ namespace BusMEAPI.Controllers
 {
     [ApiController]
     [Route("api/users")]
-    public class UserApiController : ControllerBase 
+    public class UserController : ControllerBase 
     {
-        private UserController _userMang;
+        private BaseUserService _userMang;
 
-        public UserApiController(UserController userController)
+        public UserController(BaseUserService userController)
         {
             _userMang = userController;
         }

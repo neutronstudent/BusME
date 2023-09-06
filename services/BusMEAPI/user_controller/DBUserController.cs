@@ -6,12 +6,12 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace BusMEAPI
 {
-    public class DBUserController : UserController
+    public class DbUserService : BaseUserService
     {
         private readonly BusMEContext _context;
         private readonly BaseAuthService _auth;
 
-        public DBUserController(BusMEContext context, BaseAuthService auth)
+        public DbUserService(BusMEContext context, BaseAuthService auth)
         {
             this._context = context;
             _auth = auth;

@@ -18,7 +18,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<BusMEContext>();
 
-builder.Services.AddScoped<UserController, DBUserController>();
+builder.Services.AddScoped<BaseUserService, DbUserService>();
 builder.Services.AddScoped<BaseAuthService, JwtAuthService>();
 
 builder.Services.AddAuthentication(options =>
