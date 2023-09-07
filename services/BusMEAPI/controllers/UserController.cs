@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace BusMEAPI.Controllers
 {
@@ -9,10 +10,11 @@ namespace BusMEAPI.Controllers
     public class UserController : ControllerBase 
     {
         private BaseUserService _userMang;
-
-        public UserController(BaseUserService userController)
+        private IHttpContextAccessor _httpContextAccessor;
+        public UserController(BaseUserService userController, IHttpContextAccessor httpContextAccessor)
         {
             _userMang = userController;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public class UserCreateRequest
@@ -52,18 +54,24 @@ namespace BusMEAPI.Controllers
         }
         
 
+        //get user 
         [HttpGet]
         [Authorize(policy:"UserOnly")]
-        public async Task<ActionResult<User>> GetUser(string? username, int? id)
+        public async Task<ActionResult<User>> GetUser(int? id)
         {
+            //run check 
+
+
             User? user = null;
             if (id != null)
             {
+                HttpContext context = _httpContextAccessor.HttpContext;
+                if  (!context.User.FindFirstValue(ClaimTypes.Actor).Equals(id.ToString()) && !context.User.FindFirstValue(ClaimTypes.Role).Equals("admin"))
+                {
+                    return new ForbidResult();
+                }
+                
                 user = await _userMang.GetUser(id.Value); 
-            }
-            else if (username != null)
-            {
-                user = await _userMang.GetUser(username); 
             }
             
             
@@ -73,6 +81,8 @@ namespace BusMEAPI.Controllers
             return new JsonResult(user);
         }
 
+
+        //search, only allow admin
         [HttpGet]
         [Route("search")]
         [Authorize(policy:"AdminOnly")]
@@ -87,6 +97,7 @@ namespace BusMEAPI.Controllers
         [Authorize(policy:"UserOnly")]
 
 
+        //only allow admin to delete users
         [HttpDelete]
         [Authorize(policy:"AdminOnly")]
         public async Task<ActionResult<User>> DeleteUser(int? id)
@@ -107,6 +118,30 @@ namespace BusMEAPI.Controllers
             
             return new NotFoundResult();
         }  
+
+        //has to be user minimum, if you are admin you can change other users, else can only change yourself
+        [HttpPut]
+        [Authorize(policy:"UserOnly")]
+        public async Task<ActionResult> UpdateUser(User user)
+        {
+            //do claims checking
+            HttpContext context = _httpContextAccessor.HttpContext;
+            if  (!context.User.FindFirstValue(ClaimTypes.Actor).Equals(user.Id.ToString()) && !context.User.FindFirstValue(ClaimTypes.Role).Equals("admin"))
+            {
+                return new ForbidResult();
+            }
+
+            if (await _userMang.UpdateUser(user) != 0)
+            {
+                return new NotFoundResult();
+            }
+            else
+            {
+                return new OkResult();
+            }
+
+            
+        }
 
 
     } 

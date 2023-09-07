@@ -48,18 +48,20 @@ namespace BusMEAPI
             //since both are the same then generate auth token
 
             //add secity claims depeding on user type 
-            List<Claim> claims = new List<Claim>
-            {
-                //add claim to current user to self 
-                new Claim("id", user.Id.ToString()),
-                new Claim("user", user.Id.ToString())
-            };
+            List<Claim> claims = new List<Claim>();
+
+            claims.Add(new Claim(ClaimTypes.Actor, user.Id.ToString()));
             
             //add claim to admin users 
             if (user.Type == User.UserType.Admin)
             {
-                claims.Add(new Claim("administrator", user.Id.ToString()));
+                claims.Add(new Claim(ClaimTypes.Role, "user"));
             }
+            else
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "admin"));
+            }
+            
             
 
             //load requiered cryto stuff 

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using BusMEAPI;
 using BusMEAPI.Database;
@@ -17,7 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<BusMEContext>();
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<BaseUserService, DbUserService>();
 builder.Services.AddScoped<BaseAuthService, JwtAuthService>();
 
@@ -44,8 +45,8 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization(o => 
 {
-    o.AddPolicy("AdminOnly", policy => policy.RequireClaim("administrator"));
-    o.AddPolicy("UserOnly", policy => policy.RequireClaim("user"));
+    o.AddPolicy("AdminOnly", policy => policy.RequireClaim(ClaimTypes.Role, new string[] {"admin"}));
+    o.AddPolicy("UserOnly", policy => policy.RequireClaim(ClaimTypes.Role, new string[] {"user", "admin"}));
 }
 );
 
