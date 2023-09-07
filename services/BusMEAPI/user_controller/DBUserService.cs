@@ -10,7 +10,7 @@ namespace BusMEAPI
     {
         private readonly BusMEContext _context;
         private readonly BaseAuthService _auth;
-
+        private readonly int pageSize = 50;
         public DbUserService(BusMEContext context, BaseAuthService auth)
         {
             this._context = context;
@@ -77,12 +77,12 @@ namespace BusMEAPI
 
         }
 
-        public override async Task<List<User>> SearchUser(string username_part)
+        public override async Task<List<User>> SearchUser(string username_part, int page)
         {
             var query = from u in _context.Users where u.Name.Contains(username_part) select u;
 
             //query async
-            return await query.ToListAsync();
+            return  await query.Skip(pageSize * page).Take(pageSize).ToListAsync();
         }
 
         public async override Task<int> UpdateUser(User user)

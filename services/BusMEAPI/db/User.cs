@@ -25,7 +25,7 @@ namespace BusMEAPI
         public String Phone { get; set; }
 
         //type of user
-        public UserType Type { get; set; }
+        public UserType? Type { get; set; } = 0;
 
 
         //Password and salt sequences
