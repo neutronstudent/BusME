@@ -57,6 +57,7 @@ namespace BusMEAPI.Controllers
         //get user 
         [HttpGet]
         [Authorize(policy:"UserOnly")]
+        [Route("{id}")]
         public async Task<ActionResult<User>> GetUser(int? id)
         {
             //run check 
@@ -84,7 +85,6 @@ namespace BusMEAPI.Controllers
 
         //search, only allow admin
         [HttpGet]
-        [Route("search")]
         [Authorize(policy:"AdminOnly")]
         public async Task<ActionResult> SearchUser(string query, int? page)
         {
@@ -93,13 +93,12 @@ namespace BusMEAPI.Controllers
             
             return new JsonResult(await _userMang.SearchUser(query, page.HasValue ? page.Value : 0));
         }    
-                [HttpGet]
-        [Authorize(policy:"UserOnly")]
 
 
         //only allow admin to delete users
         [HttpDelete]
         [Authorize(policy:"AdminOnly")]
+        [Route("{id}")]
         public async Task<ActionResult<User>> DeleteUser(int? id)
         {
             User? user = null;
@@ -122,11 +121,15 @@ namespace BusMEAPI.Controllers
         //has to be user minimum, if you are admin you can change other users, else can only change yourself
         [HttpPut]
         [Authorize(policy:"UserOnly")]
-        public async Task<ActionResult> UpdateUser(User user)
+        [Route("{id}")]
+        public async Task<ActionResult> UpdateUser(int id, User user)
         {
+            //overide id
+            user.Id = id;
+
             //do claims checking
             HttpContext context = _httpContextAccessor.HttpContext;
-            if  (!context.User.FindFirstValue(ClaimTypes.Actor).Equals(user.Id.ToString()) && !context.User.FindFirstValue(ClaimTypes.Role).Equals("admin"))
+            if  (!context.User.FindFirstValue(ClaimTypes.Actor).Equals(id.ToString()) && !context.User.FindFirstValue(ClaimTypes.Role).Equals("admin"))
             {
                 return new ForbidResult();
             }
