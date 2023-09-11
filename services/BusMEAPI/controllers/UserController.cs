@@ -42,7 +42,7 @@ namespace BusMEAPI.Controllers
         public async Task<ActionResult> RegisterUser(UserCreateRequest user)
         {
                 //overidde user type field to ensue no hacking 
-                user.UserInfo.Type = 0;
+                user.UserInfo.Type = BusMEAPI.User.UserType.User;
 
                 //attempt to create user with the above infomation
                int status = await _userMang.CreateUser(user.UserInfo, user.Password);

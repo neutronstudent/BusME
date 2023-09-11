@@ -55,11 +55,11 @@ namespace BusMEAPI
             //add claim to admin users 
             if (user.Type == User.UserType.Admin)
             {
-                claims.Add(new Claim(ClaimTypes.Role, "user"));
+                claims.Add(new Claim(ClaimTypes.Role, "admin"));
             }
             else
             {
-                claims.Add(new Claim(ClaimTypes.Role, "admin"));
+                claims.Add(new Claim(ClaimTypes.Role, "user"));
             }
             
             
@@ -72,7 +72,7 @@ namespace BusMEAPI
             SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(7),
+                Expires = DateTime.Now.AddYears(1),
                 SigningCredentials = creds,
                 Audience = _audience,
                 Issuer = _issuer
