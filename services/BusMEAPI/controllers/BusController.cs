@@ -9,9 +9,11 @@ namespace BusMEAPI
     public class BusController : ControllerBase 
     {
         private BusMEContext _db;
-        public BusController(BusMEContext dbContext)
+        private BaseAPIIntergration _api;
+        public BusController(BusMEContext dbContext, BaseAPIIntergration busApi)
         {
             _db = dbContext;
+            _api = busApi;
         }
 
         
@@ -39,13 +41,41 @@ namespace BusMEAPI
             BusRoute? result = await query.SingleOrDefaultAsync();
 
             //check if query null 
+            if (result == null)
+            {
+                return new NotFoundResult();
+            }
+            
+            //else return route 
+            return new JsonResult(result);
+        }
+
+        [HttpGet]
+        [Route("{route}/trips")]
+
+        public async Task<ActionResult> GetLive(int route)
+        {
+            //send route info to user
+            var query = from r in _db.BusRoutes where r.Id.Equals(route) select r;
+
+            //execute query 
+            BusRoute? result = await query.SingleOrDefaultAsync();
+
+            //check if query null 
 
             if (result == null)
             {
                 return new NotFoundResult();
             }
+            
+            //check if trips have rencently updatted if not force update
+            if (result.LastUpdated.AddSeconds(30) < DateTime.UtcNow)
+            {
+                _api.UpdateTrips(result);
+            }
 
-            return new JsonResult(result);
+            return new JsonResult(result.Trips);
         }
+        
     } 
 }

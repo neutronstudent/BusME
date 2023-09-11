@@ -8,10 +8,15 @@ public class BusTrip
     public ICollection<BusStop> Stops { get; } = new List<BusStop>();
 
     public int TripHeadSign {get; set;}
-    public string AtTripId {get; set;}
+    public string ApiTripID {get; set;}
     public string Service {get; set;}
     
     public int Direction {get; set;}
     public int Order {get; set;}
+
+    public float Lat {get; set;}
+    public float Long {get; set;}
+
+     
 
 }
