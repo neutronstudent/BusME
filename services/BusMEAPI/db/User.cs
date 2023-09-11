@@ -27,5 +27,8 @@ namespace BusMEAPI
         //type of user
         public UserType Type { get; set; }
 
+        //routeid with no instant connection referenace
+        public int RouteId {get; set;}
+
     }
 }
