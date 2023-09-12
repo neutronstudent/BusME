@@ -71,9 +71,17 @@ namespace BusMEAPI
             //check if trips have rencently updatted if not force update
             if (result.LastUpdated.AddSeconds(30) < DateTime.UtcNow)
             {
-                _api.UpdateTrips(result);
-            }
+                await _api.UpdateTrips(result);
+            
 
+                result = await query.SingleOrDefaultAsync();
+
+                if (result == null)
+                {
+                    return new NotFoundResult();
+                }
+            }
+            
             return new JsonResult(result.Trips);
         }
         

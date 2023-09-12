@@ -10,18 +10,113 @@ namespace BusMEAPI
 
         public AtAPIIntergration(BusMEContext dbContext, IConfiguration configuration)
         {
-            _apiKey = configuration["api:key"];
+            _apiKey = configuration["api:key"]!;
             _dbContext = dbContext;
 
         }
 
         //GET https://api.at.govt.nz/gtfs/v3/routes/{id}/trips
         //GET https://api.at.govt.nz/gtfs/v3/trips/{id}/stops
+
+        //assume that route is a ef tracked object
         public override async Task<int> UpdateTrips(BusRoute route)
         {
+            //get ef tracked object 
+            var query = from r in _dbContext.BusRoutes where route.Id == r.Id select r;
+
+            BusRoute? busRoute = await query.SingleOrDefaultAsync();
+
+            if (busRoute == null)
+            {
+                return 1;
+            }
+
+            busRoute.Trips.Clear();
+
+            //get trips based upon route ID 
+            MultipleEntityResponse<Trip>? trips = await MakeRequest<MultipleEntityResponse<Trip>>(String.Format("https://api.at.govt.nz/gtfs/v3/routes/{0}/trips", busRoute.RouteId));
+
+            if (trips == null || trips.data == null)
+            {
+                return 1;
+            }
+
+            //convert trips to busme data style
+            foreach (ResponseData<Trip> atTrip in trips.data)
+            {
+                if (atTrip.attributes == null)
+                {
+                    continue;
+                }
+
+                var busQuery = from t in busRoute.Trips where t.ApiTripID == atTrip.attributes.trip_id select t;
+                //select bustrip if not already in collection 
+                BusTrip? busTrip = busQuery.FirstOrDefault();
+                
+
+                if (busTrip == null) {
+                    busTrip = new BusTrip();
+                    _dbContext.BusTrips.Add(busTrip);
+                } 
 
 
-            throw new NotImplementedException();
+
+                busTrip.ApiTripID = atTrip.attributes.trip_id;
+                busTrip.BusRoute = busRoute;
+                busTrip.BusRouteId = busRoute.Id;
+                busTrip.Direction = atTrip.attributes.direction_id;
+                busTrip.Service = atTrip.attributes.trip_short_name;
+
+                //query stops for trip 
+
+                string stopQuery = String.Format("https://api.at.govt.nz/gtfs/v3/trips/{0}/stops", busTrip.ApiTripID);
+                MultipleEntityResponse<Stop>? stops = await MakeRequest<MultipleEntityResponse<Stop>>(stopQuery);
+
+                if (stops == null || stops.data == null)
+                {
+                    continue;
+                }
+
+                //for each stop check if already in list if so update else skip 
+                foreach(ResponseData<Stop> atStop in stops.data)
+                {
+                    if (atStop.attributes == null)
+                    {
+                        continue;
+                    }
+
+                    var stopDbQuery = from s in _dbContext.BusStops where s.ApiId == atStop.attributes.stop_id select s;
+
+                    //select bustrip if not already in collection 
+                    BusStop? busStop = stopDbQuery.FirstOrDefault();
+
+                    if (busStop == null)
+                    {
+                        busStop = new BusStop();
+                        _dbContext.BusStops.Add(busStop);
+                    }
+
+                    //add bus stop to trip 
+                    if (!busStop.BusTrip.Contains(busTrip))
+                    {
+                        busStop.BusTrip.Add(busTrip);
+                    }
+                    
+                    if (!busTrip.Stops.Contains(busStop))
+                    {
+                        busTrip.Stops.Add(busStop);
+                    }
+                }
+
+                //add trip to route
+                if (!busRoute.Trips.Contains(busTrip))
+                {
+                    busRoute.Trips.Add(busTrip);
+                }
+            }
+            //for each trip update stops 
+            await _dbContext.SaveChangesAsync();
+            return 0;
         }
 
         //should be bound to a cron job 
@@ -111,6 +206,31 @@ namespace BusMEAPI
             public string? route_long_name {get; set;}
             public string? route_desc {get; set;}
             public string? route_type {get; set;}
+        }
+
+        private class Trip
+        {
+            public string route_id {get; set;}
+            public string trip_id {get; set;}
+            public string? trip_headsign {get; set;}
+            public string? trip_short_name {get; set;}
+            public int? direction_id {get; set;}
+            public int? wheelchair_accessible {get; set;}
+        }
+
+        private class Stop 
+        {
+            public float stop_lat {get; set;}
+
+            public float stop_long {get; set;}
+
+            public string? stop_code {get; set;}
+
+            public string? stop_id {get; set;}
+
+            public string? stop_name {get; set;}
+
+            public int? wheelchair_boarding {get; set;}
         }
 
         //ensure that 
