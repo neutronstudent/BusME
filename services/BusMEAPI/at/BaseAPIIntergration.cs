@@ -3,9 +3,9 @@ namespace BusMEAPI
     public abstract class BaseAPIIntergration
     {
 
-        public abstract void UpdateTrips(BusRoute route);
+        public abstract Task<int> UpdateTrips(BusRoute route);
 
-        public abstract void UpdateRoutes();
+        public abstract Task<int> UpdateRoutes();
         
     }
 }
