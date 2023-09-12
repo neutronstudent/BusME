@@ -1,7 +1,6 @@
 using BusMEAPI.Database;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 
 namespace BusMEAPI
@@ -25,9 +24,9 @@ namespace BusMEAPI
             //generate hashed user password
             _auth.GeneratePasswordInfo(user, password);
             
-            var query =  from u in _context.Users where u.Username == user.Username select u;
+            var query = from u in _context.Users where u.Username == user.Username select u;
 
-            if (!query.IsNullOrEmpty())
+            if (await query.FirstOrDefaultAsync() != null)
             {
                 return 1;
             }
