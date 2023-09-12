@@ -1,4 +1,5 @@
 using BusMEAPI.Database;
+using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 namespace BusMEAPI
 {
@@ -23,10 +24,14 @@ namespace BusMEAPI
             throw new NotImplementedException();
         }
 
+        //should be bound to a cron job 
         public override async Task<int> UpdateRoutes()
         {
             //get routes from at api 
             string api_route = "https://api.at.govt.nz/gtfs/v3/routes";
+
+            //wipe old routes trips and stops 
+
 
             MultipleEntityResponse<Route>? routes = await MakeRequest<MultipleEntityResponse<Route>>(api_route);
 
@@ -51,12 +56,23 @@ namespace BusMEAPI
                 busRoute.RouteShortName = at_route.attributes.route_short_name;
                 
                 //TODO write routes to database if not already exist, else update other values 
+                var query = from r in _dbContext.BusRoutes where r.RouteId == busRoute.RouteId select r;
 
+                BusRoute? existingRoute = await query.FirstOrDefaultAsync();
+                
+                if (existingRoute != null)
+                {
+                    existingRoute.RouteLongName = busRoute.RouteLongName;
+                    existingRoute.RouteShortName = busRoute.RouteShortName;
+                }
+                else
+                {
+                    _dbContext.BusRoutes.Add(busRoute);
+                }
                 
             }
 
-            
-
+            await _dbContext.SaveChangesAsync();
 
             //return 0
 
@@ -90,7 +106,7 @@ namespace BusMEAPI
 
         private class Route
         {
-            public string? route_id {get; set;}
+            public string route_id {get; set;}
             public string? route_short_name {get; set;}
             public string? route_long_name {get; set;}
             public string? route_desc {get; set;}
