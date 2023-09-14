@@ -3,6 +3,7 @@ using System;
 using BusMEAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BusMEAPI.Migrations
 {
     [DbContext(typeof(BusMEContext))]
-    partial class BusMEContextModelSnapshot : ModelSnapshot
+    [Migration("20230914035612_busstopfix")]
+    partial class busstopfix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,8 +168,8 @@ namespace BusMEAPI.Migrations
                     b.Property<string>("Service")
                         .HasColumnType("text");
 
-                    b.Property<string>("TripHeadSign")
-                        .HasColumnType("text");
+                    b.Property<int?>("TripHeadSign")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
