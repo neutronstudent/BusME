@@ -64,7 +64,7 @@ namespace BusMEAPI
                 busTrip.ApiTripID = atTrip.attributes.trip_id;
                 busTrip.Service= atTrip.attributes.service_id;
                 busTrip.TripHeadSign = atTrip.attributes.trip_headsign;
-                
+
                 busTrip.BusRoute = busRoute;
                 busTrip.BusRouteId = busRoute.Id;
                 busTrip.Direction = atTrip.attributes.direction_id;
@@ -102,7 +102,7 @@ namespace BusMEAPI
                     busStop.ApiId = atStop.attributes.stop_id;
                     busStop.StopName = atStop.attributes.stop_name;
                     busStop.Lat = atStop.attributes.stop_lat;
-                    busStop.Long = atStop.attributes.stop_long;
+                    busStop.Long = atStop.attributes.stop_lon;
                     busStop.StopCode = atStop.attributes.stop_code;
                     busStop.SupportsWheelchair =atStop.attributes.wheelchair_boarding;
 
@@ -239,7 +239,7 @@ namespace BusMEAPI
         {
             public float stop_lat {get; set;}
 
-            public float stop_long {get; set;}
+            public float stop_lon {get; set;}
 
             public string? stop_code {get; set;}
 
