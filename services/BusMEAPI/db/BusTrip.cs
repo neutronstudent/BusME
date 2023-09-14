@@ -7,7 +7,7 @@ public class BusTrip
 
     public ICollection<BusStop> Stops { get; } = new List<BusStop>();
 
-    public int? TripHeadSign {get; set;}
+    public string? TripHeadSign {get; set;}
     public string ApiTripID {get; set;}
     public string? Service {get; set;}
     

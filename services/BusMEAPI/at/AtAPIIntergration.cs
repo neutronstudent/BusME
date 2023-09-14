@@ -62,6 +62,9 @@ namespace BusMEAPI
 
 
                 busTrip.ApiTripID = atTrip.attributes.trip_id;
+                busTrip.Service= atTrip.attributes.service_id;
+                busTrip.TripHeadSign = atTrip.attributes.trip_headsign;
+                
                 busTrip.BusRoute = busRoute;
                 busTrip.BusRouteId = busRoute.Id;
                 busTrip.Direction = atTrip.attributes.direction_id;
@@ -84,8 +87,8 @@ namespace BusMEAPI
                     {
                         continue;
                     }
-
-                    var stopDbQuery = from s in _dbContext.BusStops where s.ApiId == atStop.attributes.stop_id select s;
+                    
+                    var stopDbQuery = from s in _dbContext.BusStops where String.Compare(s.ApiId, atStop.attributes.stop_id) == 0 select s;
 
                     //select bustrip if not already in collection 
                     BusStop? busStop = stopDbQuery.FirstOrDefault();
@@ -95,6 +98,13 @@ namespace BusMEAPI
                         busStop = new BusStop();
                         _dbContext.BusStops.Add(busStop);
                     }
+
+                    busStop.ApiId = atStop.attributes.stop_id;
+                    busStop.StopName = atStop.attributes.stop_name;
+                    busStop.Lat = atStop.attributes.stop_lat;
+                    busStop.Long = atStop.attributes.stop_long;
+                    busStop.StopCode = atStop.attributes.stop_code;
+                    busStop.SupportsWheelchair =atStop.attributes.wheelchair_boarding;
 
                     //add bus stop to trip 
                     if (!busStop.BusTrip.Contains(busTrip))
@@ -106,6 +116,7 @@ namespace BusMEAPI
                     {
                         busTrip.Stops.Add(busStop);
                     }
+                    await _dbContext.SaveChangesAsync();
                 }
 
                 //fetch live location and write to lat long 
@@ -116,6 +127,7 @@ namespace BusMEAPI
                 {
                     busRoute.Trips.Add(busTrip);
                 }
+                await _dbContext.SaveChangesAsync();
             }
             //for each trip update stops 
             await _dbContext.SaveChangesAsync();
@@ -154,7 +166,7 @@ namespace BusMEAPI
                 busRoute.RouteShortName = at_route.attributes.route_short_name;
                 
                 //TODO write routes to database if not already exist, else update other values 
-                var query = from r in _dbContext.BusRoutes where r.RouteId == busRoute.RouteId select r;
+                var query = from r in _dbContext.BusRoutes where String.Compare(r.RouteId, busRoute.RouteId) == 0 select r;
 
                 BusRoute? existingRoute = await query.FirstOrDefaultAsync();
                 
@@ -216,6 +228,7 @@ namespace BusMEAPI
         {
             public string route_id {get; set;}
             public string trip_id {get; set;}
+            public string? service_id {get; set;}
             public string? trip_headsign {get; set;}
             public string? trip_short_name {get; set;}
             public int? direction_id {get; set;}
