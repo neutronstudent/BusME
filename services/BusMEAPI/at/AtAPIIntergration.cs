@@ -5,14 +5,14 @@ namespace BusMEAPI
 {
     public class AtAPIIntergration : BaseAPIIntergration
     {
-        private string _apiKey;
-        private BusMEContext _dbContext;
-
-        public AtAPIIntergration(BusMEContext dbContext, IConfiguration configuration)
+        private readonly string _apiKey;
+        private readonly BusMEContext _dbContext;
+        private readonly ILogger<AtAPIIntergration> _logger;
+        public AtAPIIntergration(BusMEContext dbContext, IConfiguration configuration, ILogger<AtAPIIntergration> logger)
         {
             _apiKey = configuration["api:key"]!;
             _dbContext = dbContext;
-
+            _logger = logger;
         }
 
         //GET https://api.at.govt.nz/gtfs/v3/routes/{id}/trips
@@ -193,6 +193,7 @@ namespace BusMEAPI
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 return default(T);
             }
 
@@ -208,7 +209,7 @@ namespace BusMEAPI
             public string? route_short_name {get; set;}
             public string? route_long_name {get; set;}
             public string? route_desc {get; set;}
-            public string? route_type {get; set;}
+            public int? route_type {get; set;}
         }
 
         private class Trip

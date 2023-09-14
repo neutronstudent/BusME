@@ -13,9 +13,11 @@ builder.Services.AddQuartz(q =>{
 
     q.AddJob<ApiUpdateJob>(ops => ops.WithIdentity(jobKey));
 
-    q.AddTrigger(opts => opts.ForJob(jobKey).WithIdentity("ApiUpdateJob-trigger").WithCronSchedule(""));
+    q.AddTrigger(opts => opts.ForJob(jobKey).WithIdentity("ApiUpdateJob-trigger").WithCronSchedule("0 0/5 * ? * * *"));
     
 });
+
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -38,5 +40,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
 
 app.Run();
