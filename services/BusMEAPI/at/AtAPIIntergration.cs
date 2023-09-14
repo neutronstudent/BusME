@@ -19,10 +19,10 @@ namespace BusMEAPI
         //GET https://api.at.govt.nz/gtfs/v3/trips/{id}/stops
 
         //assume that route is a ef tracked object
-        public override async Task<int> UpdateTrips(BusRoute route)
+        public override async Task<int> UpdateTrips(int Id)
         {
             //get ef tracked object 
-            var query = from r in _dbContext.BusRoutes where route.Id == r.Id select r;
+            var query = from r in _dbContext.BusRoutes where Id == r.Id select r;
 
             BusRoute? busRoute = await query.SingleOrDefaultAsync();
 
@@ -107,6 +107,9 @@ namespace BusMEAPI
                         busTrip.Stops.Add(busStop);
                     }
                 }
+
+                //fetch live location and write to lat long 
+                
 
                 //add trip to route
                 if (!busRoute.Trips.Contains(busTrip))
