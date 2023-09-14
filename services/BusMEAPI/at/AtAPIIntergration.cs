@@ -127,6 +127,9 @@ namespace BusMEAPI
                 {
                     busRoute.Trips.Add(busTrip);
                 }
+                
+                busRoute.LastUpdated = DateTime.UtcNow;
+
                 await _dbContext.SaveChangesAsync();
             }
             //for each trip update stops 
