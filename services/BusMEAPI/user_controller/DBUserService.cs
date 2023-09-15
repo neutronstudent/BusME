@@ -69,7 +69,7 @@ namespace BusMEAPI
         public async override Task<User?> GetUser(string username)
         {
             var query = from u in _context.Users 
-                where u.Name == username
+                where u.Username == username
                 select u;
             
             return await query.FirstOrDefaultAsync();
@@ -78,7 +78,7 @@ namespace BusMEAPI
 
         public override async Task<List<User>> SearchUser(string username_part, int page)
         {
-            var query = from u in _context.Users where u.Name.Contains(username_part) select u;
+            var query = from u in _context.Users where u.Details.Name.Contains(username_part) select u;
 
             //query async
             return  await query.Skip(pageSize * page).Take(pageSize).ToListAsync();
@@ -90,6 +90,36 @@ namespace BusMEAPI
 
             return await _context.SaveChangesAsync();
 
+        }
+        public async override Task<int> UpdateUserSettings(int id, UserSettings userSettings)
+        {
+            var query = from u in _context.Users where u.Id == id select u;
+
+            User? result = await query.SingleOrDefaultAsync();
+
+            if (result == null)
+                return 1;
+
+            result.Settings = userSettings;
+
+            await _context.SaveChangesAsync();
+            
+            return 0;
+        }
+        public async override Task<int> UpdateUserDetails (int id, UserDetails userDetails)
+        {
+            var query = from u in _context.Users where u.Id == id select u;
+
+            User? result = await query.SingleOrDefaultAsync();
+
+            if (result == null)
+                return 1;
+
+            result.Details = userDetails;
+
+            await _context.SaveChangesAsync();
+            
+            return 0;
         }
     }
 }

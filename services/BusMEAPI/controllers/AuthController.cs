@@ -1,10 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
-using BusMEAPI.Database;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+
 namespace BusMEAPI.Controllers
 {
     [ApiController]

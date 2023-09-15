@@ -18,12 +18,9 @@ namespace BusMEAPI
         }
 
 
-        //define user varaibles
-        public String Name { get; set; }
         public String Username { get; set; }
-        public String Email { get; set; }
-        public String Phone { get; set; }
-
+        public UserDetails Details {get; set;}
+        public UserSettings? Settings {get; set;}
         //type of user
         public UserType? Type { get; set; } = 0;
 
@@ -34,5 +31,19 @@ namespace BusMEAPI
         
         [JsonIgnore]
         public String Salt {get; set;} = "";
+    }
+    
+    public class UserSettings
+    {
+        int? notf_type {get; set;}
+    }
+
+
+    public class UserDetails
+    {
+                //define user varaibles
+        public String Name { get; set; }
+        public String Email { get; set; }
+        public String Phone { get; set; }
     }
 }
