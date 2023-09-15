@@ -1,0 +1,21 @@
+helvetica 
+helvetica-bold
+
+https://exceptionalindividuals.com/about-us/blog/our-top-10-dyslexia-friendly-fonts/
+	open-dyslexic
+	arial
+	comic-sans
+	verdana
+	tahoma
+	century-gothic
+	trebuchet
+	calibri
+	open-sans
+	helvetica
+
+https://dyslexiahelp.umich.edu/sites/default/files/good_fonts_for_dyslexia_study.pdf
+	helvetica
+	courier
+	arial
+	verdana
+	computer-modern-unicode
