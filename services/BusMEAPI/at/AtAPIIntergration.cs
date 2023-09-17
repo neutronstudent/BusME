@@ -228,7 +228,7 @@ namespace BusMEAPI
                 return trip.Stops.ToList();
             }
 
-            String apiQuery = String.Format("https://api.at.govt.nz/gtfs/v3/trips/{0}/stops", TripID);
+            String apiQuery = String.Format("https://api.at.govt.nz/gtfs/v3/trips/{0}/stops", trip.ApiTripID);
             MultipleEntityResponse<Stop>? stops = await MakeRequest<MultipleEntityResponse<Stop>>(apiQuery);
 
             if (stops == null || stops.data == null)
