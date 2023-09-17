@@ -56,8 +56,7 @@ namespace BusMEAPI
         public async Task<ActionResult> GetLive(int route)
         {
             //send route info to user
-            var query = from r in _db.BusRoutes where r.Id.Equals(route) select r;
-
+            var query = from r in _db.BusRoutes.Include("Trips") where r.Id.Equals(route) select r;
             //execute query 
             BusRoute? result = await query.SingleOrDefaultAsync();
 
@@ -68,6 +67,8 @@ namespace BusMEAPI
                 return new NotFoundResult();
             }
             
+            //unneeded
+            /*
             //check if trips have rencently updatted if not force update
             if (result.LastUpdated.AddSeconds(30) < DateTime.UtcNow)
             {
@@ -81,6 +82,7 @@ namespace BusMEAPI
                     return new NotFoundResult();
                 }
             }
+            */
             
             return new JsonResult(result.Trips);
         }

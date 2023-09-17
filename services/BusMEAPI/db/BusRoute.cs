@@ -11,6 +11,6 @@ public class BusRoute
     public DateTime LastUpdated {get; set;}
 
     [JsonIgnore]
-    public ICollection<BusTrip> Trips { get; } = new List<BusTrip>();
+    public ICollection<BusTrip> Trips { get; set;} = new List<BusTrip>();
 
 }

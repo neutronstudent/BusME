@@ -19,121 +19,126 @@ namespace BusMEAPI
         //GET https://api.at.govt.nz/gtfs/v3/trips/{id}/stops
 
         //assume that route is a ef tracked object
-        public override async Task<int> UpdateTrips(int Id)
+        public override async Task<int> UpdateTrips()
         {
-            //get ef tracked object 
-            var query = from r in _dbContext.BusRoutes where Id == r.Id select r;
+            //get 
+            string apiRoute = "https://api.at.govt.nz/realtime/legacy/tripupdates";
 
-            BusRoute? busRoute = await query.SingleOrDefaultAsync();
-
-            if (busRoute == null)
+            //get trips hard data (no positions or anything) and bind to routes
+            RealtimeResponse<TripEntity>? trips = await MakeRequest<RealtimeResponse<TripEntity>>(apiRoute);
+            if (trips == null || trips.response == null)
             {
                 return 1;
             }
 
-            busRoute.Trips.Clear();
-
-            //get trips based upon route ID 
-            MultipleEntityResponse<Trip>? trips = await MakeRequest<MultipleEntityResponse<Trip>>(String.Format("https://api.at.govt.nz/gtfs/v3/routes/{0}/trips", busRoute.RouteId));
-
-            if (trips == null || trips.data == null)
+            //for each trip write to database no extra if exists
+            foreach (TripEntity update in trips.response.entity)
             {
-                return 1;
-            }
+                                //NULL CHECK 2!!!!
+                if (update == null  || update.trip_update == null ||update.trip_update.trip == null)
+                {
+                    continue;
+                }
+                RealtimeTrip trip = update.trip_update.trip;
 
-            //convert trips to busme data style
-            foreach (ResponseData<Trip> atTrip in trips.data)
-            {
-                if (atTrip.attributes == null)
+                var query  = from u in _dbContext.BusRoutes.Include("Trips") where u.RouteId == trip.route_id select u;
+
+                BusRoute? route = await query.FirstOrDefaultAsync();
+                
+                if (route == null)
                 {
                     continue;
                 }
 
-                var busQuery = from t in busRoute.Trips where t.ApiTripID == atTrip.attributes.trip_id select t;
-                //select bustrip if not already in collection 
-                BusTrip? busTrip = busQuery.FirstOrDefault();
-                
 
-                if (busTrip == null) {
-                    busTrip = new BusTrip();
-                    _dbContext.BusTrips.Add(busTrip);
-                } 
+                //build trip from data 
+                var existingTripQuery = from u in route.Trips where u.ApiTripID == trip.trip_id select u;
 
+                BusTrip? newTrip = existingTripQuery.FirstOrDefault();
 
-
-                busTrip.ApiTripID = atTrip.attributes.trip_id;
-                busTrip.Service= atTrip.attributes.service_id;
-                busTrip.TripHeadSign = atTrip.attributes.trip_headsign;
-
-                busTrip.BusRoute = busRoute;
-                busTrip.BusRouteId = busRoute.Id;
-                busTrip.Direction = atTrip.attributes.direction_id;
-                busTrip.Service = atTrip.attributes.trip_short_name;
-
-                //query stops for trip 
-
-                string stopQuery = String.Format("https://api.at.govt.nz/gtfs/v3/trips/{0}/stops", busTrip.ApiTripID);
-                MultipleEntityResponse<Stop>? stops = await MakeRequest<MultipleEntityResponse<Stop>>(stopQuery);
-
-                if (stops == null || stops.data == null)
+                if (newTrip == null)
                 {
-                    continue;
-                }
-
-                //for each stop check if already in list if so update else skip 
-                foreach(ResponseData<Stop> atStop in stops.data)
-                {
-                    if (atStop.attributes == null)
-                    {
-                        continue;
-                    }
+                    newTrip = new BusTrip();
+                    await _dbContext.BusTrips.AddAsync(newTrip);
+                    route.Trips.Add(newTrip);
                     
-                    var stopDbQuery = from s in _dbContext.BusStops where String.Compare(s.ApiId, atStop.attributes.stop_id) == 0 select s;
-
-                    //select bustrip if not already in collection 
-                    BusStop? busStop = stopDbQuery.FirstOrDefault();
-
-                    if (busStop == null)
-                    {
-                        busStop = new BusStop();
-                        _dbContext.BusStops.Add(busStop);
-                    }
-
-                    busStop.ApiId = atStop.attributes.stop_id;
-                    busStop.StopName = atStop.attributes.stop_name;
-                    busStop.Lat = atStop.attributes.stop_lat;
-                    busStop.Long = atStop.attributes.stop_lon;
-                    busStop.StopCode = atStop.attributes.stop_code;
-                    busStop.SupportsWheelchair =atStop.attributes.wheelchair_boarding;
-
-                    //add bus stop to trip 
-                    if (!busStop.BusTrip.Contains(busTrip))
-                    {
-                        busStop.BusTrip.Add(busTrip);
-                    }
                     
-                    if (!busTrip.Stops.Contains(busStop))
-                    {
-                        busTrip.Stops.Add(busStop);
-                    }
-                    await _dbContext.SaveChangesAsync();
                 }
 
-                //fetch live location and write to lat long 
-                
-
-                //add trip to route
-                if (!busRoute.Trips.Contains(busTrip))
-                {
-                    busRoute.Trips.Add(busTrip);
-                }
-                
-                busRoute.LastUpdated = DateTime.UtcNow;
-
-                await _dbContext.SaveChangesAsync();
+                //populate trip with update fields
+                newTrip.ApiTripID = trip.trip_id;
+                newTrip.BusRoute = route;
+                newTrip.BusRouteId = route.Id;
+                newTrip.Direction = trip.direction_id;
+                newTrip.StartTime = DateTime.ParseExact(trip.start_date + ":" + trip.start_time, "yyyyMMdd:HH:mm:ss", null).ToUniversalTime();
             }
-            //for each trip update stops 
             await _dbContext.SaveChangesAsync();
+
+            
+
+            return 0;
+        }
+        
+        //update with realtime api data (depature time, position etc etc )
+        public override async Task<int> UpdateLive()
+        {
+             //get 
+            string apiRoute = "https://api.at.govt.nz/realtime/legacy/vehiclelocations";
+
+            //get trips hard data (no positions or anything) and bind to routes
+            RealtimeResponse<VehicleUpdate>? trips = await MakeRequest<RealtimeResponse<VehicleUpdate>>(apiRoute);
+
+            if (trips == null || trips.response == null)
+            {
+                return 1;
+            }
+
+            //for each trip write to database no extra if exists
+            foreach (VehicleUpdate update in trips.response.entity)
+            {
+                //check update has all required fields
+                if (update == null || update.vehicle == null || update.vehicle.trip == null)
+                {
+                    continue;
+                }
+
+                var query  = from u in _dbContext.BusRoutes.Include("Trips") where u.RouteId == update.vehicle.trip.route_id select u;
+
+                BusRoute? route = await query.FirstOrDefaultAsync();
+
+                //NULLL CHEEECK!!!!
+                if (route == null)
+                {
+                    continue;
+                }
+                
+                //build trip from data 
+                var existingTripQuery = from u in route.Trips where u.ApiTripID == update.vehicle.trip.trip_id select u;
+                BusTrip? trip = existingTripQuery.FirstOrDefault();
+
+                if (trip == null)
+                {
+                    continue;
+                }
+
+                //populate trip with update fields
+                trip.Lat = update.vehicle.position.latitude;
+                trip.Long = update.vehicle.position.longitude;
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            return 0;
+        }
+
+        //get the stops associated with a trip...
+        public async Task<int> GetStops(int id)
+        {
+            return 0;
+        }
+
+        public async Task<int> UpdateStops(int id)
+        {
             return 0;
         }
 
@@ -182,7 +187,6 @@ namespace BusMEAPI
                 {
                     _dbContext.BusRoutes.Add(busRoute);
                 }
-                
             }
 
             await _dbContext.SaveChangesAsync();
@@ -227,16 +231,6 @@ namespace BusMEAPI
             public int? route_type {get; set;}
         }
 
-        private class Trip
-        {
-            public string route_id {get; set;}
-            public string trip_id {get; set;}
-            public string? service_id {get; set;}
-            public string? trip_headsign {get; set;}
-            public string? trip_short_name {get; set;}
-            public int? direction_id {get; set;}
-            public int? wheelchair_accessible {get; set;}
-        }
 
         private class Stop 
         {
@@ -268,7 +262,78 @@ namespace BusMEAPI
             public ResponseData<T>[]? data {get; set;}
         }
 
+        private class RealtimeResponse<T>
+        {
+            public string status {get; set;}
+            public RealtimeResponseData<T> response {get; set;}
+        }
+        private class RealtimeTrip
+        {
+            public string trip_id {get; set;}
+            public string route_id {get; set;}
+            public int direction_id {get; set;}
+            public string start_time {get; set;}
+            public string start_date {get; set;}
+            public int schedule_relationship {get; set;}
+        }
+
+        private class Vehicle
+        {
+            public string id {get; set;}
+            public string label {get; set;}
+             public string licence_plate {get; set;}
+        }
+
+
+        private class TripUpdate
+        {
+
+            public Vehicle vehicle {get; set;}
+            public RealtimeTrip trip {get; set;}
+        }
+        private class TripEntity
+        {
+            public string id {get; set;}
+            public bool is_deleted {get; set;}
+            public TripUpdate trip_update {get; set;}
+        }
+        private class Position
+        {
+            public float latitude {get; set;}
+            public float longitude {get; set;}
+            public float bearing {get; set;}
+        }
+        private class VehicleUpdate
+        {
+            public string id {get; set;}
+            public bool is_deleted {get; set;}
+
+            public VehiclePosition vehicle {get; set;}
+        }
+        
+        private class VehiclePosition
+        {
+            public RealtimeTrip? trip {get; set;}
+            public Position? position {get; set;}
+            public Vehicle? vehicle {get; set;}
+        }
+
+
+        private class RealtimeHeader
+        {
+            public string? gtfs_realtime_version {get; set;}
+            public int? incrementality {get; set;}
+        }
+
+        private class RealtimeResponseData<T>
+        {
+            public RealtimeHeader? header {get; set;}
+            public List<T> entity {get; set;}
+        }
+        
+
         
 
     }
+
 }

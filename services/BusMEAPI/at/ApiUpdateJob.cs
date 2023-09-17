@@ -18,12 +18,14 @@ public class ApiUpdateJob : IJob
 
     public async Task Execute(IJobExecutionContext context)
     {
-        
+        //update routes and then update results 
+        _logger.LogInformation("Updating Routes");
         int result = await _api.UpdateRoutes();
-        
-        if (result > 0 )
+        _logger.LogInformation("Updating trips");
+        int result2 = await _api.UpdateTrips();
+        if (result > 0 || result2 > 0)
         {
-            _logger.LogWarning("Unable to update api routes");
+            _logger.LogWarning("Unable to update api routes/trips");
         }
         else 
         {

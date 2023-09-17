@@ -10,10 +10,14 @@ builder.Services.AddQuartz(q =>{
     q.UseMicrosoftDependencyInjectionJobFactory();
 
     var jobKey = new JobKey("ApiUpdateJob");
+    var jobKey2 = new JobKey("ApiLiveJob");
 
     q.AddJob<ApiUpdateJob>(ops => ops.WithIdentity(jobKey));
+    q.AddJob<ApiLiveUpdate>(ops => ops.WithIdentity(jobKey2));
 
-    q.AddTrigger(opts => opts.ForJob(jobKey).WithIdentity("ApiUpdateJob-trigger").WithCronSchedule("0 0/5 * ? * * *"));
+    q.AddTrigger(opts => opts.ForJob(jobKey).WithIdentity("ApiUpdateJob-trigger").WithCronSchedule("0 0/1 * ? * * *"));
+    q.AddTrigger(opts => opts.ForJob(jobKey2).WithIdentity("ApiLiveJob-trigger").WithCronSchedule("30 * * ? * * *"));
+    //30 * * ? * * *
     
 });
 
