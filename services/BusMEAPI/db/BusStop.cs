@@ -22,5 +22,5 @@ public class BusStop
     public int? SupportsWheelchair {get; set;}
 
     public int? Order {get; set;}
-
+    
 }

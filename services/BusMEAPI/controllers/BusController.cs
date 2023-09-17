@@ -22,10 +22,9 @@ namespace BusMEAPI
         public async Task<ActionResult> GetRoutes()
         {
             //dump all route names stored in database 
-            var query =  from r in _db.BusRoutes select new {r.Id, r.RouteLongName, r.RouteShortName};
 
             //return the list 
-            return new JsonResult(await query.ToListAsync());
+            return new JsonResult(await _api.GetRoutes());
         }
 
         //get route by route id
@@ -34,11 +33,9 @@ namespace BusMEAPI
         [Route("{route}")]
         public async Task<ActionResult> GetRoute(int route)
         {
-            //send route info to user
-            var query = from r in _db.BusRoutes where r.Id.Equals(route) select r;
 
             //execute query 
-            BusRoute? result = await query.SingleOrDefaultAsync();
+            BusRoute? result = await _api.GetRoute(route);
 
             //check if query null 
             if (result == null)
@@ -53,12 +50,11 @@ namespace BusMEAPI
         [HttpGet]
         [Route("{route}/trips")]
 
-        public async Task<ActionResult> GetLive(int route)
+        public async Task<ActionResult> GetTrips(int route)
         {
             //send route info to user
-            var query = from r in _db.BusRoutes.Include("Trips") where r.Id.Equals(route) select r;
             //execute query 
-            BusRoute? result = await query.SingleOrDefaultAsync();
+            BusRoute? result = await _api.GetRoute(route);
 
             //check if query null 
 
@@ -85,6 +81,42 @@ namespace BusMEAPI
             */
             
             return new JsonResult(result.Trips);
+        }
+
+
+        [HttpGet]
+        [Route("trips/{trip}/stops")]
+        public async Task<ActionResult> GetStops(int trip)
+        {
+            //send route info to user
+            //execute query 
+            List<BusStop> result = await _api.GetStops(trip);
+
+            //check if query null 
+
+            if (result.Count == 0)
+            {
+                return new NotFoundResult();
+            }
+            
+            //unneeded
+            /*
+            //check if trips have rencently updatted if not force update
+            if (result.LastUpdated.AddSeconds(30) < DateTime.UtcNow)
+            {
+                await _api.UpdateTrips(result.Id);
+            
+
+                result = await query.SingleOrDefaultAsync();
+
+                if (result == null)
+                {
+                    return new NotFoundResult();
+                }
+            }
+            */
+            
+            return new JsonResult(result);
         }
         
     } 

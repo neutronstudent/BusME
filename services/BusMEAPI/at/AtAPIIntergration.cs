@@ -1,6 +1,7 @@
 using BusMEAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
+using System.Security.Cryptography;
 namespace BusMEAPI
 {
     public class AtAPIIntergration : BaseAPIIntergration
@@ -132,15 +133,6 @@ namespace BusMEAPI
         }
 
         //get the stops associated with a trip...
-        public async Task<int> GetStops(int id)
-        {
-            return 0;
-        }
-
-        public async Task<int> UpdateStops(int id)
-        {
-            return 0;
-        }
 
         //should be bound to a cron job 
         public override async Task<int> UpdateRoutes()
@@ -219,8 +211,83 @@ namespace BusMEAPI
             return default(T);
         }
 
+        //get a list of all bus stops and write to database if not already exist for trip
+        public override async Task<List<BusStop>> GetStops(int TripID)
+        {
+            var query = from t in _dbContext.BusTrips.Include("Stops") where t.Id == TripID select t;
 
+            BusTrip? trip = await query.SingleOrDefaultAsync();
+
+            if (trip == null) 
+            {
+                return new List<BusStop>();
+            }
+
+            if (trip.Stops.Count > 0)
+            {
+                return trip.Stops.ToList();
+            }
+
+            String apiQuery = String.Format("https://api.at.govt.nz/gtfs/v3/trips/{0}/stops", TripID);
+            MultipleEntityResponse<Stop>? stops = await MakeRequest<MultipleEntityResponse<Stop>>(apiQuery);
+
+            if (stops == null || stops.data == null)
+            {
+                return new List<BusStop>();
+            }
+
+            //else add stops to trip 
+            foreach (ResponseData<Stop> busStop in stops.data)
+            {
+                if (busStop == null || busStop.attributes == null)
+                {
+                    continue;
+                }
+                
+                var stopQuery = from s in _dbContext.BusStops where s.ApiId == busStop.attributes.stop_id select s;
+
+                BusStop? stop = await stopQuery.FirstOrDefaultAsync();
+
+                //add stop 
+                if (stop == null)
+                {
+                    stop = new BusStop();
+                    stop.ApiId = busStop.attributes.stop_id;
+                    stop.Lat = busStop.attributes.stop_lat;
+                    stop.Long = busStop.attributes.stop_lon;
+                    stop.StopName = busStop.attributes.stop_name;
+                    stop.StopCode = busStop.attributes.stop_code;
+                    stop.SupportsWheelchair = busStop.attributes.wheelchair_boarding; 
+                    await _dbContext.BusStops.AddAsync(stop);
+                }
+                trip.Stops.Add(stop);
+
+                await _dbContext.SaveChangesAsync();
+            }
+
+            return trip.Stops.ToList();
+        }
+        public override async Task<List<BusRoute>> GetRoutes()
+        {
+            //dump all route names stored in database 
+            var query =  from r in _dbContext.BusRoutes select r;
+
+            //return the list 
+            return await query.ToListAsync();
+        }
+
+        //get route by route id
+                //get routes
+        public override async Task<BusRoute?> GetRoute(int route)
+        {
+            //send route info to user
+            var query = from r in _dbContext.BusRoutes where r.Id.Equals(route) select r;
+
+            //execute query 
+            return await query.SingleOrDefaultAsync();
+        }
         //api utility classes
+
 
         private class Route
         {
