@@ -18,17 +18,33 @@ namespace BusMEAPI
         }
 
 
-        //define user varaibles
-        public String Name { get; set; }
         public String Username { get; set; }
+        public UserDetails Details {get; set;}
+        public UserSettings? Settings {get; set;}
+        //type of user
+        public UserType? Type { get; set; } = 0;
+
+
+        //Password and salt sequences
+        [JsonIgnore]
+        public String Hash {get; set;} = "";
+        
+        [JsonIgnore]
+        public String Salt {get; set;} = "";
+    }
+    
+    public class UserSettings
+    {
+        int? NotfType {get; set;}
+    }
+
+    public class UserDetails
+    {
+                //define user varaibles
+        public String Name { get; set; }
         public String Email { get; set; }
         public String Phone { get; set; }
-
-        //type of user
-        public UserType Type { get; set; }
-
         //routeid with no instant connection referenace
         public int RouteId {get; set;}
-
     }
 }
