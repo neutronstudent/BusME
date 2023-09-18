@@ -35,16 +35,18 @@ namespace BusMEAPI
     
     public class UserSettings
     {
-        int? NotfType {get; set;}
+        int Id {get; set;}
+        int? notf_type {get; set;}
+        public int RouteId {get; set;}
     }
+
 
     public class UserDetails
     {
+        int id {get; set;}
                 //define user varaibles
         public String Name { get; set; }
         public String Email { get; set; }
         public String Phone { get; set; }
-        //routeid with no instant connection referenace
-        public int RouteId {get; set;}
     }
 }
