@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:bus_me/models/pin_pill_info.dart';
 
+/*
 class MapPinPillComponent extends StatefulWidget {
 
   double pinPillPosition;
@@ -69,3 +70,4 @@ class MapPinPillComponentState extends State<MapPinPillComponent> {
   }
 
 }
+ */
