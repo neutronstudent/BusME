@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:bus_me/models/api_constants.dart';
 import 'package:bus_me/observable.dart';
+import 'package:flutter/foundation.dart';
 
 
 
@@ -37,6 +38,15 @@ class BusMEAuth extends AuthModel {
   {
     //build get request
     HttpClient authServer = HttpClient(context: SecurityContext.defaultContext);
+    
+    authServer.badCertificateCallback =  (X509Certificate cert, String host, int port) {
+      if (kDebugMode)
+      {
+        return true;
+      }
+      return false;
+
+    };
 
     authServer.connectionTimeout = const Duration(seconds: 4);
 
@@ -65,7 +75,7 @@ class BusMEAuth extends AuthModel {
       return 1;
     }
 
-    log("Login Succieded");
+    log("Login Succided");
     _token = await req.transform(utf8.decoder).join();
 
     if (isLoggedIn())
