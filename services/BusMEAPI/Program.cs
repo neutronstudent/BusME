@@ -67,9 +67,8 @@ builder.Services.AddAuthorization(o =>
 }
 );
   
-builder.Services.AddScoped<UserController, DBUserController>();
+builder.Services.AddScoped<BaseUserService, DbUserService>();
 builder.Services.AddScoped<BaseAPIIntergration, AtAPIIntergration>();
-var app = builder.Build();
 
 
 

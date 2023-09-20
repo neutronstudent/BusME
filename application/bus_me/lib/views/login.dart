@@ -1,10 +1,14 @@
 
+import 'package:bus_me/observable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget
 {
-  const LoginPage({Key? key}) : super(key: key);
+  final Observable loginObservable = BaseObservable();
+
+  LoginPage({Key? key}):
+        super(key: key);
 
   @override
   State<StatefulWidget> createState() => LoginPageState();
@@ -83,9 +87,16 @@ class LoginPageState extends State<LoginPage>
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(minimumSize:  const Size.fromHeight(40)),
-                  onPressed:  (){},
+                  onPressed:  () async {
+                    await widget.loginObservable.notifyObservers(
+                        ObsSignal("login", {"username": usernameController.text, "password": passwordController.text})
+                    );
+                  },
                   child: const Text(
-                    'login'
+                    'login',
+                    style: TextStyle(
+                      fontSize: 18
+                    ),
                   ),
                 )
             ),

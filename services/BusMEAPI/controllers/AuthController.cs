@@ -20,10 +20,13 @@ namespace BusMEAPI.Controllers
         [HttpGet]
         [Route("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<String>> Login(Login login)
+        public async Task<ActionResult<String>> Login(String username, String password )
         {
-            if (login == null)
-                return new StatusCodeResult(403);
+            
+            Login login = new Login();
+
+            login.Username = username;
+            login.Password = password;
 
             SecurityToken? token = await _auth.LoginUser(login);
 

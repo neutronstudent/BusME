@@ -50,6 +50,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+http: ^1.1.0
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -65,6 +66,7 @@ flutter:
     - assets/driving_pin.png
     - assets/friend1.jpg
     - assets/friend2.jpg
+    - assets/ca/lets-encrypt-r3.pem
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
