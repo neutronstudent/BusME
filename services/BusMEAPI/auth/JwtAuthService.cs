@@ -27,7 +27,7 @@ namespace BusMEAPI
             _issuer = configuration["Jwt:Issuer"];
         }
 
-        public override async Task<SecurityToken?> LoginUser(Login login)
+        public override async Task<SecurityTokenResult> LoginUser(Login login)
         {
             //query database for user
             var query = from u in _context.Users where u.Username == login.Username select u;
@@ -79,9 +79,14 @@ namespace BusMEAPI
             };
 
             SecurityToken token = new JwtSecurityTokenHandler().CreateToken(descriptor);
+            
+            SecurityTokenResult result = new SecurityTokenResult();
+
+            result.Token = token;
+            result.UserID = user.Id;
 
             //create secuirty token
-            return token;
+            return result;
         }
 
         private byte[] hash(string password, string salt)
@@ -102,4 +107,10 @@ namespace BusMEAPI
         }
 
     }
+}
+
+public class SecurityTokenResult
+{
+    public SecurityToken? Token;
+    public int UserID;
 }

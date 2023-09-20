@@ -28,12 +28,14 @@ namespace BusMEAPI.Controllers
             login.Username = username;
             login.Password = password;
 
-            SecurityToken? token = await _auth.LoginUser(login);
+            SecurityTokenResult token = await _auth.LoginUser(login);
 
-            if (token == null)
+            if (token.Token == null)
                 return new ForbidResult();
             
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var data = new {id = token.UserID, token = token.Token};
+            
+            return new JsonResult(data);
         }
     } 
 }

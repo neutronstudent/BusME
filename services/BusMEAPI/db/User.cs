@@ -38,6 +38,9 @@ namespace BusMEAPI
         int Id {get; set;}
         int? notf_type {get; set;}
         public int RouteId {get; set;}
+
+        public bool VibrationNotifications {get; set;}
+        public bool AudioNotifications {get; set;}
     }
 
 

@@ -14,6 +14,7 @@ import 'package:flutter/foundation.dart';
 abstract class AuthModel extends Observable
 {
   String? getToken();
+  int? getUserId();
   bool isLoggedIn();
   Future<int> loginUser(String username, String password);
 }
@@ -23,7 +24,7 @@ class BusMEAuth extends AuthModel {
 
   //
   String? _token = "";
-
+  int? _id;
 
   //return token if exists
   @override
@@ -32,13 +33,18 @@ class BusMEAuth extends AuthModel {
     return _token;
   }
 
+  int? getUserId()
+  {
+    return _id;
+  }
+
   //attempt to login to BusME
   @override
   Future<int> loginUser(String username, String password) async
   {
     //build get request
     HttpClient authServer = HttpClient(context: SecurityContext.defaultContext);
-    
+
     authServer.badCertificateCallback =  (X509Certificate cert, String host, int port) {
       if (kDebugMode)
       {
@@ -55,6 +61,7 @@ class BusMEAuth extends AuthModel {
     //set request URI
     Uri route = Uri.https(API_ROUTE,'/api/auth/login', {'username': username, 'password': password});
     log(route.toString());
+
     try {
       HttpClientRequest request = await authServer.getUrl(route);
 
@@ -75,8 +82,22 @@ class BusMEAuth extends AuthModel {
       return 1;
     }
 
+
+
     log("Login Succided");
-    _token = await req.transform(utf8.decoder).join();
+    String source = await req.transform(utf8.decoder).join();
+
+    try {
+      dynamic result = jsonDecode(source);
+
+      _token = result.token;
+
+      _id = result.id;
+    }
+    on Exception catch(e)
+    {
+      return 1;
+    }
 
     if (isLoggedIn())
     {
