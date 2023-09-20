@@ -61,3 +61,6 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+services/BusMEAPI/obj/*
+services/BusMEAPI/bin/*
