@@ -1,7 +1,17 @@
+import 'dart:io';
+
+import 'package:bus_me/controllers/login_controller.dart';
+import 'package:bus_me/models/auth_model.dart';
+import 'package:bus_me/observable.dart';
 import 'package:bus_me/views/login.dart';
 import 'package:flutter/material.dart';
+
 import 'map_view.dart';
 import 'admin_view.dart';
+
+import 'package:flutter/services.dart';
+
+
 
 void main() => runApp(LoginView());
 
@@ -84,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
+  
   @override
   void dispose() {
     _usernameController.dispose();
@@ -92,3 +102,4 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 }
+
