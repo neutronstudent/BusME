@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'map_view.dart';
+import 'admin_view.dart';
 
 void main() => runApp(LoginView());
 
@@ -58,12 +60,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 String username = _usernameController.text;
                 String password = _passwordController.text;
 
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WelcomeScreen(username: username, password: password),
-                  ),
-                );
+                if (username == "admin") {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AdminView(),
+                    ),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MapView(),
+                    ),
+                  );
+                }
               },
               child: Text('Login'),
             ),
@@ -81,27 +92,4 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class WelcomeScreen extends StatelessWidget {
-  final String username;
-  final String password;
 
-  WelcomeScreen({required this.username, required this.password});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Welcome'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Welcome $username'),
-            Text('Your password is $password'),
-          ],
-        ),
-      ),
-    );
-  }
-}
