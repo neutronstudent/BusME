@@ -1,0 +1,3 @@
+class CustomMapController {
+  //logic here
+}
