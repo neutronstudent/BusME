@@ -1,12 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ffi';
 import 'dart:io';
 
-import 'package:bus_me/controllers/login_controller.dart';
 import 'package:bus_me/models/api_constants.dart';
 import 'package:bus_me/observable.dart';
-import 'package:http/http.dart' as http;
 
 
 
