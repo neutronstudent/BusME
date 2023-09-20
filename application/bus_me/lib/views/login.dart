@@ -1,11 +1,18 @@
-
+import 'package:bus_me/models/auth_model.dart';
 import 'package:bus_me/observable.dart';
 import 'package:bus_me/views/admin_view.dart';
 import 'package:bus_me/views/map_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../controllers/login_controller.dart';
+
 class LoginScreen extends StatefulWidget {
+  final AuthModel BusMEAuth;
+  final LoginController loginController;
+
+  LoginScreen({required this.BusMEAuth, required this.loginController});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -47,27 +54,27 @@ class _LoginScreenState extends State<LoginScreen> {
                 String username = _usernameController.text;
                 String password = _passwordController.text;
 
-                if (username == "admin") {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AdminView(),
-                    ),
-                  );
+                widget.loginController.notify(ObsSignal(
+                    "login", {"username": username, "password": password}),);
+
+                if (widget.BusMEAuth.isLoggedIn()) {
+                  if (username == "admin") {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AdminView()));
+                  } else {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MapView()));
+                  }
                 } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MapView(),
-                    ),
-                  );
+                  //create a popup saying login unsuccessful
                 }
               },
+
               child: Text('Login'),
             ),
           ],
-        ),
-      ),
+        ),)
+      ,
     );
   }
 

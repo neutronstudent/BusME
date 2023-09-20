@@ -99,6 +99,7 @@ class BusMEAuth extends AuthModel {
       return 1;
     }
 
+    //notify observers that i have logged_in
     if (isLoggedIn())
     {
 
@@ -106,7 +107,7 @@ class BusMEAuth extends AuthModel {
       return 0;
 
     }
-    //notify observers that i have logged_in
+    //notify observes that login has failed
     return 1;
   }
 

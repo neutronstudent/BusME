@@ -20,6 +20,4 @@ class LoginController implements Observer
       await _authModel.loginUser(notification.parameters["username"], notification.parameters["password"]);
     }
   }
-
-
 }
