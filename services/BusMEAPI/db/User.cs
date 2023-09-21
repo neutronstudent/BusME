@@ -46,10 +46,10 @@ namespace BusMEAPI
         [JsonIgnore]
         public int? Id {get; set;}
         public int? notf_type {get; set;}
-        public int RouteId {get; set;}
+        public int? RouteId {get; set;}
 
-        public bool VibrationNotifications {get; set;}
-        public bool AudioNotifications {get; set;}
+        public bool? VibrationNotifications {get; set;}
+        public bool? AudioNotifications {get; set;}
     }
 
 

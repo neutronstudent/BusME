@@ -33,7 +33,7 @@ namespace BusMEAPI.Controllers
             if (token.Token == null)
                 return new ForbidResult();
             
-            var data = new {id = token.UserID, token = token.Token};
+            var data = new {id = token.UserID, token = new JwtSecurityTokenHandler().WriteToken(token.Token)};
             
             return new JsonResult(data);
         }

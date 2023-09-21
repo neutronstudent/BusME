@@ -10,10 +10,12 @@ namespace BusMEAPI
         private readonly BusMEContext _context;
         private readonly BaseAuthService _auth;
         private readonly int pageSize = 50;
-        public DbUserService(BusMEContext context, BaseAuthService auth)
+        private readonly ILogger<DbUserService> _logger;
+        public DbUserService(BusMEContext context, BaseAuthService auth, ILogger<DbUserService> logger)
         {
             this._context = context;
             _auth = auth;
+            _logger = logger;
         }
         
 
@@ -30,6 +32,7 @@ namespace BusMEAPI
             {
                 return 1;
             }
+
             
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
