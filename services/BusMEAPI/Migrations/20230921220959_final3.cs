@@ -5,7 +5,7 @@
 namespace BusMEAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class final_migration : Migration
+    public partial class final3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -106,7 +106,7 @@ namespace BusMEAPI
             
             return 0;
         }
-        public async override Task<int> UpdateUserDetails (int id, UserDetails userDetails)
+        public async override Task<int> UpdateUserDetails (int id, UserDetail userDetails)
         {
             var query = from u in _context.Users where u.Id == id select u;
 

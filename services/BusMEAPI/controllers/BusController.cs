@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BusMEAPI
 {
     [ApiController]
-    [Route("routes")]
+    [Route("api/routes")]
     public class BusController : ControllerBase 
     {
         private BusMEContext _db;

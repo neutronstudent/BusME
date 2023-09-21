@@ -20,7 +20,7 @@ namespace BusMEAPI.Controllers
         public class UserCreateRequest
         {
             public string Username {get; set;}
-            public UserDetails Details {get; set;}
+            public UserDetail Details {get; set;}
 
             public string Password {get; set;}
         }
@@ -153,7 +153,7 @@ namespace BusMEAPI.Controllers
         [HttpPut]
         [Authorize(policy:"UserOnly")]
         [Route("{id}/details")]
-        public async Task<ActionResult> UpdateUserDetails(int id, UserDetails details)
+        public async Task<ActionResult> UpdateUserDetails(int id, UserDetail details)
         {
             //overide id
         

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BusMEAPI.Migrations
 {
     [DbContext(typeof(BusMEContext))]
-    [Migration("20230914035612_busstopfix")]
-    partial class busstopfix
+    [Migration("20230921220959_final3")]
+    partial class final3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,44 @@ namespace BusMEAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("DetailsId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Hash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("SettingsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailsId");
+
+                    b.HasIndex("SettingsId");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("BusMEAPI.UserDetail", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
@@ -45,19 +83,34 @@ namespace BusMEAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.HasKey("Id");
+
+                    b.ToTable("UserDetails");
+                });
+
+            modelBuilder.Entity("BusMEAPI.UserSettings", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
+
+                    b.Property<bool>("AudioNotifications")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("RouteId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
+                    b.Property<bool>("VibrationNotifications")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int?>("notf_type")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("UserSettings");
                 });
 
             modelBuilder.Entity("BusRoute", b =>
@@ -162,20 +215,36 @@ namespace BusMEAPI.Migrations
                     b.Property<float?>("Long")
                         .HasColumnType("real");
 
-                    b.Property<int?>("Order")
-                        .HasColumnType("integer");
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Service")
+                    b.Property<string>("TripHeadSign")
                         .HasColumnType("text");
-
-                    b.Property<int?>("TripHeadSign")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BusRouteId");
 
                     b.ToTable("BusTrips");
+                });
+
+            modelBuilder.Entity("BusMEAPI.User", b =>
+                {
+                    b.HasOne("BusMEAPI.UserDetail", "Details")
+                        .WithMany()
+                        .HasForeignKey("DetailsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BusMEAPI.UserSettings", "Settings")
+                        .WithMany()
+                        .HasForeignKey("SettingsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Details");
+
+                    b.Navigation("Settings");
                 });
 
             modelBuilder.Entity("BusStopBusTrip", b =>
