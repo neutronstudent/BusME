@@ -82,10 +82,6 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/destination_map_marker.png
-    - assets/driving_pin.png
-    - assets/friend1.jpg
-    - assets/friend2.jpg
     - assets/ca/lets-encrypt-r3.pem
   # To add assets to your application, add an assets section, like this:
     - assets/images/logo.png
