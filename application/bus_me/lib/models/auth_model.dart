@@ -17,6 +17,7 @@ abstract class AuthModel extends Observable
   int? getUserId();
   bool isLoggedIn();
   Future<int> loginUser(String username, String password);
+  Future<bool> createAccount(String username, String password);
 }
 
 
@@ -118,5 +119,15 @@ class BusMEAuth extends AuthModel {
     //need to pass expiry in the future...
     return _token != null && _token!.isNotEmpty;
   }
+
+  Future<bool> createAccount(String username, String password) async {
+    //TODO
+    // Check if the username exists
+    // If username exists return false
+    // Otherwise create account and return true
+
+    return true;
+  }
+
 
 }

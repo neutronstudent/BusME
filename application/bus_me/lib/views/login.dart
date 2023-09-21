@@ -4,6 +4,7 @@ import 'package:bus_me/views/admin_view.dart';
 import 'package:bus_me/views/map_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'create_account_screen.dart';
 
 import '../controllers/login_controller.dart';
 
@@ -49,51 +50,33 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             SizedBox(height: 24.0),
-            ElevatedButton(
-              onPressed: () {
-                String username = _usernameController.text;
-                String password = _passwordController.text;
-
-                widget.loginController.notify(ObsSignal(
-                    "login", {"username": username, "password": password}),);
-
-                if (widget.BusMEAuth.isLoggedIn()) {
-                  if (username == "admin") {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AdminView()));
-                  } else {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MapView()));
-                  }
-                } else {
-                  // Create a popup alerting user that login attempt was unsuccessful
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text("Login Failed"),
-                        content: Text("Invalid username or password."),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();  // Close the dialog
-                            },
-                            child: Text("OK"),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }
-              },
-
-              child: Text('Login'),
+            Row(  // This is the new Row widget
+              mainAxisAlignment: MainAxisAlignment.center, // Center the buttons
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    // Your login logic here
+                  },
+                  child: Text('Login'),
+                ),
+                SizedBox(width: 20),  // Add space between the buttons
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CreateAccountScreen(loginController: widget.loginController, BusMEAuth: widget.BusMEAuth)),
+                    );
+                  },
+                  child: Text('Create Account'),
+                ),
+              ],
             ),
           ],
-        ),)
-      ,
+        ),
+      ),
     );
   }
+
 
   @override
   void dispose() {

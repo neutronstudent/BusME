@@ -20,4 +20,10 @@ class LoginController implements Observer
       await _authModel.loginUser(notification.parameters["username"], notification.parameters["password"]);
     }
   }
+
+  Future<bool> createAccount(String username, String password) async {
+    return await _authModel.createAccount(username, password);
+  }
 }
+
+
