@@ -2,6 +2,8 @@ font_awesome_flutter
 pub.dev/packages/font_awesome_flutter
 	user
 		FontAwesomeIcons.solidUser
+	wheelchair
+		FontAwesomeIcons.solidWheelchair
 	bus
 		FontAwesomeIcons.solidBusSimple
 	arrow(s)
@@ -15,4 +17,4 @@ pub.dev/packages/font_awesome_flutter
 Installation:
 
 dependencies:
-  font_awesome_flutter: <latest_version>
+  font_awesome_flutter: ^10.5.0
