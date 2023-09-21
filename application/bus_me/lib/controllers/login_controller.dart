@@ -21,5 +21,9 @@ class LoginController implements Observer
     }
   }
 
-
+  Future<bool> createAccount(String username, String password) async {
+    return await _authModel.createAccount(username, password);
+  }
 }
+
+
