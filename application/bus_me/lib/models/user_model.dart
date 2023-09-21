@@ -45,9 +45,6 @@ class BusMeUserModel extends UserModel
   Future<int> fetchUser() async {
     //build get request
 
-
-
-
     userServer.connectionTimeout = const Duration(seconds: 4);
 
     HttpClientResponse req;
