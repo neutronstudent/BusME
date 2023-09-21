@@ -1,108 +1,87 @@
-
+import 'package:bus_me/models/auth_model.dart';
 import 'package:bus_me/observable.dart';
+import 'package:bus_me/views/admin_view.dart';
+import 'package:bus_me/views/map_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'create_account_screen.dart';
 
-class LoginPage extends StatefulWidget
-{
-  final Observable loginObservable = BaseObservable();
+import '../controllers/login_controller.dart';
 
-  LoginPage({Key? key}):
-        super(key: key);
+class LoginScreen extends StatefulWidget {
+  final AuthModel BusMEAuth;
+  final LoginController loginController;
+
+  LoginScreen({required this.BusMEAuth, required this.loginController});
 
   @override
-  State<StatefulWidget> createState() => LoginPageState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class LoginPageState extends State<LoginPage>
-{
-
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+class _LoginScreenState extends State<LoginScreen> {
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
-  Widget build(BuildContext context)
-  {
-    return
-      Padding(
-        padding: const EdgeInsets.all(20),
-        child: ListView(
-          //all children of login menu
-          children: [
-
-            //title
-            Container(
-              padding: const EdgeInsets.all(10),
-              alignment: Alignment.center,
-              child: const Text(
-                'BusME',
-                style: TextStyle(
-                  fontSize: 48
-                ),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('BusMe'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            TextField(
+              controller: _usernameController,
+              decoration: InputDecoration(
+                labelText: 'Username',
+                border: OutlineInputBorder(),
               ),
             ),
-
-            //login text
-            Container(
-              padding: const EdgeInsets.all(10),
-              alignment: Alignment.center,
-              child: const Text(
-                'Login',
-                style: TextStyle(
-                    fontSize: 18
-                ),
+            SizedBox(height: 16.0),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                border: OutlineInputBorder(),
               ),
             ),
-
-            //login boxes
-            //username field
-            Container(
-              padding: const EdgeInsets.all(10),
-              alignment: Alignment.center,
-              child: TextField(
-                controller: usernameController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Username"
+            SizedBox(height: 24.0),
+            Row(  // This is the new Row widget
+              mainAxisAlignment: MainAxisAlignment.center, // Center the buttons
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    // Your login logic here
+                  },
+                  child: Text('Login'),
                 ),
-              )
-            ),
-
-            Container(
-                padding: const EdgeInsets.all(10),
-                alignment: Alignment.center,
-                child: TextField(
-                  obscureText: true,
-                  controller: passwordController,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Password"
-                  ),
-                )
-            ),
-            //enty button
-            Container(
-
-                padding: const EdgeInsets.fromLTRB(10, 0, 10 , 0),
-                alignment: Alignment.center,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(minimumSize:  const Size.fromHeight(40)),
-                  onPressed:  () async {
-                    await widget.loginObservable.notifyObservers(
-                        ObsSignal("login", {"username": usernameController.text, "password": passwordController.text})
+                SizedBox(width: 20),  // Add space between the buttons
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CreateAccountScreen(loginController: widget.loginController, BusMEAuth: widget.BusMEAuth)),
                     );
                   },
-                  child: const Text(
-                    'login',
-                    style: TextStyle(
-                      fontSize: 18
-                    ),
-                  ),
-                )
+                  child: Text('Create Account'),
+                ),
+              ],
             ),
-
           ],
-        )
-      );
+        ),
+      ),
+    );
+  }
+
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

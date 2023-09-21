@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ffi';
 import 'dart:io';
 
-import 'package:bus_me/controllers/login_controller.dart';
 import 'package:bus_me/models/api_constants.dart';
 import 'package:bus_me/observable.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
 
 
 
@@ -16,8 +14,10 @@ import 'package:http/http.dart' as http;
 abstract class AuthModel extends Observable
 {
   String? getToken();
+  int? getUserId();
   bool isLoggedIn();
   Future<int> loginUser(String username, String password);
+  Future<bool> createAccount(String username, String password);
 }
 
 
@@ -25,13 +25,18 @@ class BusMEAuth extends AuthModel {
 
   //
   String? _token = "";
-
+  int? _id;
 
   //return token if exists
   @override
   String? getToken()
   {
     return _token;
+  }
+
+  int? getUserId()
+  {
+    return _id;
   }
 
   //attempt to login to BusME
@@ -41,6 +46,15 @@ class BusMEAuth extends AuthModel {
     //build get request
     HttpClient authServer = HttpClient(context: SecurityContext.defaultContext);
 
+    authServer.badCertificateCallback =  (X509Certificate cert, String host, int port) {
+      if (kDebugMode)
+      {
+        return true;
+      }
+      return false;
+
+    };
+
     authServer.connectionTimeout = const Duration(seconds: 4);
 
     HttpClientResponse req;
@@ -48,6 +62,7 @@ class BusMEAuth extends AuthModel {
     //set request URI
     Uri route = Uri.https(API_ROUTE,'/api/auth/login', {'username': username, 'password': password});
     log(route.toString());
+
     try {
       HttpClientRequest request = await authServer.getUrl(route);
 
@@ -68,9 +83,24 @@ class BusMEAuth extends AuthModel {
       return 1;
     }
 
-    log("Login Succieded");
-    _token = await req.transform(utf8.decoder).join();
 
+
+    log("Login Succided");
+    String source = await req.transform(utf8.decoder).join();
+
+    try {
+      dynamic result = jsonDecode(source);
+
+      _token = result.token;
+
+      _id = result.id;
+    }
+    on Exception catch(e)
+    {
+      return 1;
+    }
+
+    //notify observers that i have logged_in
     if (isLoggedIn())
     {
 
@@ -78,7 +108,7 @@ class BusMEAuth extends AuthModel {
       return 0;
 
     }
-    //notify observers that i have logged_in
+    //notify observes that login has failed
     return 1;
   }
 
@@ -89,5 +119,15 @@ class BusMEAuth extends AuthModel {
     //need to pass expiry in the future...
     return _token != null && _token!.isNotEmpty;
   }
+
+  Future<bool> createAccount(String username, String password) async {
+    //TODO
+    // Check if the username exists
+    // If username exists return false
+    // Otherwise create account and return true
+
+    return true;
+  }
+
 
 }

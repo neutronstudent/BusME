@@ -1,4 +1,4 @@
-# bus_me
+# bus_app
 
 A new Flutter project.
 
