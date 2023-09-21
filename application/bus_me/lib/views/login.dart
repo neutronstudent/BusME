@@ -66,7 +66,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         MaterialPageRoute(builder: (context) => MapView()));
                   }
                 } else {
-                  //create a popup saying login unsuccessful
+                  // Create a popup alerting user that login attempt was unsuccessful
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text("Login Failed"),
+                        content: Text("Invalid username or password."),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();  // Close the dialog
+                            },
+                            child: Text("OK"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 }
               },
 
