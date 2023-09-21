@@ -1,27 +1,30 @@
-import 'package:bus_app/main_login_page.dart';
+import 'dart:io';
+
+import 'package:bus_me/controllers/login_controller.dart';
+import 'package:bus_me/models/auth_model.dart';
+import 'package:bus_me/observable.dart';
+import 'package:bus_me/views/login.dart';
 import 'package:flutter/material.dart';
+import 'views/map_view.dart';
+import 'views/admin_view.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'package:flutter/services.dart';
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-  State<MyApp> createState() => _MyAppState();
-}
 
-class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
+
+void main() => runApp(LoginView());
+
+class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
+      title: 'BusMe Login',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
-      home: const MainPage(),
+      home: LoginScreen(),
     );
   }
 }
+

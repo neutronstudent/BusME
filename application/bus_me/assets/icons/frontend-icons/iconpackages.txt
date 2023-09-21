@@ -1,0 +1,18 @@
+font_awesome_flutter
+pub.dev/packages/font_awesome_flutter
+	user
+		FontAwesomeIcons.solidUser
+	bus
+		FontAwesomeIcons.solidBusSimple
+	arrow(s)
+		FontAwesomeIcons.solidArrowRight
+		FontAwesomeIcons.solidArrowLeft
+		FontAwesomeIcons.solidArrowUp
+		FontAwesomeIcons.solidArrowDown
+	check
+		FontAwesomeIcons.solidCheck
+
+Installation:
+
+dependencies:
+  font_awesome_flutter: <latest_version>
