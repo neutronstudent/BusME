@@ -55,7 +55,7 @@ class BusMeUserModel extends UserModel
     log(route.toString());
     try {
       HttpClientRequest request = await userServer.getUrl(route);
-
+      request.headers.add(HttpHeaders.authorizationHeader, _authModel.getToken().toString());
       req = await request.close();
     }
     on SocketException catch (e)
@@ -83,7 +83,7 @@ class BusMeUserModel extends UserModel
     }
 
     //notify observers that i have fetched a user
-    return 10;
+    return 0;
   }
 
   @override
