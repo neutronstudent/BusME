@@ -15,15 +15,19 @@ class CreateAccountScreen extends StatefulWidget {
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('Create Account'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -43,13 +47,42 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 border: OutlineInputBorder(),
               ),
             ),
+            TextField(
+              controller: _nameController,
+              obscureText: false,
+              decoration: InputDecoration(
+                labelText: 'Name',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 24),
+            TextField(
+              controller: _emailController,
+              obscureText: false,
+              decoration: InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 24),
+            TextField(
+              controller: _phoneController,
+              obscureText: false,
+              decoration: InputDecoration(
+                labelText: 'Phone',
+                border: OutlineInputBorder(),
+              ),
+            ),
             SizedBox(height: 24),
             ElevatedButton(
               onPressed: () async {
                 String username = _usernameController.text;
                 String password = _passwordController.text;
+                String name = _nameController.text;
+                String email = _emailController.text;
+                String phone = _phoneController.text;
 
-                bool result = await widget.loginController.createAccount(username, password);
+                bool result = await widget.loginController.createAccount(username, password, name, email, phone);
 
                 if (result) {
                   showDialog(

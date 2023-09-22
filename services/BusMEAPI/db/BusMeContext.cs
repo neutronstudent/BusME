@@ -23,5 +23,9 @@ namespace BusMEAPI.Database
         public DbSet<BusStop>  BusStops {get; set;}
 
         public DbSet<BusTrip> BusTrips {get; set;}
+
+        public DbSet<UserSettings> UserSettings {get; set;}
+        public DbSet<UserDetail> UserDetails {get; set;}
+
     }
 }

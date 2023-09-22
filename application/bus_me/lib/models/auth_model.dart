@@ -17,7 +17,7 @@ abstract class AuthModel extends Observable
   int? getUserId();
   bool isLoggedIn();
   Future<int> loginUser(String username, String password);
-  Future<bool> createAccount(String username, String password);
+  int logout();
 }
 
 
@@ -91,9 +91,9 @@ class BusMEAuth extends AuthModel {
     try {
       dynamic result = jsonDecode(source);
 
-      _token = result.token;
+      _token = result["token"];
 
-      _id = result.id;
+      _id = result["id"];
     }
     on Exception catch(e)
     {
@@ -120,13 +120,13 @@ class BusMEAuth extends AuthModel {
     return _token != null && _token!.isNotEmpty;
   }
 
-  Future<bool> createAccount(String username, String password) async {
-    //TODO
-    // Check if the username exists
-    // If username exists return false
-    // Otherwise create account and return true
+  @override
+  int logout() {
 
-    return true;
+    _token = null;
+    _id = null;
+
+    return 1;
   }
 
 

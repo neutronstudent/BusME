@@ -1,6 +1,13 @@
+import 'package:bus_me/models/auth_model.dart';
+import 'package:bus_me/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:bus_me/views/login.dart';
 
 class SettingsPage extends StatefulWidget {
+  UserModel userModel;
+
+  SettingsPage(this.userModel);
+
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
@@ -8,6 +15,12 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   bool isAudioEnabled = false;
   bool isVibrationEnabled = false;
+
+  _SettingsPageState()
+  {
+    this.isAudioEnabled= widget.userModel.getUser()!.settings!.audioNotifications!;
+    this.isVibrationEnabled = widget.userModel.getUser()!.settings!.vibrationNotifications!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +43,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   });
                 },
               ),
-              onTap: () {
-                setState(() {
+              onTap: ()  {
+                setState(() async {
                   isAudioEnabled = !isAudioEnabled;
+                  widget.userModel.getUser()!.settings?.audioNotifications = isAudioEnabled;
+                  await widget.userModel.updateUser();
                 });
               },
             ),
@@ -44,12 +59,15 @@ class _SettingsPageState extends State<SettingsPage> {
                 onChanged: (bool? value) {
                   setState(() {
                     isVibrationEnabled = value ?? false;
+
                   });
                 },
               ),
               onTap: () {
-                setState(() {
+                setState(() async {
                   isVibrationEnabled = !isVibrationEnabled;
+                  widget.userModel.getUser()!.settings?.vibrationNotifications = isVibrationEnabled;
+                  await widget.userModel.updateUser();
                 });
               },
             ),
@@ -58,10 +76,8 @@ class _SettingsPageState extends State<SettingsPage> {
             // Logout button
             ElevatedButton(
               onPressed: () {
-                Navigator.popUntil(
-                  context,
-                  ModalRoute.withName('/'),
-                );
+
+                Navigator.of(context).popUntil((route) => route.isFirst);
               },
               child: Text('Logout'),
             ),

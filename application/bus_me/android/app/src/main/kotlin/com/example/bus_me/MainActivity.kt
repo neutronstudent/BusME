@@ -1,6 +1,7 @@
-package com.example.bus_app
+package com.example.bus_me
 
 import io.flutter.embedding.android.FlutterActivity
 
 class MainActivity: FlutterActivity() {
+
 }

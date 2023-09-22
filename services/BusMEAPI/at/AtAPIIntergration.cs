@@ -62,16 +62,21 @@ namespace BusMEAPI
                     newTrip = new BusTrip();
                     await _dbContext.BusTrips.AddAsync(newTrip);
                     route.Trips.Add(newTrip);
-                    
-                    
                 }
 
                 //populate trip with update fields
                 newTrip.ApiTripID = trip.trip_id;
+                _logger.LogDebug(trip.trip_id);
                 newTrip.BusRoute = route;
                 newTrip.BusRouteId = route.Id;
                 newTrip.Direction = trip.direction_id;
-                newTrip.StartTime = DateTime.ParseExact(trip.start_date + ":" + trip.start_time, "yyyyMMdd:HH:mm:ss", null).ToUniversalTime();
+                try {
+                    newTrip.StartTime = DateTime.ParseExact(trip.start_date + ":" + trip.start_time, "yyyyMMdd:HH:mm:ss", null).ToUniversalTime();
+                }
+                catch (System.FormatException e){
+                    _logger.LogError("Datetime format Execption");
+                    newTrip.StartTime = DateTime.UtcNow;
+                }
             }
             await _dbContext.SaveChangesAsync();
 
@@ -281,7 +286,7 @@ namespace BusMEAPI
         public override async Task<BusRoute?> GetRoute(int route)
         {
             //send route info to user
-            var query = from r in _dbContext.BusRoutes where r.Id.Equals(route) select r;
+            var query = from r in _dbContext.BusRoutes.Include("Trips") where r.Id.Equals(route) select r;
 
             //execute query 
             return await query.SingleOrDefaultAsync();

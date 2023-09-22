@@ -20,7 +20,7 @@ namespace BusMEAPI.Controllers
         public class UserCreateRequest
         {
             public string Username {get; set;}
-            public UserDetails Details {get; set;}
+            public UserDetail Details {get; set;}
 
             public string Password {get; set;}
         }
@@ -31,6 +31,7 @@ namespace BusMEAPI.Controllers
         {
                 User newUser = new User();
                 newUser.Details = user.Details;
+                newUser.Settings = new UserSettings();
                 newUser.Username = user.Username;
                 newUser.Type = type;
 
@@ -51,6 +52,7 @@ namespace BusMEAPI.Controllers
             User newUser = new User();
             //overidde user type field to ensue no hacking 
             newUser.Type = BusMEAPI.User.UserType.User;
+            newUser.Settings = new UserSettings();
             newUser.Details = user.Details;
             newUser.Username = user.Username;
                 
@@ -67,6 +69,7 @@ namespace BusMEAPI.Controllers
         //get user 
         [HttpGet]
         [Authorize(policy:"UserOnly")]
+        
         [Route("{id}")]
         public async Task<ActionResult<User>> GetUser(int? id)
         {
@@ -96,6 +99,7 @@ namespace BusMEAPI.Controllers
         //search, only allow admin
         [HttpGet]
         [Authorize(policy:"AdminOnly")]
+        //[AllowAnonymous]
         public async Task<ActionResult> SearchUser(string query, int? page)
         {
             if (!(query.Length > 0))
@@ -135,16 +139,13 @@ namespace BusMEAPI.Controllers
         public async Task<ActionResult> UpdateUser(int id, User user)
         {
             //overide id
-            user.Id = id;
 
-            if (await _userMang.UpdateUser(user) != 0)
+            int result = await _userMang.UpdateUser(id, user);
+            if (result != 0 )
             {
                 return new NotFoundResult();
             }
-            else
-            {
-                return new OkResult();
-            }
+            return new OkResult();
 
             
         }
@@ -153,7 +154,7 @@ namespace BusMEAPI.Controllers
         [HttpPut]
         [Authorize(policy:"UserOnly")]
         [Route("{id}/details")]
-        public async Task<ActionResult> UpdateUserDetails(int id, UserDetails details)
+        public async Task<ActionResult> UpdateUserDetails(int id, UserDetail details)
         {
             //overide id
         

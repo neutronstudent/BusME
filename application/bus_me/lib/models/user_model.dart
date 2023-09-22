@@ -50,18 +50,21 @@ class BusMeUserModel extends UserModel
     HttpClientResponse req;
 
     //set request URI
-    Uri route = Uri.https(API_ROUTE,'/api/users/{${_authModel.getUserId()}}');
+    Uri route = Uri.https(API_ROUTE,'/api/users/${_authModel.getUserId()}');
 
     log(route.toString());
     try {
       HttpClientRequest request = await userServer.getUrl(route);
-      request.headers.add(HttpHeaders.authorizationHeader, _authModel.getToken().toString());
+
+      request.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
+
       req = await request.close();
     }
     on SocketException catch (e)
     {
       return 1;
     }
+    log(req.statusCode.toString());
     if(req.statusCode != 200)
     {
       return 1;
@@ -70,11 +73,8 @@ class BusMeUserModel extends UserModel
     try
     {
       dynamic result = jsonDecode(await req.transform(utf8.decoder).join());
-      
-      UserSettings settings = UserSettings(result.settings.audioNotifications, result.settings.vibrationNotifications, result.settings.routeId);
-      UserDetails details = UserDetails(result.details.name, result.details.email, result.details.phone);
 
-      _user = User(result.id, result.username, settings, details, result.type);
+      _user = User.fromJson(result);
 
     }
     on Exception catch(e)
@@ -123,8 +123,8 @@ class BusMeUserModel extends UserModel
     HttpClientRequest detailPut = await userServer.putUrl(detailRoute);
     HttpClientRequest settingsPut = await userServer.putUrl(settingsRotue);
 
-    detailPut.headers.add(HttpHeaders.authorizationHeader, _authModel.getToken()!);
-    settingsPut.headers.add(HttpHeaders.authorizationHeader, _authModel.getToken()!);
+    detailPut.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
+    settingsPut.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
 
     detailPut.write(jsonEncode(_user!.details));
     settingsPut.write(jsonEncode(_user!.settings));
@@ -156,12 +156,22 @@ class UserRegistration {
 }
 
 
-class UserSettings
-{
-  bool audioNotifications = false;
-  bool vibrationNotifications = false;
+class UserSettings {
+  bool? audioNotifications = false;
+  bool? vibrationNotifications = false;
   int? route;
-  UserSettings(this.audioNotifications, this.vibrationNotifications, this.route);
+
+  UserSettings(this.audioNotifications, this.vibrationNotifications,
+      this.route);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'notf_type': 0,
+      'audioNotifications': audioNotifications,
+      'vibrationNotifications': vibrationNotifications,
+      'routeId': route,
+    };
+  }
 }
 
 class UserDetails
@@ -171,14 +181,66 @@ class UserDetails
   String phone;
 
   UserDetails(this.name, this.email, this.phone);
+
+  Map<String, dynamic> toJson() {
+    return {
+    'name': name,
+    'email': email,
+    'phone': phone,
+    };
+  }
 }
 
-class User
-{
-  UserSettings settings;
-  UserDetails details;
+class User {
+  UserSettings? settings;
+  UserDetails? details;
   String username;
   int id;
   int type;
+
+
+
   User(this.id, this.username, this.settings, this.details, this.type);
+
+  static User fromJson(dynamic sourceObj) {
+    dynamic? settings = sourceObj["settings"];
+    dynamic? details = sourceObj["details"];
+
+    UserSettings? settingsObj;
+    UserDetails? detailsObj;
+
+    if (settings != null) {
+      settingsObj = UserSettings(
+          settings["audioNotifications"], settings["vibrationNotifications"],
+          settings["routeId"]);
+    }
+    else
+      {
+        settingsObj = UserSettings(
+            false, false,
+            0);
+      }
+
+    if (details != null) {
+      detailsObj =
+          UserDetails(details["name"], details["email"], details["phone"]);
+    }
+    else
+    {
+      detailsObj = UserDetails("email", "phone", "name");
+    }
+
+    return User(sourceObj["id"], sourceObj["username"], settingsObj, detailsObj,
+        sourceObj["type"]);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'settings': settings?.toJson(),
+      'details': details?.toJson(),
+      'username': username,
+      'id': id,
+      'type': type,
+    };
+  }
 }
