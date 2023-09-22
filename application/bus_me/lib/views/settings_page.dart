@@ -1,6 +1,7 @@
 import 'package:bus_me/models/auth_model.dart';
 import 'package:bus_me/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:bus_me/views/login.dart';
 
 class SettingsPage extends StatefulWidget {
   UserModel userModel;
