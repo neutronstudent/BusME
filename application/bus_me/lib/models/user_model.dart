@@ -70,11 +70,8 @@ class BusMeUserModel extends UserModel
     try
     {
       dynamic result = jsonDecode(await req.transform(utf8.decoder).join());
-      
-      UserSettings settings = UserSettings(result.settings.audioNotifications, result.settings.vibrationNotifications, result.settings.routeId);
-      UserDetails details = UserDetails(result.details.name, result.details.email, result.details.phone);
 
-      _user = User(result.id, result.username, settings, details, result.type);
+      _user = User.fromJson(result);
 
     }
     on Exception catch(e)
@@ -180,5 +177,27 @@ class User
   String username;
   int id;
   int type;
+
   User(this.id, this.username, this.settings, this.details, this.type);
+
+  static User fromJson(dynamic sourceObj)
+  {
+    dynamic? settings = sourceObj["settings"];
+    dynamic? details = sourceObj["details"];
+
+    UserSettings? settingsObj;
+    UserDetails? detailsObj;
+
+    if (settings != null)
+    {
+      settingsObj = UserSettings(settings["audioNotifications"], settings["vibrationNotifications"], settings["routeId"]);
+    }
+
+    if (details != null)
+    {
+      detailsObj = UserDetails(details["name"], details["email"], details["phone"]);
+    }
+
+    return User(sourceObj["id"], sourceObj["username"], settingsObj, detailsObj, sourceObj["type"]);
+  }
 }
