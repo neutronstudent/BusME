@@ -12,6 +12,10 @@ void main() {
   LoginController loginController = LoginController(authModel, userManagementModel);
 
   runApp(MaterialApp(
+    theme: ThemeData(
+      primarySwatch: Colors.blue,
+      fontFamily: 'Helvetica',
+    ),
     home: LoginScreen(
       BusMEAuth: authModel,
       loginController: loginController,
