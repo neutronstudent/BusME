@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:bus_me/models/user_model.dart';
 import 'package:flutter/foundation.dart';
@@ -86,18 +87,20 @@ class BusMEUserManagement extends UserManagementModel
 
     List<User> userList = [];
 
-    Uri route = Uri.https(API_ROUTE,'/api/users/search');
+    Uri route = Uri.https(API_ROUTE,'/api/users', {"query": query.toString(), "page": "0"});
     HttpClientRequest delReq = await userServer.getUrl(route);
-
+    print(route.toString());
     delReq.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
 
 
     HttpClientResponse result = await delReq.close();
+    print(result.statusCode);
 
     if (result.statusCode != HttpStatus.ok)
     {
       return userList;
     }
+
 
     dynamic decode  = jsonDecode(await result.transform(utf8.decoder).join());
 
@@ -166,11 +169,12 @@ class BusMEUserManagement extends UserManagementModel
     HttpClientResponse req;
 
     //set request URI
-    Uri route = Uri.https(API_ROUTE,'/api/users/{${_authModel.getUserId()}}');
+    Uri route = Uri.https(API_ROUTE,'/api/users/{${id}}');
 
     try {
       HttpClientRequest request = await userServer.putUrl(route);
       request.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
+      print(jsonEncode(user));
       request.write(jsonEncode(user));
       req = await request.close();
     }
@@ -178,7 +182,7 @@ class BusMEUserManagement extends UserManagementModel
     {
       return 1;
     }
-
+    print(req.reasonPhrase);
     if(req.statusCode != 200)
     {
       return 1;

@@ -69,6 +69,7 @@ namespace BusMEAPI.Controllers
         //get user 
         [HttpGet]
         [Authorize(policy:"UserOnly")]
+        
         [Route("{id}")]
         public async Task<ActionResult<User>> GetUser(int? id)
         {
@@ -98,6 +99,7 @@ namespace BusMEAPI.Controllers
         //search, only allow admin
         [HttpGet]
         [Authorize(policy:"AdminOnly")]
+        //[AllowAnonymous]
         public async Task<ActionResult> SearchUser(string query, int? page)
         {
             if (!(query.Length > 0))
@@ -137,16 +139,13 @@ namespace BusMEAPI.Controllers
         public async Task<ActionResult> UpdateUser(int id, User user)
         {
             //overide id
-            user.Id = id;
 
-            if (await _userMang.UpdateUser(user) != 0)
+            int result = await _userMang.UpdateUser(id, user);
+            if (result != 0 )
             {
                 return new NotFoundResult();
             }
-            else
-            {
-                return new OkResult();
-            }
+            return new OkResult();
 
             
         }
