@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:bus_me/views/settings_page.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -83,6 +84,19 @@ class _MapPage extends State<MapPage> {
           title: const Text('Bus me Route'),
           backgroundColor: Colors.deepPurpleAccent,
           elevation: 2,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SettingsPage(),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
         body: GoogleMap(
           onMapCreated: _onMapCreated,
