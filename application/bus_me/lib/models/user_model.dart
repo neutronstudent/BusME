@@ -175,8 +175,8 @@ class UserDetails
 
 class User
 {
-  UserSettings settings;
-  UserDetails details;
+  UserSettings? settings;
+  UserDetails? details;
   String username;
   int id;
   int type;

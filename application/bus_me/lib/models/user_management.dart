@@ -23,7 +23,7 @@ abstract class UserManagementModel
   //update the user at ID to the new user object
   Future<int> updateUser(int id, User user);
 
-  Future<List<User>> getUser(int id);
+  Future<User> getUser(int id);
 }
 
 class BusMEUserManagement extends UserManagementModel
@@ -87,7 +87,7 @@ class BusMEUserManagement extends UserManagementModel
   }
 
   @override
-  Future<List<User>> getUser(int id) async{
+  Future<User> getUser(int id) async{
     // TODO: implement searchUser
     throw UnimplementedError();
   }

@@ -20,7 +20,7 @@ namespace BusMEAPI.Controllers
         public class UserCreateRequest
         {
             public string Username {get; set;}
-            public UserDetails Details {get; set;}
+            public UserDetail Details {get; set;}
 
             public string Password {get; set;}
         }
@@ -31,6 +31,7 @@ namespace BusMEAPI.Controllers
         {
                 User newUser = new User();
                 newUser.Details = user.Details;
+                newUser.Settings = new UserSettings();
                 newUser.Username = user.Username;
                 newUser.Type = type;
 
@@ -51,6 +52,7 @@ namespace BusMEAPI.Controllers
             User newUser = new User();
             //overidde user type field to ensue no hacking 
             newUser.Type = BusMEAPI.User.UserType.User;
+            newUser.Settings = new UserSettings();
             newUser.Details = user.Details;
             newUser.Username = user.Username;
                 
@@ -153,7 +155,7 @@ namespace BusMEAPI.Controllers
         [HttpPut]
         [Authorize(policy:"UserOnly")]
         [Route("{id}/details")]
-        public async Task<ActionResult> UpdateUserDetails(int id, UserDetails details)
+        public async Task<ActionResult> UpdateUserDetails(int id, UserDetail details)
         {
             //overide id
         

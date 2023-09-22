@@ -10,10 +10,12 @@ namespace BusMEAPI
         private readonly BusMEContext _context;
         private readonly BaseAuthService _auth;
         private readonly int pageSize = 50;
-        public DbUserService(BusMEContext context, BaseAuthService auth)
+        private readonly ILogger<DbUserService> _logger;
+        public DbUserService(BusMEContext context, BaseAuthService auth, ILogger<DbUserService> logger)
         {
             this._context = context;
             _auth = auth;
+            _logger = logger;
         }
         
 
@@ -30,6 +32,7 @@ namespace BusMEAPI
             {
                 return 1;
             }
+
             
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
@@ -59,7 +62,7 @@ namespace BusMEAPI
 
         public async override Task<User?> GetUser(int id)
         {
-            var query = from u in _context.Users 
+            var query = from u in _context.Users.Include(u => u.Details).Include(u => u.Settings) 
                 where u.Id == id
                 select u;
             
@@ -68,7 +71,7 @@ namespace BusMEAPI
 
         public async override Task<User?> GetUser(string username)
         {
-            var query = from u in _context.Users 
+            var query = from u in _context.Users.Include(u => u.Details).Include(u => u.Settings)
                 where u.Username == username
                 select u;
             
@@ -106,7 +109,7 @@ namespace BusMEAPI
             
             return 0;
         }
-        public async override Task<int> UpdateUserDetails (int id, UserDetails userDetails)
+        public async override Task<int> UpdateUserDetails (int id, UserDetail userDetails)
         {
             var query = from u in _context.Users where u.Id == id select u;
 

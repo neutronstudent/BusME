@@ -8,7 +8,7 @@ namespace BusMEAPI
         //update target user
         public abstract Task<int> UpdateUser(User updatedUser);
         public abstract Task<int> UpdateUserSettings(int id, UserSettings userSettings);
-        public abstract Task<int> UpdateUserDetails (int id, UserDetails userDetails);
+        public abstract Task<int> UpdateUserDetails (int id, UserDetail userDetails);
 
         public abstract Task<User?> GetUser(int id);
 

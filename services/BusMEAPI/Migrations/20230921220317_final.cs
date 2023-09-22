@@ -7,18 +7,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BusMEAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class bus_db_migrations : Migration
+    public partial class final : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "RouteId",
-                table: "Users",
-                type: "integer",
-                nullable: false,
-                defaultValue: 0);
-
             migrationBuilder.CreateTable(
                 name: "BusRoutes",
                 columns: table => new
@@ -42,16 +35,48 @@ namespace BusMEAPI.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     BusTripId = table.Column<int>(type: "integer", nullable: false),
-                    Lat = table.Column<float>(type: "real", nullable: false),
-                    Long = table.Column<float>(type: "real", nullable: false),
-                    StopCode = table.Column<int>(type: "integer", nullable: false),
-                    StopName = table.Column<int>(type: "integer", nullable: false),
-                    SupportsWheelchair = table.Column<int>(type: "integer", nullable: false),
-                    Order = table.Column<int>(type: "integer", nullable: false)
+                    Lat = table.Column<float>(type: "real", nullable: true),
+                    Long = table.Column<float>(type: "real", nullable: true),
+                    StopCode = table.Column<string>(type: "text", nullable: true),
+                    ApiId = table.Column<string>(type: "text", nullable: true),
+                    StopName = table.Column<string>(type: "text", nullable: true),
+                    SupportsWheelchair = table.Column<int>(type: "integer", nullable: true),
+                    Order = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BusStops", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Phone = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserDetails", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserSettings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    notf_type = table.Column<int>(type: "integer", nullable: true),
+                    RouteId = table.Column<int>(type: "integer", nullable: false),
+                    VibrationNotifications = table.Column<bool>(type: "boolean", nullable: false),
+                    AudioNotifications = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserSettings", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -61,13 +86,12 @@ namespace BusMEAPI.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     BusRouteId = table.Column<int>(type: "integer", nullable: false),
-                    TripHeadSign = table.Column<int>(type: "integer", nullable: true),
+                    TripHeadSign = table.Column<string>(type: "text", nullable: true),
                     ApiTripID = table.Column<string>(type: "text", nullable: false),
-                    Service = table.Column<string>(type: "text", nullable: true),
                     Direction = table.Column<int>(type: "integer", nullable: true),
-                    Order = table.Column<int>(type: "integer", nullable: true),
                     Lat = table.Column<float>(type: "real", nullable: true),
-                    Long = table.Column<float>(type: "real", nullable: true)
+                    Long = table.Column<float>(type: "real", nullable: true),
+                    StartTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,6 +100,36 @@ namespace BusMEAPI.Migrations
                         name: "FK_BusTrips_BusRoutes_BusRouteId",
                         column: x => x.BusRouteId,
                         principalTable: "BusRoutes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    DetailsId = table.Column<int>(type: "integer", nullable: false),
+                    SettingsId = table.Column<int>(type: "integer", nullable: false),
+                    Type = table.Column<int>(type: "integer", nullable: true),
+                    Hash = table.Column<string>(type: "text", nullable: false),
+                    Salt = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_UserDetails_DetailsId",
+                        column: x => x.DetailsId,
+                        principalTable: "UserDetails",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Users_UserSettings_SettingsId",
+                        column: x => x.SettingsId,
+                        principalTable: "UserSettings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -113,6 +167,16 @@ namespace BusMEAPI.Migrations
                 name: "IX_BusTrips_BusRouteId",
                 table: "BusTrips",
                 column: "BusRouteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_DetailsId",
+                table: "Users",
+                column: "DetailsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_SettingsId",
+                table: "Users",
+                column: "SettingsId");
         }
 
         /// <inheritdoc />
@@ -122,17 +186,22 @@ namespace BusMEAPI.Migrations
                 name: "BusStopBusTrip");
 
             migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
                 name: "BusStops");
 
             migrationBuilder.DropTable(
                 name: "BusTrips");
 
             migrationBuilder.DropTable(
-                name: "BusRoutes");
+                name: "UserDetails");
 
-            migrationBuilder.DropColumn(
-                name: "RouteId",
-                table: "Users");
+            migrationBuilder.DropTable(
+                name: "UserSettings");
+
+            migrationBuilder.DropTable(
+                name: "BusRoutes");
         }
     }
 }
