@@ -9,7 +9,7 @@
 
         android:label="BusMe"
         android:icon="@mipmap/launcher_icon">
-        android:label="bus_app"
+        android:label="bus_me"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

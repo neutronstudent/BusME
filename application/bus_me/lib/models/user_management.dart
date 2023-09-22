@@ -30,7 +30,7 @@ class BusMEUserManagement extends UserManagementModel
 {
   final AuthModel _authModel;
 
-  HttpClient userServer = HttpClient(context: SecurityContext.defaultContext);
+  HttpClient userServer = HttpClient(/*context: SecurityContext.defaultContext*/);
 
   BusMEUserManagement(this._authModel) {
     userServer.badCertificateCallback =
