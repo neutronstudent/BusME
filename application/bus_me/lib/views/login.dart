@@ -81,11 +81,11 @@ class _LoginScreenState extends State<LoginScreen> {
       int userType = user.type;
 
       if (userType == 2) {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
+        Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => AdminPortal(),
         ));
       } else {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
+        Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => MapPage(),
         ));
       }

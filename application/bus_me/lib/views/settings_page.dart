@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bus_me/views/login.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -58,10 +59,7 @@ class _SettingsPageState extends State<SettingsPage> {
             // Logout button
             ElevatedButton(
               onPressed: () {
-                Navigator.popUntil(
-                  context,
-                  ModalRoute.withName('/'),
-                );
+                Navigator.of(context).pop();
               },
               child: Text('Logout'),
             ),

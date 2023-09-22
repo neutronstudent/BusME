@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:bus_me/controllers/admin_portal_controller.dart';
 import 'package:bus_me/models/user_model.dart';
 import 'package:bus_me/views/UserDetailsPage.dart';
 import 'package:bus_me/models/auth_model.dart';
+import 'package:bus_me/models/user_management.dart';
 
 class AdminPortal extends StatefulWidget {
   @override
@@ -10,19 +10,15 @@ class AdminPortal extends StatefulWidget {
 }
 
 class _AdminPortalState extends State<AdminPortal> {
-  final AdminPortalController _controller = AdminPortalController();
   final AuthModel _authModel = BusMEAuth();
+  late BusMEUserManagement _userManagement;
+  late Future<List<User>> usersFuture;
 
   @override
   void initState() {
     super.initState();
-    _controller.init();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    _userManagement = BusMEUserManagement(_authModel);
+    usersFuture = _userManagement.searchUser(""); // Initially get all users
   }
 
   @override
@@ -36,7 +32,11 @@ class _AdminPortalState extends State<AdminPortal> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              onChanged: _controller.search,
+              onChanged: (value) {
+                setState(() {
+                  usersFuture = _userManagement.searchUser(value); // Update the future when search value changes
+                });
+              },
               decoration: InputDecoration(
                 labelText: 'Search',
                 suffixIcon: Icon(Icons.search),
@@ -44,8 +44,8 @@ class _AdminPortalState extends State<AdminPortal> {
             ),
           ),
           Expanded(
-            child: StreamBuilder<List<User>>(
-              stream: _controller.userStream,
+            child: FutureBuilder<List<User>>(
+              future: usersFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
@@ -63,7 +63,6 @@ class _AdminPortalState extends State<AdminPortal> {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UserDetailsPage(user: user, authModel: _authModel),
                           ));
-
                         },
                       );
                     },

@@ -49,7 +49,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             ),
             TextField(
               controller: _nameController,
-              obscureText: true,
+              obscureText: false,
               decoration: InputDecoration(
                 labelText: 'Name',
                 border: OutlineInputBorder(),
@@ -58,7 +58,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             SizedBox(height: 24),
             TextField(
               controller: _emailController,
-              obscureText: true,
+              obscureText: false,
               decoration: InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(),
@@ -67,7 +67,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             SizedBox(height: 24),
             TextField(
               controller: _phoneController,
-              obscureText: true,
+              obscureText: false,
               decoration: InputDecoration(
                 labelText: 'Phone',
                 border: OutlineInputBorder(),
