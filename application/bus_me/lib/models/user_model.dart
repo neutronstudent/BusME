@@ -156,12 +156,22 @@ class UserRegistration {
 }
 
 
-class UserSettings
-{
+class UserSettings {
   bool? audioNotifications = false;
   bool? vibrationNotifications = false;
   int? route;
-  UserSettings(this.audioNotifications, this.vibrationNotifications, this.route);
+
+  UserSettings(this.audioNotifications, this.vibrationNotifications,
+      this.route);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'notf_type': 0,
+      'audioNotifications': audioNotifications,
+      'vibrationNotifications': vibrationNotifications,
+      'routeId': route,
+    };
+  }
 }
 
 class UserDetails
@@ -171,36 +181,66 @@ class UserDetails
   String phone;
 
   UserDetails(this.name, this.email, this.phone);
+
+  Map<String, dynamic> toJson() {
+    return {
+    'name': name,
+    'email': email,
+    'phone': phone,
+    };
+  }
 }
 
-class User
-{
+class User {
   UserSettings? settings;
   UserDetails? details;
   String username;
   int id;
   int type;
 
+
+
   User(this.id, this.username, this.settings, this.details, this.type);
 
-  static User fromJson(dynamic sourceObj)
-  {
+  static User fromJson(dynamic sourceObj) {
     dynamic? settings = sourceObj["settings"];
     dynamic? details = sourceObj["details"];
 
     UserSettings? settingsObj;
     UserDetails? detailsObj;
 
-    if (settings != null)
+    if (settings != null) {
+      settingsObj = UserSettings(
+          settings["audioNotifications"], settings["vibrationNotifications"],
+          settings["routeId"]);
+    }
+    else
+      {
+        settingsObj = UserSettings(
+            false, false,
+            0);
+      }
+
+    if (details != null) {
+      detailsObj =
+          UserDetails(details["name"], details["email"], details["phone"]);
+    }
+    else
     {
-      settingsObj = UserSettings(settings["audioNotifications"], settings["vibrationNotifications"], settings["routeId"]);
+      detailsObj = UserDetails("email", "phone", "name");
     }
 
-    if (details != null)
-    {
-      detailsObj = UserDetails(details["name"], details["email"], details["phone"]);
-    }
+    return User(sourceObj["id"], sourceObj["username"], settingsObj, detailsObj,
+        sourceObj["type"]);
+  }
 
-    return User(sourceObj["id"], sourceObj["username"], settingsObj, detailsObj, sourceObj["type"]);
+  Map<String, dynamic> toJson() {
+    return {
+      'settings': settings?.toJson(),
+      'details': details?.toJson(),
+      'username': username,
+      'id': id,
+      'type': type,
+    };
   }
 }

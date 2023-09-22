@@ -139,16 +139,13 @@ namespace BusMEAPI.Controllers
         public async Task<ActionResult> UpdateUser(int id, User user)
         {
             //overide id
-            user.Id = id;
 
-            if (await _userMang.UpdateUser(user) != 0)
+            int result = await _userMang.UpdateUser(id, user);
+            if (result != 0 )
             {
                 return new NotFoundResult();
             }
-            else
-            {
-                return new OkResult();
-            }
+            return new OkResult();
 
             
         }

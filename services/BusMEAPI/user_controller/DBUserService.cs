@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using BusMEAPI.Database;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 
 namespace BusMEAPI
@@ -89,13 +90,21 @@ namespace BusMEAPI
             return  await query.ToListAsync();
         }
 
-        public async override Task<int> UpdateUser(User user)
+        public async override Task<int> UpdateUser(int id, User user)
         {
-            _context.Users.Update(user);
+            var query = from u in _context.Users where u.Id == id select u;
 
-            return await _context.SaveChangesAsync();
+            User? targetUser = await query.FirstOrDefaultAsync();
 
+            targetUser.Details = user.Details;
+            targetUser.Settings = user.Settings;
+            targetUser.Type = user.Type;
+
+            await _context.SaveChangesAsync();
+
+            return 0;
         }
+
         public async override Task<int> UpdateUserSettings(int id, UserSettings userSettings)
         {
             var query = from u in _context.Users where u.Id == id select u;

@@ -169,11 +169,12 @@ class BusMEUserManagement extends UserManagementModel
     HttpClientResponse req;
 
     //set request URI
-    Uri route = Uri.https(API_ROUTE,'/api/users/{${_authModel.getUserId()}}');
+    Uri route = Uri.https(API_ROUTE,'/api/users/{${id}}');
 
     try {
       HttpClientRequest request = await userServer.putUrl(route);
       request.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
+      print(jsonEncode(user));
       request.write(jsonEncode(user));
       req = await request.close();
     }
@@ -181,7 +182,7 @@ class BusMEUserManagement extends UserManagementModel
     {
       return 1;
     }
-
+    print(req.reasonPhrase);
     if(req.statusCode != 200)
     {
       return 1;
