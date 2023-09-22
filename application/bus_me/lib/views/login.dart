@@ -1,7 +1,4 @@
 import 'package:bus_me/models/auth_model.dart';
-import 'package:bus_me/observable.dart';
-import 'package:bus_me/views/admin_view.dart';
-import 'package:bus_me/views/map_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'create_account_screen.dart';
