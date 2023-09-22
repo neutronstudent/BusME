@@ -30,7 +30,7 @@ namespace BusMEAPI.Controllers
 
             SecurityTokenResult token = await _auth.LoginUser(login);
 
-            if (token.Token == null)
+            if (token == null || token.Token == null)
                 return new ForbidResult();
             
             var data = new {id = token.UserID, token = new JwtSecurityTokenHandler().WriteToken(token.Token)};

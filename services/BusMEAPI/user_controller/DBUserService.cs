@@ -62,7 +62,7 @@ namespace BusMEAPI
 
         public async override Task<User?> GetUser(int id)
         {
-            var query = from u in _context.Users 
+            var query = from u in _context.Users.Include(u => u.Details).Include(u => u.Settings) 
                 where u.Id == id
                 select u;
             
@@ -71,7 +71,7 @@ namespace BusMEAPI
 
         public async override Task<User?> GetUser(string username)
         {
-            var query = from u in _context.Users 
+            var query = from u in _context.Users.Include(u => u.Details).Include(u => u.Settings)
                 where u.Username == username
                 select u;
             
