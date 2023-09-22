@@ -40,6 +40,8 @@ namespace BusMEAPI
         
         [JsonIgnore]
         public String Salt {get; set;} = "";
+
+        public DateTime? ExpiryDate {get; set;} = DateTime.UtcNow.AddYears(1);
     }
     
     public class UserSettings
