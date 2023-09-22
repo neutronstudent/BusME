@@ -5,18 +5,20 @@ import 'package:bus_me/models/auth_model.dart';
 
 
 class AdminPortalController {
-  final _authModel = BusMEAuth();
+  BusMEAuth _authModel;
+
 
   late final _userManagementModel = BusMEUserManagement(_authModel);
   final _userController = StreamController<List<User>>();
 
   Stream<List<User>> get userStream => _userController.stream;
-
-  void init() {
-    search('');
+  
+  AdminPortalController(this._authModel);
+  Future<void> init() async {
+    await search('');
   }
 
-  void search(String query) async {
+  Future<void> search(String query) async {
     final users = await _userManagementModel.searchUser(query);
     _userController.add(users);
   }

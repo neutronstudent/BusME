@@ -16,6 +16,12 @@ class _SettingsPageState extends State<SettingsPage> {
   bool isAudioEnabled = false;
   bool isVibrationEnabled = false;
 
+  _SettingsPageState()
+  {
+    this.isAudioEnabled= widget.userModel.getUser()!.settings!.audioNotifications!;
+    this.isVibrationEnabled = widget.userModel.getUser()!.settings!.vibrationNotifications!;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

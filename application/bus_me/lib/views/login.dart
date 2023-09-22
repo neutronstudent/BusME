@@ -83,11 +83,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (userType == 2) {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => AdminPortal(),
+          builder: (context) => AdminPortal(widget.BusMEAuth),
         ));
       } else {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => MapPage(user: widget.userModel,),
+          builder: (context) => MapPage(user: widget.userModel),
         ));
       }
     } else {
