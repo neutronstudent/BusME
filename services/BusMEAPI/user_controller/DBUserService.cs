@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using BusMEAPI.Database;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
@@ -81,10 +82,11 @@ namespace BusMEAPI
 
         public override async Task<List<User>> SearchUser(string username_part, int page)
         {
-            var query = from u in _context.Users where u.Details.Name.Contains(username_part) select u;
+            _logger.LogInformation(username_part);
+            var query = from u in _context.Users where Regex.IsMatch(u.Username, username_part) == true select u;
 
             //query async
-            return  await query.Skip(pageSize * page).Take(pageSize).ToListAsync();
+            return  await query.ToListAsync();
         }
 
         public async override Task<int> UpdateUser(User user)

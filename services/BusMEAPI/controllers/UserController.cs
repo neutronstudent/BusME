@@ -69,6 +69,7 @@ namespace BusMEAPI.Controllers
         //get user 
         [HttpGet]
         [Authorize(policy:"UserOnly")]
+        
         [Route("{id}")]
         public async Task<ActionResult<User>> GetUser(int? id)
         {
@@ -98,6 +99,7 @@ namespace BusMEAPI.Controllers
         //search, only allow admin
         [HttpGet]
         [Authorize(policy:"AdminOnly")]
+        //[AllowAnonymous]
         public async Task<ActionResult> SearchUser(string query, int? page)
         {
             if (!(query.Length > 0))
