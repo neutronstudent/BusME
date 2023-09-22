@@ -47,7 +47,7 @@ class BusMEUserManagement extends UserManagementModel
     Uri route = Uri.https(API_ROUTE,'/api/users',  {'type': userType});
     HttpClientRequest postReq = await userServer.postUrl(route);
 
-    postReq.headers.add(HttpHeaders.authorizationHeader, _authModel.getToken().toString());
+    postReq.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
 
     //write user info to network
     postReq.write(jsonEncode(user));
@@ -68,7 +68,7 @@ class BusMEUserManagement extends UserManagementModel
     Uri route = Uri.https(API_ROUTE,'/api/users/${id}');
     HttpClientRequest delReq = await userServer.deleteUrl(route);
 
-    delReq.headers.add(HttpHeaders.authorizationHeader, _authModel.getToken().toString());
+    delReq.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
 
 
     HttpClientResponse result = await delReq.close();
@@ -89,7 +89,7 @@ class BusMEUserManagement extends UserManagementModel
     Uri route = Uri.https(API_ROUTE,'/api/users/search');
     HttpClientRequest delReq = await userServer.getUrl(route);
 
-    delReq.headers.add(HttpHeaders.authorizationHeader, _authModel.getToken().toString());
+    delReq.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
 
 
     HttpClientResponse result = await delReq.close();
@@ -106,7 +106,6 @@ class BusMEUserManagement extends UserManagementModel
       try
       {
         userList.add(User.fromJson(i));
-
       }
       catch(e)
       {
@@ -131,7 +130,7 @@ class BusMEUserManagement extends UserManagementModel
 
     try {
       HttpClientRequest request = await userServer.getUrl(route);
-      request.headers.add(HttpHeaders.authorizationHeader, _authModel.getToken().toString());
+      request.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
       req = await request.close();
     }
     on SocketException catch (e)
@@ -171,7 +170,7 @@ class BusMEUserManagement extends UserManagementModel
 
     try {
       HttpClientRequest request = await userServer.putUrl(route);
-      request.headers.add(HttpHeaders.authorizationHeader, _authModel.getToken().toString());
+      request.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
       request.write(jsonEncode(user));
       req = await request.close();
     }

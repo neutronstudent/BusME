@@ -50,18 +50,21 @@ class BusMeUserModel extends UserModel
     HttpClientResponse req;
 
     //set request URI
-    Uri route = Uri.https(API_ROUTE,'/api/users/{${_authModel.getUserId()}}');
+    Uri route = Uri.https(API_ROUTE,'/api/users/${_authModel.getUserId()}');
 
     log(route.toString());
     try {
       HttpClientRequest request = await userServer.getUrl(route);
-      request.headers.add(HttpHeaders.authorizationHeader, _authModel.getToken().toString());
+
+      request.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
+
       req = await request.close();
     }
     on SocketException catch (e)
     {
       return 1;
     }
+    log(req.statusCode.toString());
     if(req.statusCode != 200)
     {
       return 1;
@@ -120,8 +123,8 @@ class BusMeUserModel extends UserModel
     HttpClientRequest detailPut = await userServer.putUrl(detailRoute);
     HttpClientRequest settingsPut = await userServer.putUrl(settingsRotue);
 
-    detailPut.headers.add(HttpHeaders.authorizationHeader, _authModel.getToken()!);
-    settingsPut.headers.add(HttpHeaders.authorizationHeader, _authModel.getToken()!);
+    detailPut.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
+    settingsPut.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
 
     detailPut.write(jsonEncode(_user!.details));
     settingsPut.write(jsonEncode(_user!.settings));
@@ -155,8 +158,8 @@ class UserRegistration {
 
 class UserSettings
 {
-  bool audioNotifications = false;
-  bool vibrationNotifications = false;
+  bool? audioNotifications = false;
+  bool? vibrationNotifications = false;
   int? route;
   UserSettings(this.audioNotifications, this.vibrationNotifications, this.route);
 }

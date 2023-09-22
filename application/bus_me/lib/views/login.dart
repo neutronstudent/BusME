@@ -73,6 +73,8 @@ class _LoginScreenState extends State<LoginScreen> {
     // Determine user type and navigate accordingly.
 
     BusMeUserModel userModel = BusMeUserModel(widget.BusMEAuth);
+    await userModel.fetchUser();
+
     User? user = userModel.getUser();
 
     if (user != null) {

@@ -91,9 +91,9 @@ class BusMEAuth extends AuthModel {
     try {
       dynamic result = jsonDecode(source);
 
-      _token = result.token;
+      _token = result["token"];
 
-      _id = result.id;
+      _id = result["id"];
     }
     on Exception catch(e)
     {
