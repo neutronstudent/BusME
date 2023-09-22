@@ -1,0 +1,7 @@
+Hexcode		Colour		Use(s)
+---------------------------------------------------
+#3155D1 	Dark Blue 	Background/Text
+#EBEEFF 	Light Blue 	Foreground
+#FCFCFC 	White 		Icons/Elements/Text
+#5D5F7E		Dark Gray	Icons/Elements/Text
+#828282		Gray		Subtext
