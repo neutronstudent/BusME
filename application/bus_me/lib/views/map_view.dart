@@ -1,4 +1,6 @@
 
+import 'package:bus_me/models/auth_model.dart';
+import 'package:bus_me/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -6,6 +8,9 @@ import 'settings_page.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 
 class MapView extends StatelessWidget {
+  UserModel model;
+  MapView(this.model);
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -20,7 +25,7 @@ class MapView extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SettingsPage(),
+                      builder: (context) => SettingsPage(model),
                     ),
                   );
                 },

@@ -8,8 +8,12 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:bus_me/views/settings_page.dart';
 
+import 'models/user_model.dart';
+
 class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+
+  UserModel user;
+  MapPage({super.key, required this.user});
 
   @override
   State<MapPage> createState() => _MapPage();
@@ -91,7 +95,7 @@ class _MapPage extends State<MapPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SettingsPage(),
+                    builder: (context) => SettingsPage(widget.user),
                   ),
                 );
               },

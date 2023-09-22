@@ -11,8 +11,10 @@ import '../controllers/login_controller.dart';
 class LoginScreen extends StatefulWidget {
   final AuthModel BusMEAuth;
   final LoginController loginController;
+  final UserModel userModel;
 
-  LoginScreen({required this.BusMEAuth, required this.loginController});
+
+  LoginScreen({required this.BusMEAuth, required this.loginController, required this.userModel});
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -72,21 +74,20 @@ class _LoginScreenState extends State<LoginScreen> {
     // At this point, login is successful.
     // Determine user type and navigate accordingly.
 
-    BusMeUserModel userModel = BusMeUserModel(widget.BusMEAuth);
-    await userModel.fetchUser();
+    await widget.userModel.fetchUser();
 
-    User? user = userModel.getUser();
+    User? user = widget.userModel.getUser();
 
     if (user != null) {
       int userType = user.type;
 
       if (userType == 2) {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
+        Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => AdminPortal(),
         ));
       } else {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => MapPage(),
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => MapPage(user: widget.userModel,),
         ));
       }
     } else {

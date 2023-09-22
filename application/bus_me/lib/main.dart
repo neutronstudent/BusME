@@ -22,8 +22,8 @@ void main() {
     home: LoginScreen(
       BusMEAuth: authModel,
       loginController: loginController,
+      userModel: userModel,
     ),
   ));
 }
-
 
