@@ -2,352 +2,263 @@
   "data": [
     {
       "type": "stop",
-      "id": "8000-7386a836",
+      "id": "6231-190b2aaa",
       "attributes": {
         "location_type": 0,
-        "stop_code": "8000",
-        "stop_id": "8000-7386a836",
-        "stop_lat": -36.85267,
-        "stop_lon": 174.70428,
-        "stop_name": "Coyle Park",
+        "parent_station": "31713-ed9ef80f",
+        "platform_code": "A",
+        "stop_code": "6231",
+        "stop_id": "6231-190b2aaa",
+        "stop_lat": -36.93226,
+        "stop_lon": 174.91196,
+        "stop_name": "Stop A Botany Town Centre",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "8002-ce800e63",
+      "id": "1932-6441229f",
       "attributes": {
         "location_type": 0,
-        "stop_code": "8002",
-        "stop_id": "8002-ce800e63",
-        "stop_lat": -36.85467,
-        "stop_lon": 174.70415,
-        "stop_name": "Johnstone Street",
+        "stop_code": "1932",
+        "stop_id": "1932-6441229f",
+        "stop_lat": -36.93108,
+        "stop_lon": 174.92021,
+        "stop_name": "Glamworth Place",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "8004-66851f82",
+      "id": "2221-e3212e8f",
       "attributes": {
         "location_type": 0,
-        "stop_code": "8004",
-        "stop_id": "8004-66851f82",
-        "stop_lat": -36.85682,
-        "stop_lon": 174.70343,
-        "stop_name": "Oliver Street",
+        "stop_code": "2221",
+        "stop_id": "2221-e3212e8f",
+        "stop_lat": -36.93055,
+        "stop_lon": 174.92163,
+        "stop_name": "Ardagh Road",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "8006-154bc233",
+      "id": "6987-2824d1e5",
       "attributes": {
         "location_type": 0,
-        "stop_code": "8006",
-        "stop_id": "8006-154bc233",
-        "stop_lat": -36.85936,
-        "stop_lon": 174.7025,
-        "stop_name": "Dignan Steeet",
+        "stop_code": "6987",
+        "stop_id": "6987-2824d1e5",
+        "stop_lat": -36.92593,
+        "stop_lon": 174.92201,
+        "stop_name": "Point View School",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "8008-6aee982b",
+      "id": "6248-856d36e3",
       "attributes": {
         "location_type": 0,
-        "stop_code": "8008",
-        "stop_id": "8008-6aee982b",
-        "stop_lat": -36.8611,
-        "stop_lon": 174.70331,
-        "stop_name": "Point Chevalier School",
+        "stop_code": "6248",
+        "stop_id": "6248-856d36e3",
+        "stop_lat": -36.92403,
+        "stop_lon": 174.92145,
+        "stop_name": "Kilimanjaro Drive",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "8010-6b74c8ff",
+      "id": "1926-27167271",
       "attributes": {
         "location_type": 0,
-        "stop_code": "8010",
-        "stop_id": "8010-6b74c8ff",
-        "stop_lat": -36.86252,
-        "stop_lon": 174.70439,
-        "stop_name": "Target Street",
+        "stop_code": "1926",
+        "stop_id": "1926-27167271",
+        "stop_lat": -36.92185,
+        "stop_lon": 174.92357,
+        "stop_name": "Bruce McLaren Retirement Village",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "1049-ef8b69e4",
+      "id": "2112-cedd3d5e",
       "attributes": {
         "location_type": 0,
-        "stop_code": "1049",
-        "stop_id": "1049-ef8b69e4",
-        "stop_lat": -36.86212,
-        "stop_lon": 174.70865,
-        "stop_name": "Moa Road",
+        "stop_code": "2112",
+        "stop_id": "2112-cedd3d5e",
+        "stop_lat": -36.91975,
+        "stop_lon": 174.92681,
+        "stop_name": "Santa Ana Drive",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "1051-3ab326d8",
+      "id": "6247-62b0cdd1",
       "attributes": {
         "location_type": 0,
-        "stop_code": "1051",
-        "stop_id": "1051-3ab326d8",
-        "stop_lat": -36.85908,
-        "stop_lon": 174.71486,
-        "stop_name": "Meola Road/MOTAT",
+        "stop_code": "6247",
+        "stop_id": "6247-62b0cdd1",
+        "stop_lat": -36.91786,
+        "stop_lon": 174.92823,
+        "stop_name": "Whitford Road",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "8491-4c2b3c12",
+      "id": "6251-61518df2",
       "attributes": {
         "location_type": 0,
-        "stop_code": "8491",
-        "stop_id": "8491-4c2b3c12",
-        "stop_lat": -36.85452,
-        "stop_lon": 174.71868,
-        "stop_name": "Westmere Shops",
+        "stop_code": "6251",
+        "stop_id": "6251-61518df2",
+        "stop_lat": -36.91413,
+        "stop_lon": 174.92761,
+        "stop_name": "Meadowlands Shopping Centre",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "8493-d8c9215b",
+      "id": "6677-bc31478b",
       "attributes": {
         "location_type": 0,
-        "stop_code": "8493",
-        "stop_id": "8493-d8c9215b",
-        "stop_lat": -36.85232,
-        "stop_lon": 174.71981,
-        "stop_name": "Kotare Avenue",
+        "stop_code": "6677",
+        "stop_id": "6677-bc31478b",
+        "stop_lat": -36.90875,
+        "stop_lon": 174.92875,
+        "stop_name": "Morrin Cooper Park",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "8495-84b493be",
+      "id": "1935-3364cfde",
       "attributes": {
         "location_type": 0,
-        "stop_code": "8495",
-        "stop_id": "8495-84b493be",
-        "stop_lat": -36.85172,
-        "stop_lon": 174.72246,
-        "stop_name": "Cox's Bay Reserve",
+        "stop_code": "1935",
+        "stop_id": "1935-3364cfde",
+        "stop_lat": -36.90564,
+        "stop_lon": 174.93204,
+        "stop_name": "Cook Street/Union Road",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "8497-30667212",
+      "id": "1731-7f25340b",
       "attributes": {
         "location_type": 0,
-        "stop_code": "8497",
-        "stop_id": "8497-30667212",
-        "stop_lat": -36.84968,
-        "stop_lon": 174.7284,
-        "stop_name": "Jervois Road",
+        "stop_code": "1731",
+        "stop_id": "1731-7f25340b",
+        "stop_lat": -36.90314,
+        "stop_lon": 174.93359,
+        "stop_name": "Gibraltar Street",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "7124-8993255e",
+      "id": "6275-23d5bb7e",
       "attributes": {
         "location_type": 0,
-        "stop_code": "7124",
-        "stop_id": "7124-8993255e",
-        "stop_lat": -36.84822,
-        "stop_lon": 174.72882,
-        "stop_name": "Masons Avenue",
+        "stop_code": "6275",
+        "stop_id": "6275-23d5bb7e",
+        "stop_lat": -36.89921,
+        "stop_lon": 174.93419,
+        "stop_name": "Abercrombie Street",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "7121-c9212dc1",
+      "id": "1933-38e426d5",
       "attributes": {
         "location_type": 0,
-        "stop_code": "7121",
-        "stop_id": "7121-c9212dc1",
-        "stop_lat": -36.84737,
-        "stop_lon": 174.73192,
-        "stop_name": "Bayfield School",
+        "stop_code": "1933",
+        "stop_id": "1933-38e426d5",
+        "stop_lat": -36.89666,
+        "stop_lon": 174.93356,
+        "stop_name": "Hawthorden Reserve",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "7119-5fc299b0",
+      "id": "6267-aa3109fd",
       "attributes": {
         "location_type": 0,
-        "stop_code": "7119",
-        "stop_id": "7119-5fc299b0",
-        "stop_lat": -36.84541,
-        "stop_lon": 174.73484,
-        "stop_name": "Lawrence Street",
+        "stop_code": "6267",
+        "stop_id": "6267-aa3109fd",
+        "stop_lat": -36.89475,
+        "stop_lon": 174.93255,
+        "stop_name": "Howick Village",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "7117-e91d6511",
+      "id": "6463-2f7d1c08",
       "attributes": {
         "location_type": 0,
-        "stop_code": "7117",
-        "stop_id": "7117-e91d6511",
-        "stop_lat": -36.84514,
-        "stop_lon": 174.73773,
-        "stop_name": "John Street",
+        "stop_code": "6463",
+        "stop_id": "6463-2f7d1c08",
+        "stop_lat": -36.89326,
+        "stop_lon": 174.93046,
+        "stop_name": "Wellington Street",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "7115-63c0ed0a",
+      "id": "6260-96b63b31",
       "attributes": {
         "location_type": 0,
-        "stop_code": "7115",
-        "stop_id": "7115-63c0ed0a",
-        "stop_lat": -36.84516,
-        "stop_lon": 174.74076,
-        "stop_name": "St Stephen's Church",
+        "stop_code": "6260",
+        "stop_id": "6260-96b63b31",
+        "stop_lat": -36.89282,
+        "stop_lon": 174.92495,
+        "stop_name": "Bleakhouse Road",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "7113-084b368e",
+      "id": "6178-9e3b564e",
       "attributes": {
         "location_type": 0,
-        "stop_code": "7113",
-        "stop_id": "7113-084b368e",
-        "stop_lat": -36.84699,
-        "stop_lon": 174.7438,
-        "stop_name": "Three Lamps",
+        "stop_code": "6178",
+        "stop_id": "6178-9e3b564e",
+        "stop_lat": -36.89159,
+        "stop_lon": 174.92238,
+        "stop_name": "Patons Road",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "7111-398e6ec5",
+      "id": "1917-e7b62531",
       "attributes": {
         "location_type": 0,
-        "stop_code": "7111",
-        "stop_id": "7111-398e6ec5",
-        "stop_lat": -36.84812,
-        "stop_lon": 174.74748,
-        "stop_name": "Mercy Hospice",
+        "stop_code": "1917",
+        "stop_id": "1917-e7b62531",
+        "stop_lat": -36.88323,
+        "stop_lon": 174.91062,
+        "stop_name": "Bucklands Beach Intermediate",
         "wheelchair_boarding": 0
       }
     },
     {
       "type": "stop",
-      "id": "7109-13c2b0c9",
+      "id": "2410-55591828",
       "attributes": {
         "location_type": 0,
-        "stop_code": "7109",
-        "stop_id": "7109-13c2b0c9",
-        "stop_lat": -36.84823,
-        "stop_lon": 174.75,
-        "stop_name": "Gudgeon Street",
-        "wheelchair_boarding": 0
-      }
-    },
-    {
-      "type": "stop",
-      "id": "7107-14d27628",
-      "attributes": {
-        "location_type": 0,
-        "stop_code": "7107",
-        "stop_id": "7107-14d27628",
-        "stop_lat": -36.84803,
-        "stop_lon": 174.75405,
-        "stop_name": "Victoria Park Market",
-        "wheelchair_boarding": 0
-      }
-    },
-    {
-      "type": "stop",
-      "id": "1079-d80fd2d6",
-      "attributes": {
-        "location_type": 0,
-        "stop_code": "1079",
-        "stop_id": "1079-d80fd2d6",
-        "stop_lat": -36.84877,
-        "stop_lon": 174.75733,
-        "stop_name": "Sale Street",
-        "wheelchair_boarding": 0
-      }
-    },
-    {
-      "type": "stop",
-      "id": "1089-d1686dd6",
-      "attributes": {
-        "location_type": 0,
-        "stop_code": "1089",
-        "stop_id": "1089-d1686dd6",
-        "stop_lat": -36.84964,
-        "stop_lon": 174.76023,
-        "stop_name": "International Convention Centre",
-        "wheelchair_boarding": 0
-      }
-    },
-    {
-      "type": "stop",
-      "id": "1094-2f276785",
-      "attributes": {
-        "location_type": 0,
-        "stop_code": "1094",
-        "stop_id": "1094-2f276785",
-        "stop_lat": -36.85092,
-        "stop_lon": 174.76487,
-        "stop_name": "Lorne Street",
-        "wheelchair_boarding": 0
-      }
-    },
-    {
-      "type": "stop",
-      "id": "7088-d255c2d6",
-      "attributes": {
-        "location_type": 0,
-        "stop_code": "7088",
-        "stop_id": "7088-d255c2d6",
-        "stop_lat": -36.85236,
-        "stop_lon": 174.767,
-        "stop_name": "Auckland Art Gallery",
-        "wheelchair_boarding": 0
-      }
-    },
-    {
-      "type": "stop",
-      "id": "7023-2daf6ff1",
-      "attributes": {
-        "location_type": 0,
-        "stop_code": "7023",
-        "stop_id": "7023-2daf6ff1",
-        "stop_lat": -36.85163,
-        "stop_lon": 174.76958,
-        "stop_name": "University General Library",
-        "wheelchair_boarding": 0
-      }
-    },
-    {
-      "type": "stop",
-      "id": "1096-83f5e701",
-      "attributes": {
-        "location_type": 0,
-        "stop_code": "1096",
-        "stop_id": "1096-83f5e701",
-        "stop_lat": -36.85324,
-        "stop_lon": 174.77074,
-        "stop_name": "University of Auckland",
+        "stop_code": "2410",
+        "stop_id": "2410-55591828",
+        "stop_lat": -36.88239,
+        "stop_lon": 174.9141,
+        "stop_name": "Macleans College",
         "wheelchair_boarding": 0
       }
     }

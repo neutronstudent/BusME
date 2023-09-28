@@ -21,7 +21,10 @@ class _MapPage extends State<MapPage> {
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor markerCurrentIcon = BitmapDescriptor.defaultMarker;
   Location location = Location();
+
   LatLng currentLocation = LatLng(-36.848461, 174.763336);
+  LatLng schoolLocation = LatLng(-36.881351, 174.916656);
+
   Marker currentLocationMarker = Marker(
     markerId: MarkerId('current_location'),
     position: LatLng(-36.848461, 174.763336),
