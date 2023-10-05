@@ -1,3 +1,4 @@
+// #import 'package:bus_me/views/main_map_page.dart';
 import 'package:bus_me/models/auth_model.dart';
 import 'package:bus_me/observable.dart';
 import 'package:bus_me/views/admin_view.dart';
@@ -50,21 +51,26 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             SizedBox(height: 24.0),
-            Row(  // This is the new Row widget
+            Row(
+              // This is the new Row widget
               mainAxisAlignment: MainAxisAlignment.center, // Center the buttons
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    // Your login logic here
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MapPage()));
                   },
                   child: Text('Login'),
                 ),
-                SizedBox(width: 20),  // Add space between the buttons
+                SizedBox(width: 20), // Add space between the buttons
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CreateAccountScreen(loginController: widget.loginController, BusMEAuth: widget.BusMEAuth)),
+                      MaterialPageRoute(
+                          builder: (context) => CreateAccountScreen(
+                              loginController: widget.loginController,
+                              BusMEAuth: widget.BusMEAuth)),
                     );
                   },
                   child: Text('Create Account'),
@@ -76,7 +82,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
 
   @override
   void dispose() {
