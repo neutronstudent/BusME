@@ -27,7 +27,7 @@ namespace BusMEAPI
             _issuer = configuration["Jwt:Issuer"];
         }
 
-        public override async Task<SecurityTokenResult> LoginUser(Login login)
+        public override async Task<SecurityTokenResult?> LoginUser(Login login)
         {
             //query database for user
             var query = from u in _context.Users where u.Username == login.Username select u;
