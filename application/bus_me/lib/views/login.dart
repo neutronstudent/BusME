@@ -143,22 +143,13 @@ class _LoginScreenState extends State<LoginScreen> {
               // This is the new Row widget
               mainAxisAlignment: MainAxisAlignment.center, // Center the buttons
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MapPage()));
-                  },
-                  child: Text('Login'),
-                ),
-                SizedBox(width: 20), // Add space between the buttons
-                
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+
                 ElevatedButton(
                   onPressed: _login,
                   child: Text('Login'),
                 ),
                 SizedBox(width: 20),
+
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -166,19 +157,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       MaterialPageRoute(
                         builder: (context) => CreateAccountScreen(
                           loginController: widget.loginController,
-                          BusMEAuth: widget.BusMEAuth);
+                          BusMEAuth: widget.BusMEAuth)
                         ),
-                      ),
-                    );
-                  },
-                  child: Text('Create Account'),
+                      );
+
+                    },
+                    child: Text('Create Account'),
+                  )
+                ]
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        );
   }
 
   @override
