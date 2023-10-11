@@ -15,11 +15,11 @@ void main() {
   LoginController loginController = LoginController();
 
   runApp(MaterialApp(
+    home: LoginScreen(
+    ),
     theme: ThemeData(
       primarySwatch: Colors.blue,
       fontFamily: 'Helvetica',
-    ),
-    home: LoginScreen(
     ),
   ));
 }
