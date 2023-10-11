@@ -65,11 +65,132 @@ class BusModel
   }
 
   Future<Route?> GetRoute(int routeId) async {
-    throw Exception("Not Implimented");
+
+    //error checking
+    if (routeId < 0) {
+      return null;
+    }
+
+    //get routes from api
+    _client.connectionTimeout = const Duration(seconds: 4);
+
+    HttpClientResponse req;
+
+    //set request URI
+    Uri uriRoute = Uri.https(API_ROUTE,"/api/routes/${routeId}");
+
+    try {
+      HttpClientRequest request = await _client.getUrl(uriRoute);
+
+      request.headers.add("Authorization", "Bearer ${_auth.getToken()}");
+
+      req = await request.close();
+    }
+    on SocketException catch (e)
+    {
+      return null;
+    }
+
+    if(req.statusCode != 200)
+    {
+      return null;
+    }
+
+    Route? route = Route(0, "", "", []);
+
+
+    try {
+      //decode json to map
+      Map<String, dynamic> json = jsonDecode(
+          await req.transform(utf8.decoder).join());
+
+      route.code = json['code'];
+      route.id = json['id'];
+      route.name = json['name'];
+
+      //load all trips registered to route
+      for (int i = 0; i < json['trips'].length; i++)
+      {
+        route.trips.add(Trip(
+            json['trips'][i]['id'],
+            json['trips'][i]['name'],
+            false,
+            json['trips'][i]['lat'],
+            json['trips'][i]['long']
+          )
+        );
+      }
+
+    }
+    on Exception catch (e)
+    {
+      return null;
+    }
+
+    return route;
   }
 
   Future<List<Trip>> GetTrips(int routeId) async {
-    throw Exception("Not Implimented");
+
+    //error checking
+    if (routeId < 0) {
+      return [];
+    }
+
+    //get routes from api
+    _client.connectionTimeout = const Duration(seconds: 4);
+
+    HttpClientResponse req;
+
+    //set request URI
+    Uri uriRoute = Uri.https(API_ROUTE,"/api/routes/${routeId}");
+
+    try {
+      HttpClientRequest request = await _client.getUrl(uriRoute);
+
+      request.headers.add("Authorization", "Bearer ${_auth.getToken()}");
+
+      req = await request.close();
+    }
+    on SocketException catch (e)
+    {
+      return [];
+    }
+
+    if(req.statusCode != 200)
+    {
+      return [];
+    }
+
+    List<Trip> trips = [];
+
+    try {
+      //decode json to map
+      List<dynamic> json = jsonDecode(
+          await req.transform(utf8.decoder).join());
+
+
+
+      //load all trips registered to route
+      for (int i = 0; i < json.length; i++)
+      {
+        trips.add(Trip(
+            json[i]['id'],
+            json[i]['name'],
+            false,
+            json[i]['lat'],
+            json[i]['long']
+        )
+        );
+      }
+
+    }
+    on Exception catch (e)
+    {
+      return [];
+    }
+
+    return trips;
   }
 
   Future<Trip?> GetTrip(int id) async {
