@@ -54,11 +54,14 @@ class BusModel
     List<Route> routes = [];
     //decode json to map
     List<dynamic> json = jsonDecode(await req.transform(utf8.decoder).join());
+
+    //add routes to array
     for (int i = 0; i < json.length; i ++)
     {
-
+      routes.add(Route(json[i]['id'], json[i]['name'], json[i]['code'], []));
     }
-    throw Exception("Not Implimented");
+
+    return routes;
   }
 
   Future<Route?> GetRoute(int routeId) async {
@@ -87,6 +90,7 @@ class BusModel
 
 class Trip
 {
+  Trip(this.id, this.name, this.wheelchairSupport, this.lat, this.long);
   int id = 0;
   String name = "";
   bool wheelchairSupport = false;
@@ -96,6 +100,7 @@ class Trip
 
 class Stop
 {
+  Stop(this.id, this.lat, this.long, this.name);
   int id = 0;
   Float lat = 0 as Float;
   Float long = 0 as Float;
@@ -104,6 +109,8 @@ class Stop
 
 class Route
 {
+  Route(this.id, this.name, this.code, this.trips);
+
   int id = 0;
   String name = "";
   String code = "";
