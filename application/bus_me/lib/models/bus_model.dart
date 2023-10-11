@@ -143,7 +143,7 @@ class BusModel
     HttpClientResponse req;
 
     //set request URI
-    Uri uriRoute = Uri.https(API_ROUTE,"/api/routes/${routeId}");
+    Uri uriRoute = Uri.https(API_ROUTE,"/api/routes/${routeId}/trips");
 
     try {
       HttpClientRequest request = await _client.getUrl(uriRoute);
@@ -194,8 +194,58 @@ class BusModel
   }
 
   Future<Trip?> GetTrip(int id) async {
-    throw Exception("Not Implimented");
-    return null;
+
+    //error checking
+    if (id < 0) {
+      return null;
+    }
+
+    //get routes from api
+    _client.connectionTimeout = const Duration(seconds: 4);
+
+    HttpClientResponse req;
+
+    //set request URI
+    Uri uriRoute = Uri.https(API_ROUTE,"/api/routes/trips/${id}");
+
+    try {
+      HttpClientRequest request = await _client.getUrl(uriRoute);
+
+      request.headers.add("Authorization", "Bearer ${_auth.getToken()}");
+
+      req = await request.close();
+    }
+    on SocketException catch (e)
+    {
+      return null;
+    }
+
+    if(req.statusCode != 200)
+    {
+      return null;
+    }
+
+
+
+    try {
+      //decode json to map
+      Map<String, dynamic> json = jsonDecode(
+          await req.transform(utf8.decoder).join());
+      
+        Trip trip = Trip(
+          json['id'],
+          json['name'],
+          false,
+          json['lat'],
+          json['long']
+       );
+
+        return trip;
+    }
+    on Exception catch (e)
+    {
+      return null;
+    }
   }
 
   Future<List<Stop>> GetStops(int tripId) async {
