@@ -10,9 +10,9 @@ import 'package:flutter/material.dart';
 void main() {
   AuthModel authModel = BusMEAuth();
   BusMEUserManagement userManagementModel = BusMEUserManagement(authModel);
-  BusMeUserModel userModel = BusMeUserModel(authModel);
+  BusMEUserModel userModel = BusMEUserModel();
 
-  LoginController loginController = LoginController(authModel, userModel);
+  LoginController loginController = LoginController();
 
   runApp(MaterialApp(
     theme: ThemeData(
@@ -20,9 +20,6 @@ void main() {
       fontFamily: 'Helvetica',
     ),
     home: LoginScreen(
-      BusMEAuth: authModel,
-      loginController: loginController,
-      userModel: userModel,
     ),
   ));
 }

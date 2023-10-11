@@ -21,23 +21,23 @@ abstract class UserModel
   Future<int> updateUser();
 }
 
-class BusMeUserModel extends UserModel
-{
+class BusMEUserModel extends UserModel {
+  static final BusMEUserModel _instance = BusMEUserModel._internal(BusMEAuth());
+
+  factory BusMEUserModel() {
+    return _instance;
+  }
+
   User? _user;
   final AuthModel _authModel;
-
   HttpClient userServer = HttpClient(context: SecurityContext.defaultContext);
 
-
-  BusMeUserModel(this._authModel)
-  {
-    userServer.badCertificateCallback =  (X509Certificate cert, String host, int port) {
-      if (kDebugMode)
-      {
+  BusMEUserModel._internal(this._authModel) {
+    userServer.badCertificateCallback = (X509Certificate cert, String host, int port) {
+      if (kDebugMode) {
         return true;
       }
       return false;
-
     };
   }
 

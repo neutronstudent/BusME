@@ -10,13 +10,6 @@ import 'package:bus_me/main_map_page.dart';
 import '../controllers/login_controller.dart';
 
 class LoginScreen extends StatefulWidget {
-  final AuthModel BusMEAuth;
-  final LoginController loginController;
-  final UserModel userModel;
-
-
-  LoginScreen({required this.BusMEAuth, required this.loginController, required this.userModel});
-
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -24,6 +17,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  final AuthModel _authModel = BusMEAuth();
+  final UserModel _userModel = BusMEUserModel();
+  final LoginController _loginController = LoginController();
 
   Future<void> _login() async {
     String username = _usernameController.text.trim();
@@ -50,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     // Attempt to login
-    int loginResult = await widget.BusMEAuth.loginUser(username, password);
+    int loginResult = await _authModel.loginUser(username, password);
 
     if (loginResult != 0) {
       // Show login failed alert
@@ -75,20 +72,20 @@ class _LoginScreenState extends State<LoginScreen> {
     // At this point, login is successful.
     // Determine user type and navigate accordingly.
 
-    await widget.userModel.fetchUser();
+    await _userModel.fetchUser();
 
-    User? user = widget.userModel.getUser();
+    User? user = _userModel.getUser();
 
     if (user != null) {
       int userType = user.type;
 
       if (userType == 2) {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => AdminPortal(widget.BusMEAuth),
+          builder: (context) => AdminPortal(),
         ));
       } else {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => MapPage(user: widget.userModel),
+          builder: (context) => MapPage(user: _userModel),
         ));
       }
     } else {
@@ -155,10 +152,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CreateAccountScreen(
-                          loginController: widget.loginController,
-                          BusMEAuth: widget.BusMEAuth)
-                        ),
+                        builder: (context) => CreateAccountScreen()
+                      ),
                       );
 
                     },
