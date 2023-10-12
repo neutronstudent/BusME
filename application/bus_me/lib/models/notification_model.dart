@@ -3,19 +3,21 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class NotificationModel
 {
+  static final NotificationModel _instance = NotificationModel._internal();
+
+  factory NotificationModel() {
+    return _instance;
+
+  }
+
+  NotificationModel._internal();
+
   final FlutterTts _tts = FlutterTts();
   final FlutterLocalNotificationsPlugin _localNotificationsPlugin = FlutterLocalNotificationsPlugin();
   int _lastId = 0;
-  NotificationModel()
-  {
     //map of notifiaction types to function to use
-    notfiHandlers = {
-      NotifType.TTS: _sendTTS,
-      NotifType.POPUP: _sendPopup
-    };
 
 
-  }
   Future<void> initPushNotifications() async
   {
     const andInitSettings = AndroidInitializationSettings("assets/icons/app-icons/bus-me-logo.png");
@@ -25,9 +27,12 @@ class NotificationModel
   }
 
   final Set<NotifType> _notfiSettings = Set();
-  late final Map<NotifType, Future<void> Function(String)> notfiHandlers;
+  late final Map<NotifType, Future<void> Function(String)> notfiHandlers = {
+    NotifType.TTS: _sendTTS,
+    NotifType.POPUP: _sendPopup
+  };
 
-  void sendNotification(String str) async
+  Future<void> sendNotification(String str) async
   {
     //loop over notification types and call handlers for each if present
     for (NotifType type in _notfiSettings)
