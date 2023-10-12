@@ -1,10 +1,11 @@
 
 import 'package:flutter_tts/flutter_tts.dart';
-
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class NotificationModel
 {
   final FlutterTts _tts = FlutterTts();
-
+  final FlutterLocalNotificationsPlugin _localNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  int _lastId = 0;
   NotificationModel()
   {
     //map of notifiaction types to function to use
@@ -14,6 +15,13 @@ class NotificationModel
     };
 
 
+  }
+  Future<void> initPushNotifications() async
+  {
+    const andInitSettings = AndroidInitializationSettings("assets/icons/app-icons/bus-me-logo.png");
+    final iosInitSettings = DarwinInitializationSettings();
+
+    await _localNotificationsPlugin.initialize(InitializationSettings(android: andInitSettings, iOS: iosInitSettings, macOS: iosInitSettings));
   }
 
   final Set<NotifType> _notfiSettings = Set();
@@ -41,7 +49,8 @@ class NotificationModel
 
   Future<void> _sendPopup(String str) async
   {
-
+    _localNotificationsPlugin.show(_lastId, "BusME Alert!", str, const NotificationDetails());
+    _lastId +=1;
 
   }
 
