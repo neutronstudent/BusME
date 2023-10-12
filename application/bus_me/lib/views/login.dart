@@ -1,13 +1,10 @@
-// #import 'package:bus_me/views/main_map_page.dart';
-import 'package:bus_me/models/auth_model.dart';
-import 'package:bus_me/models/user_model.dart';
-import 'package:bus_me/views/admin_portal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'create_account_screen.dart';
-import 'package:bus_me/main_map_page.dart';
-
 import '../controllers/login_controller.dart';
+import '../views/mapView.dart';
+
+import 'package:bus_me/views/map_view.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -17,95 +14,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  final AuthModel _authModel = BusMEAuth();
-  final UserModel _userModel = BusMEUserModel();
-  final LoginController _loginController = LoginController();
-
-  Future<void> _login() async {
-    String username = _usernameController.text.trim();
-    String password = _passwordController.text.trim();
-
-    if (username.isEmpty || password.isEmpty) {
-      // Show alert that username or password is empty
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Missing'),
-            content: Text('Please enter both username and password'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-      return;
-    }
-
-    // Attempt to login
-    int loginResult = await _authModel.loginUser(username, password);
-
-    if (loginResult != 0) {
-      // Show login failed alert
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Login Failed'),
-            content: Text('Incorrect username or password'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-      return;
-    }
-
-    // At this point, login is successful.
-    // Determine user type and navigate accordingly.
-
-    await _userModel.fetchUser();
-
-    User? user = _userModel.getUser();
-
-    if (user != null) {
-      int userType = user.type;
-
-      if (userType == 2) {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => AdminPortal(),
-        ));
-      } else {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => MapPage(user: _userModel),
-        ));
-      }
-    } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Does not exist'),
-            content: Text('User does not exist'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
+  final _loginController = LoginController();
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +51,8 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
 
                 ElevatedButton(
-                  onPressed: _login,
+                  onPressed: //() => _loginController.login(context, _usernameController, _passwordController),
+                  () { Navigator.push(context, MaterialPageRoute(builder: (context) => MapView()), ); }, //only for testing purposes
                   child: Text('Login'),
                 ),
                 SizedBox(width: 20),
