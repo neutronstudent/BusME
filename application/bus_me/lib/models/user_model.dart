@@ -7,6 +7,7 @@ import 'package:bus_me/models/auth_model.dart';
 import 'package:flutter/foundation.dart';
 
 import 'api_constants.dart';
+import 'notification_model.dart';
 
 abstract class UserModel
 {
@@ -81,6 +82,8 @@ class BusMEUserModel extends UserModel {
     {
       return 1;
     }
+
+    await _user?.testExpiry();
 
     //notify observers that i have fetched a user
     return 0;
@@ -197,10 +200,22 @@ class User {
   String username;
   int id;
   int type;
+  DateTime expiry;
 
 
 
-  User(this.id, this.username, this.settings, this.details, this.type);
+  User(this.id, this.username, this.settings, this.details, this.type, this.expiry)
+  {
+
+  }
+
+  Future<void> testExpiry() async
+  {
+    if (expiry.difference(DateTime.now()).inDays < 30)
+    {
+      await NotificationModel().sendNotification("Your account will expire soon, please contact an administrator");
+    }
+  }
 
   static User fromJson(dynamic sourceObj) {
     dynamic? settings = sourceObj["settings"];
@@ -231,7 +246,7 @@ class User {
     }
 
     return User(sourceObj["id"], sourceObj["username"], settingsObj, detailsObj,
-        sourceObj["type"]);
+        sourceObj["type"], DateTime.parse(sourceObj['expiry']));
   }
 
   Map<String, dynamic> toJson() {
