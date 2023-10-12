@@ -3,10 +3,6 @@ import 'package:bus_me/models/auth_model.dart';
 import 'package:bus_me/controllers/login_controller.dart';
 
 class CreateAccountScreen extends StatefulWidget {
-  final AuthModel BusMEAuth;
-  final LoginController loginController;
-
-  CreateAccountScreen({required this.BusMEAuth, required this.loginController});
 
   @override
   _CreateAccountScreenState createState() => _CreateAccountScreenState();
@@ -18,6 +14,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
+
+  final LoginController _loginController = LoginController();
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +80,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 String email = _emailController.text;
                 String phone = _phoneController.text;
 
-                bool result = await widget.loginController.createAccount(username, password, name, email, phone);
+                bool result = await _loginController.createAccount(username, password, name, email, phone);
 
                 if (result) {
                   showDialog(

@@ -13,6 +13,8 @@ public class BusTrip
     public string? TripHeadSign {get; set;}
     public string ApiTripID {get; set;}
     
+    public bool HasWheelchair {get; set;} = false;
+    
     public int? Direction {get; set;}
 
     public float? Lat {get; set;}

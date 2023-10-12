@@ -5,9 +5,8 @@ import 'package:bus_me/models/user_management.dart';
 
 class UserDetailsPage extends StatefulWidget {
   final User user;
-  final AuthModel authModel; // Assume you pass AuthModel to UserDetailsPage
 
-  UserDetailsPage({required this.user, required this.authModel});
+  UserDetailsPage({required this.user});
 
   @override
   _UserDetailsPageState createState() => _UserDetailsPageState();
@@ -15,13 +14,14 @@ class UserDetailsPage extends StatefulWidget {
 
 class _UserDetailsPageState extends State<UserDetailsPage> {
   late TextEditingController _nameController;
-  late BusMEUserManagement userManagement; // Declare userManagement here
+  late BusMEUserManagement userManagement;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.user.details?.name);
-    userManagement = BusMEUserManagement(widget.authModel); // Initialize userManagement here
+    final AuthModel _authModel = BusMEAuth();
+    userManagement = BusMEUserManagement(_authModel); // Initialize userManagement here
   }
 
   @override

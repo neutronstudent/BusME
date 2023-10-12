@@ -4,10 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:bus_me/views/login.dart';
 
 class SettingsPage extends StatefulWidget {
-  UserModel userModel;
-
-  SettingsPage(this.userModel);
-
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
@@ -16,10 +12,12 @@ class _SettingsPageState extends State<SettingsPage> {
   bool isAudioEnabled = false;
   bool isVibrationEnabled = false;
 
+  UserModel _userModel = BusMEUserModel();
+
   _SettingsPageState()
   {
-    this.isAudioEnabled= widget.userModel.getUser()!.settings!.audioNotifications!;
-    this.isVibrationEnabled = widget.userModel.getUser()!.settings!.vibrationNotifications!;
+    this.isAudioEnabled= _userModel.getUser()!.settings!.audioNotifications!;
+    this.isVibrationEnabled = _userModel.getUser()!.settings!.vibrationNotifications!;
   }
 
   @override
@@ -46,8 +44,8 @@ class _SettingsPageState extends State<SettingsPage> {
               onTap: ()  {
                 setState(() async {
                   isAudioEnabled = !isAudioEnabled;
-                  widget.userModel.getUser()!.settings?.audioNotifications = isAudioEnabled;
-                  await widget.userModel.updateUser();
+                  _userModel.getUser()!.settings?.audioNotifications = isAudioEnabled;
+                  await _userModel.updateUser();
                 });
               },
             ),
@@ -66,8 +64,8 @@ class _SettingsPageState extends State<SettingsPage> {
               onTap: () {
                 setState(() async {
                   isVibrationEnabled = !isVibrationEnabled;
-                  widget.userModel.getUser()!.settings?.vibrationNotifications = isVibrationEnabled;
-                  await widget.userModel.updateUser();
+                  _userModel.getUser()!.settings?.vibrationNotifications = isVibrationEnabled;
+                  await _userModel.updateUser();
                 });
               },
             ),

@@ -1,16 +1,11 @@
-import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-//import 'package:bus_app/locations.dart' as locations;
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'dart:convert';
-import 'dart:io';
-// import 'package:geocoding/geocoding.dart';
-// import 'package:geolocator/geolocator.dart';
+
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -27,7 +22,7 @@ class _MapPage extends State<MapPage> {
   BitmapDescriptor markerCurrentIcon = BitmapDescriptor.defaultMarker;
   Location location = Location();
 
-  //Student get off locatio
+  //Student get off location
   var busStopLocationLat = -36.846187;
   var busStopLocationLon = 174.76939;
 

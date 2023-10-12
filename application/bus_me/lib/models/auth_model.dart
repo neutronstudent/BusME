@@ -23,6 +23,14 @@ abstract class AuthModel extends Observable
 
 class BusMEAuth extends AuthModel {
 
+  static final BusMEAuth _instance = BusMEAuth._internal();
+
+  factory BusMEAuth() {
+    return _instance;
+  }
+
+  BusMEAuth._internal();
+
   //
   String? _token = "";
   int? _id;
