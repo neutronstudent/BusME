@@ -65,9 +65,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
-    compileOptions {
-        coreLibraryDesugaringEnabled true
-    }
+
 }
 
 flutter {
@@ -76,5 +74,4 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    oreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }
