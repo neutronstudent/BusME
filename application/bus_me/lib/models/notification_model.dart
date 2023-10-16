@@ -1,4 +1,5 @@
 
+import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class NotificationModel
@@ -29,7 +30,8 @@ class NotificationModel
   final Set<NotifType> _notfiSettings = Set();
   late final Map<NotifType, Future<void> Function(String)> notfiHandlers = {
     NotifType.TTS: _sendTTS,
-    NotifType.POPUP: _sendPopup
+    NotifType.POPUP: _sendPopup,
+    NotifType.ALERT: _sendAlert
   };
 
   Future<void> sendNotification(String str) async
@@ -47,7 +49,7 @@ class NotificationModel
     await _tts.setLanguage("en-US");
     await _tts.setSpeechRate(0.5); //speed of speech
     await _tts.setVolume(1.0); //volume of speech
-    await _tts.setPitch(1); //pitc of sound
+    await _tts.setPitch(1); //pitch of sound
 
     await _tts.speak(str);
   }
@@ -57,6 +59,25 @@ class NotificationModel
     _localNotificationsPlugin.show(_lastId, "BusME Alert!", str, const NotificationDetails());
     _lastId +=1;
 
+  }
+
+  Future<void> _sendAlert(String str) async
+  {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('BusME Alert!'),
+          content: Text('Your Bus is Arriving'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void addNotifType(NotifType type)
@@ -74,5 +95,6 @@ class NotificationModel
 enum NotifType
 {
   TTS,
-  POPUP
+  POPUP,
+  ALERT
 }
