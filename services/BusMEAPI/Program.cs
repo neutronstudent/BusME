@@ -3,13 +3,17 @@ using System.Text;
 using BusMEAPI;
 using BusMEAPI.Database;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.IdentityModel.Tokens;
-using Npgsql;
 using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders =
+        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+});
 // Add services to the container.
 builder.Services.AddQuartz(q =>{
     q.UseMicrosoftDependencyInjectionJobFactory();
@@ -70,17 +74,22 @@ builder.Services.AddAuthorization(o =>
 builder.Services.AddScoped<BaseUserService, DbUserService>();
 builder.Services.AddScoped<BaseAPIIntergration, AtAPIIntergration>();
 
-
-
-
 builder.Services.AddSwaggerGen();
-
 
 var app = builder.Build();
 
+app.UseForwardedHeaders();
+
 app.UseRouting();
-app.UseSwagger();
-app.UseSwaggerUI();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+
+
 
 
 
@@ -88,7 +97,7 @@ app.UseSwaggerUI();
 app.UseAuthentication();
 
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
