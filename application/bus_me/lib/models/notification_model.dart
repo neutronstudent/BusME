@@ -7,20 +7,23 @@ class NotificationModel
   static final NotificationModel _instance = NotificationModel._internal();
 
   factory NotificationModel() {
+    WidgetsFlutterBinding.ensureInitialized();
     return _instance;
 
   }
 
   NotificationModel._internal();
 
-  final FlutterTts _tts = FlutterTts();
+  late final FlutterTts _tts;
   final FlutterLocalNotificationsPlugin _localNotificationsPlugin = FlutterLocalNotificationsPlugin();
   int _lastId = 0;
     //map of notifiaction types to function to use
 
 
-  Future<void> initPushNotifications() async
+  Future<void> initNotifications() async
   {
+    WidgetsFlutterBinding.ensureInitialized();
+    _tts = FlutterTts();
     const andInitSettings = AndroidInitializationSettings("assets/icons/app-icons/bus-me-logo.png");
     final iosInitSettings = DarwinInitializationSettings();
 

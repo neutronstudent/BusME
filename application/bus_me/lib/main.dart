@@ -14,6 +14,7 @@ void main() {
   BusMEUserManagement userManagementModel = BusMEUserManagement(authModel);
   BusMEUserModel userModel = BusMEUserModel();
 
+  NotificationModel().initNotifications();
   NotificationModel().addNotifType(NotifType.ALERT);
 
   LoginController loginController = LoginController();
