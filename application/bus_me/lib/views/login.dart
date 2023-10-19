@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../models/notification_model.dart';
 import 'create_account_screen.dart';
 import '../controllers/login_controller.dart';
 import '../views/mapView.dart';
@@ -68,7 +69,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     },
                     child: Text('Create Account'),
-                  )
+                  ),
+                ElevatedButton(
+                  onPressed: () async {
+                    await NotificationModel().sendNotification("Bus Arrive", context);
+                  },
+                  child: Text('Test Message'),
+                )
                 ]
                 ),
               ],

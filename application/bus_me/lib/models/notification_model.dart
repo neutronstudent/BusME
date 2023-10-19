@@ -28,23 +28,24 @@ class NotificationModel
   }
 
   final Set<NotifType> _notfiSettings = Set();
-  late final Map<NotifType, Future<void> Function(String)> notfiHandlers = {
+
+  late final Map<NotifType, Future<void> Function(String, BuildContext? context)> notfiHandlers = {
     NotifType.TTS: _sendTTS,
     NotifType.POPUP: _sendPopup,
     NotifType.ALERT: _sendAlert
   };
 
-  Future<void> sendNotification(String str) async
+  Future<void> sendNotification(String str, BuildContext? context) async
   {
     //loop over notification types and call handlers for each if present
     for (NotifType type in _notfiSettings)
     {
-      await notfiHandlers[type]!(str);
+      await notfiHandlers[type]!(str, context);
     }
 
   }
 
-  Future<void> _sendTTS(String str) async
+  Future<void> _sendTTS(String str, BuildContext? context) async
   {
     await _tts.setLanguage("en-US");
     await _tts.setSpeechRate(0.5); //speed of speech
@@ -54,21 +55,21 @@ class NotificationModel
     await _tts.speak(str);
   }
 
-  Future<void> _sendPopup(String str) async
+  Future<void> _sendPopup(String str, BuildContext? context) async
   {
     _localNotificationsPlugin.show(_lastId, "BusME Alert!", str, const NotificationDetails());
     _lastId +=1;
 
   }
 
-  Future<void> _sendAlert(String str) async
+  Future<void> _sendAlert(String str, BuildContext? context) async
   {
     return showDialog(
-      context: context,
+      context: context!,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('BusME Alert!'),
-          content: Text('Your Bus is Arriving'),
+          content: Text(str),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
