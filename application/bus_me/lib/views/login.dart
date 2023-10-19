@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ElevatedButton(
                   onPressed: () async {
-                    await NotificationModel().sendNotification("Bus Arrive", context);
+                    await NotificationModel().sendNotification("Your Bus is Arriving! Press OK to Dismiss", context);
                   },
                   child: Text('Test Message'),
                 )
