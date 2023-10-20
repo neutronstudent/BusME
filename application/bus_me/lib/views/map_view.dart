@@ -5,7 +5,8 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-
+import 'package:bus_me/models/bus_model.dart';
+import 'package:bus_me/models/user_model.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -21,6 +22,7 @@ class _MapPage extends State<MapPage> {
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor markerCurrentIcon = BitmapDescriptor.defaultMarker;
   Location location = Location();
+  final BusModel _busModel = BusModel();
 
   //Student get off location
   var busStopLocationLat = -36.846187;
@@ -37,11 +39,11 @@ class _MapPage extends State<MapPage> {
 
   List _items = [];
   readJson() async {
-    final String response =
-        await rootBundle.loadString('assets/json/stops.json');
-    final data = await json.decode(response);
+    //final String response = await rootBundle.loadString('assets/json/stops.json');
+    //final data = await json.decode(response);
+    _items = (await _busModel.getRoute(1)) as List;
     setState(() {
-      _items = data["data"];
+      _items = _items;
     });
   }
 
