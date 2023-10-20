@@ -213,7 +213,7 @@ class User {
   {
     if (expiry.difference(DateTime.now()).inDays < 30)
     {
-      await NotificationModel().sendNotification("Your account will expire soon, please contact an administrator");
+      await NotificationModel().sendNotification("Your account will expire soon, please contact an administrator", null);
     }
   }
 
