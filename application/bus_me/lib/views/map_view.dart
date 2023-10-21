@@ -1,3 +1,4 @@
+import 'package:bus_me/controllers/custom_map_controller.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -23,6 +24,7 @@ class _MapPage extends State<MapPage> {
   BitmapDescriptor markerCurrentIcon = BitmapDescriptor.defaultMarker;
   Location location = Location();
   final BusModel _busModel = BusModel();
+  final BusController _busController = BusController();
 
   //Student get off location
   var busStopLocationLat = -36.846187;
@@ -41,9 +43,10 @@ class _MapPage extends State<MapPage> {
   readJson() async {
     //final String response = await rootBundle.loadString('assets/json/stops.json');
     //final data = await json.decode(response);
-    _items = (await _busModel.getRoute(1)) as List;
+    int routeId = 1;
+    Route? route = await _busController.getRoute(routeId);
     setState(() {
-      _items = _items;
+      _items = route;
     });
   }
 
