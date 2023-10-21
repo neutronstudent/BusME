@@ -45,7 +45,8 @@ class _MapPage extends State<MapPage> {
   readJson() async {
     //final String response = await rootBundle.loadString('assets/json/stops.json');
     //final data = await json.decode(response);
-    List<Route> routes = await _customMapController.getRoutes();
+    int rountId = 1;
+    List<Route> routes = await _customMapController.getRoute(rountId);
     setState(() {
       _items = routes;
     });
