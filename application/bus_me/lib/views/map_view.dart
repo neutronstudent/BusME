@@ -9,6 +9,7 @@ import 'package:location/location.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:convert';
 import 'dart:io';
+import 'package:bus_me/controllers/custom_map_controller.dart';
 // import 'package:geocoding/geocoding.dart';
 // import 'package:geolocator/geolocator.dart';
 
@@ -26,7 +27,7 @@ class _MapPage extends State<MapPage> {
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor markerCurrentIcon = BitmapDescriptor.defaultMarker;
   Location location = Location();
-
+  final CustomMapController _customMapController;
   //Student get off locatio
   var busStopLocationLat = -36.846187;
   var busStopLocationLon = 174.76939;
@@ -42,11 +43,11 @@ class _MapPage extends State<MapPage> {
 
   List _items = [];
   readJson() async {
-    final String response =
-        await rootBundle.loadString('assets/json/stops.json');
-    final data = await json.decode(response);
+    //final String response = await rootBundle.loadString('assets/json/stops.json');
+    //final data = await json.decode(response);
+    List<Route> routes = await _customMapController.getRoutes();
     setState(() {
-      _items = data["data"];
+      _items = routes;
     });
   }
 
