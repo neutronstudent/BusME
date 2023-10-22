@@ -323,16 +323,16 @@ class Trip
   int id = 0;
   String name = "";
   bool wheelchairSupport = false;
-  Float lat = 0 as Float;
-  Float long = 0 as Float;
+  Double lat = 0 as Double;
+  Double long = 0 as Double;
 }
 
 class Stop
 {
   Stop(this.id, this.lat, this.long, this.name);
   int id = 0;
-  Float lat = 0 as Float;
-  Float long = 0 as Float;
+  Double lat = 0 as Double;
+  Double long = 0 as Double;
   String name = "";
 }
 
