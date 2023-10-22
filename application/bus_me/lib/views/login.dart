@@ -1,9 +1,10 @@
+import 'dart:collection';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../models/notification_model.dart';
 import 'create_account_screen.dart';
 import '../controllers/login_controller.dart';
-import '../views/mapView.dart';
 
 import 'package:bus_me/views/map_view.dart';
 
@@ -53,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 ElevatedButton(
                   onPressed: //() => _loginController.login(context, _usernameController, _passwordController),
-                  () { Navigator.push(context, MaterialPageRoute(builder: (context) => MapView()), ); }, //only for testing purposes
+                  () { Navigator.push(context, MaterialPageRoute(builder: (context) => MapView(map)), ); }, //only for testing purposes
                   child: Text('Login'),
                 ),
                 SizedBox(width: 20),
