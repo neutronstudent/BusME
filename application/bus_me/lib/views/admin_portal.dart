@@ -6,10 +6,6 @@ import 'package:bus_me/models/user_management.dart';
 
 class AdminPortal extends StatefulWidget {
 
-  AuthModel _authModel;
-
-  AdminPortal(this._authModel);
-
   @override
   _AdminPortalState createState() => _AdminPortalState();
 }
@@ -17,11 +13,12 @@ class AdminPortal extends StatefulWidget {
 class _AdminPortalState extends State<AdminPortal> {
   late BusMEUserManagement _userManagement;
   late Future<List<User>> usersFuture;
+  final AuthModel _authModel = BusMEAuth();
 
   @override
   void initState() {
     super.initState();
-    _userManagement = BusMEUserManagement(widget._authModel);
+    _userManagement = BusMEUserManagement(_authModel);
     usersFuture = _userManagement.searchUser(""); // Initially get all users
   }
 
@@ -65,7 +62,7 @@ class _AdminPortalState extends State<AdminPortal> {
                         onTap: () {
                           // Navigate to user details page and pass the user object
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => UserDetailsPage(user: user, authModel: widget._authModel),
+                            builder: (context) => UserDetailsPage(user: user),
                           ));
                         },
                       );

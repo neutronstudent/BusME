@@ -1,10 +1,16 @@
-import 'package:bus_me/models/auth_model.dart';
+
 import 'package:flutter/foundation.dart';
-import 'package:bus_me/models/api_constants.dart';
+import 'dart:async';
+import 'package:bus_me/models/user_model.dart';
+import 'package:bus_me/models/user_management.dart';
+import 'package:bus_me/models/auth_model.dart';
 import 'package:bus_me/models/bus_model.dart';
+import 'package:flutter/material.dart';
+import 'package:bus_me/models/api_constants.dart';
 
 class CustomMapController {
   final BusModel _busModel = BusModel();
+
   // Define methods to interact with the BusModel and handle API calls.
 
   Future<List<Route>> getRoutes() async {

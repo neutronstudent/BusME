@@ -55,6 +55,7 @@ namespace BusMEAPI.Controllers
             newUser.Settings = new UserSettings();
             newUser.Details = user.Details;
             newUser.Username = user.Username;
+            newUser.Expiry = DateTime.UtcNow.AddYears(1);
                 
                 //attempt to create user with the above infomation
                int status = await _userMang.CreateUser(newUser, user.Password);

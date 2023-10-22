@@ -1,8 +1,7 @@
-import 'package:permission_handler/permission_handler.dart';
+import 'package:bus_me/controllers/custom_map_controller.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-//import 'package:bus_app/locations.dart' as locations;
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
@@ -12,6 +11,8 @@ import 'dart:io';
 import 'package:bus_me/controllers/custom_map_controller.dart';
 // import 'package:geocoding/geocoding.dart';
 // import 'package:geolocator/geolocator.dart';
+import 'package:bus_me/models/bus_model.dart';
+import 'package:bus_me/models/user_model.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -27,8 +28,13 @@ class _MapPage extends State<MapPage> {
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor markerCurrentIcon = BitmapDescriptor.defaultMarker;
   Location location = Location();
+ 
   final CustomMapController _customMapController;
   //Student get off locatio
+  final BusModel _busModel = BusModel();
+  final BusController _busController = BusController();
+
+  //Student get off location
   var busStopLocationLat = -36.846187;
   var busStopLocationLon = 174.76939;
 

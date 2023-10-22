@@ -95,7 +95,7 @@ class _MapPage extends State<MapPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SettingsPage(widget.user),
+                    builder: (context) => SettingsPage(),
                   ),
                 );
               },
