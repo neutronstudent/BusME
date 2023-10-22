@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/services.dart';
+
 class NotificationModel
 {
   static final NotificationModel _instance = NotificationModel._internal();
@@ -35,7 +37,8 @@ class NotificationModel
   late final Map<NotifType, Future<void> Function(String, BuildContext? context)> notfiHandlers = {
     NotifType.TTS: _sendTTS,
     NotifType.POPUP: _sendPopup,
-    NotifType.ALERT: _sendAlert
+    NotifType.ALERT: _sendAlert,
+    NotifType.VIB: _sendVib
   };
 
   Future<void> sendNotification(String str, BuildContext? context) async
@@ -45,6 +48,11 @@ class NotificationModel
     });
     //loop over notification types and call handlers for each if present
 
+  }
+
+  Future<void> _sendVib(String str, BuildContext? context) async
+  {
+    HapticFeedback.vibrate();
   }
 
   Future<void> _sendTTS(String str, BuildContext? context) async
@@ -99,5 +107,6 @@ enum NotifType
 {
   TTS,
   POPUP,
-  ALERT
+  ALERT,
+  VIB
 }
