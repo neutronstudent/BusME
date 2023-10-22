@@ -25,7 +25,7 @@ class BusModel
   final AuthModel _auth = BusMEAuth();
   final HttpClient _client = HttpClient(/*context: SecurityContext.defaultContext*/);
 
-  Future<List<Route>> getRoutes() async {
+  Future<List<BusRoute>> getRoutes() async {
     //get routes from api
     _client.connectionTimeout = const Duration(seconds: 4);
 
@@ -51,20 +51,20 @@ class BusModel
       return [];
     }
 
-    List<Route> routes = [];
+    List<BusRoute> routes = [];
     //decode json to map
     List<dynamic> json = jsonDecode(await req.transform(utf8.decoder).join());
 
     //add routes to array
     for (int i = 0; i < json.length; i ++)
     {
-      routes.add(Route(json[i]['id'], json[i]['name'], json[i]['code'], []));
+      routes.add(BusRoute(json[i]['id'], json[i]['name'], json[i]['code'], []));
     }
 
     return routes;
   }
 
-  Future<Route?> getRoute(int routeId) async {
+  Future<BusRoute?> getRoute(int routeId) async {
 
     //error checking
     if (routeId < 0) {
@@ -96,7 +96,7 @@ class BusModel
       return null;
     }
 
-    Route? route = Route(0, "", "", []);
+    BusRoute? route = BusRoute(0, "", "", []);
 
 
     try {
@@ -336,9 +336,9 @@ class Stop
   String name = "";
 }
 
-class Route
+class BusRoute
 {
-  Route(this.id, this.name, this.code, this.trips);
+  BusRoute(this.id, this.name, this.code, this.trips);
 
   int id = 0;
   String name = "";

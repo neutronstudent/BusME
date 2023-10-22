@@ -41,13 +41,16 @@ class _MapPage extends State<MapPage> {
 
   List _items = [];
   readJson() async {
+    /*
     //final String response = await rootBundle.loadString('assets/json/stops.json');
     //final data = await json.decode(response);
     int routeId = 1;
-    Route? route = await _busController.getRoute(routeId);
+    List<BusRoute route = await _busController.getRoute(routeId);
     setState(() {
       _items = route;
     });
+
+     */
   }
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
@@ -197,7 +200,7 @@ class _MapPage extends State<MapPage> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Bus me Route'),
+          title: const Text('Bus me BusRoute'),
           backgroundColor: Colors.deepPurpleAccent,
           elevation: 2,
         ),

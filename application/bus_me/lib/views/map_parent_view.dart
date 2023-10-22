@@ -98,7 +98,7 @@ class _MapParentPage extends State<MapParentPage> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Bus me Route Parent view'),
+          title: const Text('Bus me BusRoute Parent view'),
           backgroundColor: Colors.deepPurpleAccent,
           elevation: 2,
         ),

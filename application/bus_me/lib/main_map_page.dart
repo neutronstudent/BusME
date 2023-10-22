@@ -85,7 +85,7 @@ class _MapPage extends State<MapPage> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Bus me Route'),
+          title: const Text('Bus me BusRoute'),
           backgroundColor: Colors.deepPurpleAccent,
           elevation: 2,
           actions: [

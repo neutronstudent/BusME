@@ -11,7 +11,7 @@ class BusController {
 
   // Define methods to interact with the BusModel and handle API calls.
 
-  Future<List<Route>> getRoutes() async {
+  Future<List<BusRoute>> getRoutes() async {
     try {
       return await _busModel.getRoutes();
     } catch (e) {
@@ -20,7 +20,7 @@ class BusController {
     }
   }
 
-  Future<Route?> getRoute(int routeId) async {
+  Future<BusRoute?> getRoute(int routeId) async {
     try {
       return await _busModel.getRoute(routeId);
     } catch (e) {
