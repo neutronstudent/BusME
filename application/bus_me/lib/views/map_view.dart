@@ -6,6 +6,11 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:bus_me/controllers/custom_map_controller.dart';
+// import 'package:geocoding/geocoding.dart';
+// import 'package:geolocator/geolocator.dart';
 import 'package:bus_me/models/bus_model.dart';
 import 'package:bus_me/models/user_model.dart';
 
@@ -23,6 +28,9 @@ class _MapPage extends State<MapPage> {
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor markerCurrentIcon = BitmapDescriptor.defaultMarker;
   Location location = Location();
+ 
+  final CustomMapController _customMapController;
+  //Student get off locatio
   final BusModel _busModel = BusModel();
   final BusController _busController = BusController();
 
@@ -43,10 +51,10 @@ class _MapPage extends State<MapPage> {
   readJson() async {
     //final String response = await rootBundle.loadString('assets/json/stops.json');
     //final data = await json.decode(response);
-    int routeId = 1;
-    Route? route = await _busController.getRoute(routeId);
+    int rountId = 1;
+    List<Route> routes = await _customMapController.getRoute(rountId);
     setState(() {
-      _items = route;
+      _items = routes;
     });
   }
 
