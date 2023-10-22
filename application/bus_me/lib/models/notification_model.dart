@@ -40,11 +40,10 @@ class NotificationModel
 
   Future<void> sendNotification(String str, BuildContext? context) async
   {
+    await Future.forEach(_notfiSettings, (element)  async {
+      notfiHandlers[element]!(str, context);
+    });
     //loop over notification types and call handlers for each if present
-    for (NotifType type in _notfiSettings)
-    {
-      await notfiHandlers[type]!(str, context);
-    }
 
   }
 
