@@ -64,7 +64,7 @@ class TrackingModel
       await NotificationModel().sendNotification("Bus is approaching", context);
     }
   }
-  
+
   Future<List<Stop>> getTripStops() async
   {
     return BusModel().getStops(curTrip);
@@ -87,6 +87,17 @@ class TrackingModel
   void resetNotifs()
   {
     _notif = false;
+  }
+
+  void setTrip(int tripId)
+  {
+    _notif = false;
+    curTrip = tripId;
+  }
+
+  int getTrip()
+  {
+    return curTrip;
   }
 
 }
