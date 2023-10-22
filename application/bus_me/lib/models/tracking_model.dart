@@ -64,7 +64,7 @@ class TrackingModel
       await NotificationModel().sendNotification("Bus is approaching", context);
     }
   }
-
+  
   Future<List<Stop>> getTripStops() async
   {
     return BusModel().getStops(curTrip);
