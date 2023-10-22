@@ -52,7 +52,9 @@ class NotificationModel
 
   Future<void> _sendVib(String str, BuildContext? context) async
   {
+    HapticFeedback.heavyImpact();
     HapticFeedback.vibrate();
+    HapticFeedback.heavyImpact();
   }
 
   Future<void> _sendTTS(String str, BuildContext? context) async
