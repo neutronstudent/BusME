@@ -4,6 +4,9 @@ import '../models/notification_model.dart';
 import 'create_account_screen.dart';
 import '../controllers/login_controller.dart';
 import '../views/mapView.dart';
+import '../views/UserDetailsPage.dart'; //testing purposes
+import '../models/user_model.dart'; //testing purposes
+
 
 import 'package:bus_me/views/map_view.dart';
 
@@ -48,40 +51,45 @@ class _LoginScreenState extends State<LoginScreen> {
             Row(
 
               // This is the new Row widget
-              mainAxisAlignment: MainAxisAlignment.center, // Center the buttons
-              children: [
+                mainAxisAlignment: MainAxisAlignment.center,
+                // Center the buttons
+                children: [
 
-                ElevatedButton(
-                  onPressed: //() => _loginController.login(context, _usernameController, _passwordController),
-                  () { Navigator.push(context, MaterialPageRoute(builder: (context) => MapView()), ); }, //only for testing purposes
-                  child: Text('Login'),
-                ),
-                SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: //() => _loginController.login(context, _usernameController, _passwordController),
+                        () {
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) =>
+                              UserDetailsPage(user: testUser())),);
+                    }, //only for testing purposes
+                    child: Text('Login'),
+                  ),
+                  SizedBox(width: 20),
 
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CreateAccountScreen()
-                      ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreateAccountScreen()
+                        ),
                       );
-
                     },
                     child: Text('Create Account'),
                   ),
-                ElevatedButton(
-                  onPressed: () async {
-                    await NotificationModel().sendNotification("Your Bus is Arriving! Press OK to Dismiss", context);
-                  },
-                  child: Text('Test Message'),
-                )
+                  ElevatedButton(
+                    onPressed: () async {
+                      await NotificationModel().sendNotification(
+                          "Your Bus is Arriving! Press OK to Dismiss", context);
+                    },
+                    child: Text('Test Message'),
+                  )
                 ]
-                ),
-              ],
             ),
-          ),
-        );
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -90,4 +98,21 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
     super.dispose();
   }
+
+  //For testing UserDetailsPage
+  User testUser() {
+    UserDetails userDetails = UserDetails(
+        "John Doe", "johndoe@example.com", "+1234567890");
+    UserSettings userSettings = UserSettings(true, true, 123);
+
+    return User(
+        1,
+        "john_doe",
+        userSettings,
+        userDetails,
+        1,
+        DateTime.now().add(Duration(days: 365))
+    );
+  }
+
 }

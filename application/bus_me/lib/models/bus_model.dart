@@ -25,6 +25,7 @@ class BusModel
   final AuthModel _auth = BusMEAuth();
   final HttpClient _client = HttpClient(/*context: SecurityContext.defaultContext*/);
 
+  //Get list of all routes
   Future<List<BusRoute>> getRoutes() async {
     //get routes from api
     _client.connectionTimeout = const Duration(seconds: 4);
@@ -64,6 +65,7 @@ class BusModel
     return routes;
   }
 
+  //For retrieving a route that is tied to a users account
   Future<BusRoute?> getRoute(int routeId) async {
 
     //error checking
@@ -130,6 +132,7 @@ class BusModel
     return route;
   }
 
+  //Get all trips associated with a routeID
   Future<List<Trip>> getTrips(int routeId) async {
 
     //error checking
@@ -193,6 +196,7 @@ class BusModel
     return trips;
   }
 
+  //Get information about trip id
   Future<Trip?> getTrip(int id) async {
 
     //error checking
@@ -248,6 +252,7 @@ class BusModel
     }
   }
 
+  //get all stop associated with a trip
   Future<List<Stop>> getStops(int tripId) async {
 
     //error checking
