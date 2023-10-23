@@ -116,7 +116,8 @@ class BusModel
             json['trips'][i]['name'],
             false,
             json['trips'][i]['lat'],
-            json['trips'][i]['long']
+            json['trips'][i]['long'],
+            json['trips'][i]['startTime']
           )
         );
       }
@@ -179,7 +180,8 @@ class BusModel
             json[i]['name'],
             false,
             json[i]['lat'],
-            json[i]['long']
+            json[i]['long'],
+            json[i]['startTime']
         )
         );
       }
@@ -237,7 +239,9 @@ class BusModel
           json['name'],
           false,
           json['lat'],
-          json['long']
+          json['long'],
+          json['startTime']
+
        );
 
         return trip;
@@ -319,12 +323,14 @@ class BusModel
 
 class Trip
 {
-  Trip(this.id, this.name, this.wheelchairSupport, this.lat, this.long);
+  Trip(this.id, this.name, this.wheelchairSupport, this.lat, this.long, this.startTime);
   int id = 0;
   String name = "";
   bool wheelchairSupport = false;
   Double lat = 0 as Double;
   Double long = 0 as Double;
+  String startTime = "";
+
 }
 
 class Stop
