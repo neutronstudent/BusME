@@ -36,7 +36,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 24),
             TextField(
               controller: _passwordController,
               obscureText: true,
@@ -45,6 +45,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 border: OutlineInputBorder(),
               ),
             ),
+            SizedBox(height: 24),
             TextField(
               controller: _nameController,
               obscureText: false,

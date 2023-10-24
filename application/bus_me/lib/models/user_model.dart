@@ -100,12 +100,13 @@ class BusMEUserModel extends UserModel {
     HttpClientRequest postReq = await userServer.postUrl(route);
 
     //write user info to network
-    postReq.write(jsonEncode(user));
+    postReq.write(jsonEncode(user.toJson()));
 
     HttpClientResponse result = await postReq.close();
 
     if (result.statusCode != HttpStatus.created)
     {
+      print(result.statusCode);
       return 1;
     }
 
@@ -155,6 +156,15 @@ class UserRegistration {
   UserDetails details;
 
   UserRegistration(this.username, this.password, this.details);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': 0,
+      'username': username,
+      'password': password,
+      'details': details.toJson()
+    };
+  }
 
 }
 

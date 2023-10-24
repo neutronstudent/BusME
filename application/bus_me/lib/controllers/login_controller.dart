@@ -29,6 +29,9 @@ class LoginController implements Observer {
   Future<bool> createAccount(String username, String password, String name, String email, String phone) async {
     bool created = false;
 
+    //debug
+    print("createAccount method called");
+
     UserDetails userDetails = UserDetails(name, email, phone);
     UserRegistration userRegistration = UserRegistration(username, password, userDetails);
 
