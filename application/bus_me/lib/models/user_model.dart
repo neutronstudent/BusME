@@ -98,7 +98,7 @@ class BusMEUserModel extends UserModel {
   Future<int> registerUser(UserRegistration user) async {
     Uri route = Uri.https(API_ROUTE,'/api/users/register');
     HttpClientRequest postReq = await userServer.postUrl(route);
-
+    postReq.headers.contentType = ContentType.json;
     //write user info to network
     postReq.write(jsonEncode(user.toJson()));
 
@@ -106,7 +106,7 @@ class BusMEUserModel extends UserModel {
 
     if (result.statusCode != HttpStatus.created)
     {
-      print(result.statusCode);
+      print(jsonEncode(user.toJson()));
       return 1;
     }
 
@@ -129,6 +129,9 @@ class BusMEUserModel extends UserModel {
 
     detailPut.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
     settingsPut.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
+
+    detailPut.headers.contentType = ContentType.json;
+    settingsPut.headers.contentType = ContentType.json;
 
     detailPut.write(jsonEncode(_user!.details));
     settingsPut.write(jsonEncode(_user!.settings));
@@ -189,6 +192,7 @@ class UserSettings {
 
 class UserDetails
 {
+  int id = 0;
   String name;
   String email;
   String phone;
@@ -197,6 +201,7 @@ class UserDetails
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
     'name': name,
     'email': email,
     'phone': phone,
