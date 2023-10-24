@@ -7,6 +7,9 @@ import 'create_account_screen.dart';
 import '../controllers/login_controller.dart';
 import 'mapView.dart';
 
+import '../views/UserDetailsPage.dart'; //testing purposes
+import '../models/user_model.dart'; //testing purposes
+
 import 'package:bus_me/views/map_view.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -48,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 24.0),
             Row(
+
               mainAxisAlignment: MainAxisAlignment.center, // Center the buttons
               children: [
 
@@ -58,30 +62,30 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(width: 20),
 
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CreateAccountScreen()
-                      ),
+                 ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreateAccountScreen()
+                        ),
                       );
-
                     },
                     child: Text('Create Account'),
                   ),
-                ElevatedButton(
-                  onPressed: () async {
-                    await NotificationModel().sendNotification("Your Bus is Arriving! Press OK to Dismiss", context);
-                  },
-                  child: Text('Test Message'),
-                )
+                  ElevatedButton(
+                    onPressed: () async {
+                      await NotificationModel().sendNotification(
+                          "Your Bus is Arriving! Press OK to Dismiss", context);
+                    },
+                    child: Text('Test Message'),
+                  )
                 ]
-                ),
-              ],
             ),
-          ),
-        );
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -90,4 +94,21 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
     super.dispose();
   }
+
+  //For testing UserDetailsPage
+  User testUser() {
+    UserDetails userDetails = UserDetails(
+        "John Doe", "johndoe@example.com", "+1234567890");
+    UserSettings userSettings = UserSettings(true, true, 123);
+
+    return User(
+        1,
+        "john_doe",
+        userSettings,
+        userDetails,
+        1,
+        DateTime.now().add(Duration(days: 365))
+    );
+  }
+
 }
