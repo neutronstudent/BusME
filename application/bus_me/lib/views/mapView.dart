@@ -21,9 +21,12 @@ class _MapViewState extends State<MapView> {
 
   final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
+  //custom icons not working
+  /*
   //Icons for bus and bus stops, User current location uses default
   late BitmapDescriptor _busStopIcon;
   late BitmapDescriptor _busIcon;
+   */
 
   String _tripName = "No trip selected";
 
@@ -43,8 +46,12 @@ class _MapViewState extends State<MapView> {
     super.initState();
     _busController.checkRouteAndShowSnackBar(context);
     _getUserLocation();
+
+    //Custom icons not working
+    /*
     _loadBusStopIcon();
     _loadBusIcon();
+     */
     _startLocationUpdates();
   }
 
@@ -161,7 +168,7 @@ class _MapViewState extends State<MapView> {
     Trip? trip = await _busModel.getTrip(_trackingModel.getTripId());
     print(trip);
 
-    setState(() {  // You need to wrap the update inside setState
+    setState(() {
 
       _tripName = trip!.name;
 
@@ -173,7 +180,7 @@ class _MapViewState extends State<MapView> {
             markerId: MarkerId('stop_${stop.id}'),
             position: LatLng(stop.lat as double, stop.long as double),
             infoWindow: InfoWindow(title: '${stop.name}', snippet: 'Stop ID: ${stop.id}'),
-            icon: _busStopIcon,
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
           ),
         );
       }
@@ -181,6 +188,8 @@ class _MapViewState extends State<MapView> {
     });
   }
 
+  //Custom Icons not working
+  /*
   Future<void> _loadBusStopIcon() async {
     _busStopIcon = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(devicePixelRatio: 2.5),
@@ -195,6 +204,8 @@ class _MapViewState extends State<MapView> {
     );
   }
 
+   */
+
   void _startBusTracking() {
     _trackingTimer = Timer.periodic(Duration(seconds: 30), (timer) async {
       // Get bus location
@@ -206,7 +217,8 @@ class _MapViewState extends State<MapView> {
             Marker(
               markerId: MarkerId('Bus Location'),
               position: busLocation,
-              icon: _busIcon,
+              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+              infoWindow: InfoWindow(title: 'Bus Location'),
             ),
           );
         });
