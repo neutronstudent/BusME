@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../models/notification_model.dart';
 import 'create_account_screen.dart';
 import '../controllers/login_controller.dart';
+import 'mapView.dart';
 
 import 'package:bus_me/views/map_view.dart';
 
@@ -47,14 +48,12 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 24.0),
             Row(
-
-              // This is the new Row widget
               mainAxisAlignment: MainAxisAlignment.center, // Center the buttons
               children: [
 
                 ElevatedButton(
                   onPressed: //() => _loginController.login(context, _usernameController, _passwordController),
-                  () { Navigator.push(context, MaterialPageRoute(builder: (context) => MapPage()), ); }, //only for testing purposes
+                  () { Navigator.push(context, MaterialPageRoute(builder: (context) => MapView()), ); }, //only for testing purposes
                   child: Text('Login'),
                 ),
                 SizedBox(width: 20),
