@@ -1,4 +1,5 @@
 using BusMEAPI.Database;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,8 +7,10 @@ namespace BusMEAPI
 {
     [ApiController]
     [Route("api/routes")]
+    //[Authorize(policy:"UserOnly")]
     public class BusController : ControllerBase 
     {
+        
         private BusMEContext _db;
         private BaseAPIIntergration _api;
         public BusController(BusMEContext dbContext, BaseAPIIntergration busApi)
@@ -19,6 +22,7 @@ namespace BusMEAPI
         
         //get routes
         [HttpGet]
+        
         public async Task<ActionResult> GetRoutes()
         {
             //dump all route names stored in database 
@@ -83,9 +87,45 @@ namespace BusMEAPI
             return new JsonResult(result.Trips);
         }
 
+        [HttpGet]
+        [Route("/api/trips/{id}")]
+
+        public async Task<ActionResult> GetTrip(int id)
+        {
+            //send route info to user
+            //execute query 
+            BusTrip? result = await _api.GetTrip(id);
+
+            //check if query null 
+
+            if (result == null)
+            {
+                return new NotFoundResult();
+            }
+            
+            //unneeded
+            /*
+            //check if trips have rencently updatted if not force update
+            if (result.LastUpdated.AddSeconds(30) < DateTime.UtcNow)
+            {
+                await _api.UpdateTrips(result.Id);
+            
+
+                result = await query.SingleOrDefaultAsync();
+
+                if (result == null)
+                {
+                    return new NotFoundResult();
+                }
+            }
+            */
+            
+            return new JsonResult(result);
+        }
+
 
         [HttpGet]
-        [Route("trips/{trip}/stops")]
+        [Route("/api/trips/{trip}/stops")]
         public async Task<ActionResult> GetStops(int trip)
         {
             //send route info to user

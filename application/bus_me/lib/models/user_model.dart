@@ -98,14 +98,15 @@ class BusMEUserModel extends UserModel {
   Future<int> registerUser(UserRegistration user) async {
     Uri route = Uri.https(API_ROUTE,'/api/users/register');
     HttpClientRequest postReq = await userServer.postUrl(route);
-
+    postReq.headers.contentType = ContentType.json;
     //write user info to network
-    postReq.write(jsonEncode(user));
+    postReq.write(jsonEncode(user.toJson()));
 
     HttpClientResponse result = await postReq.close();
 
     if (result.statusCode != HttpStatus.created)
     {
+      print(jsonEncode(user.toJson()));
       return 1;
     }
 
@@ -128,6 +129,9 @@ class BusMEUserModel extends UserModel {
 
     detailPut.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
     settingsPut.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
+
+    detailPut.headers.contentType = ContentType.json;
+    settingsPut.headers.contentType = ContentType.json;
 
     detailPut.write(jsonEncode(_user!.details));
     settingsPut.write(jsonEncode(_user!.settings));
@@ -156,6 +160,15 @@ class UserRegistration {
 
   UserRegistration(this.username, this.password, this.details);
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': 0,
+      'username': username,
+      'password': password,
+      'details': details.toJson()
+    };
+  }
+
 }
 
 
@@ -179,6 +192,7 @@ class UserSettings {
 
 class UserDetails
 {
+  int id = 0;
   String name;
   String email;
   String phone;
@@ -187,6 +201,7 @@ class UserDetails
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
     'name': name,
     'email': email,
     'phone': phone,
@@ -244,9 +259,19 @@ class User {
     {
       detailsObj = UserDetails("email", "phone", "name");
     }
+    DateTime time = DateTime.now();
 
+    if (sourceObj.containsKey("expiry"))
+      {
+        if (sourceObj["expiry"] != null)
+        {
+          DateTime.parse(sourceObj["expiry"] );
+
+        }
+
+      }
     return User(sourceObj["id"], sourceObj["username"], settingsObj, detailsObj,
-        sourceObj["type"], DateTime.parse(sourceObj['expiry']));
+        sourceObj["type"], time);
   }
 
   Map<String, dynamic> toJson() {

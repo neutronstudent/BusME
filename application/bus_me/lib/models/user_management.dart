@@ -181,6 +181,8 @@ class BusMEUserManagement extends UserManagementModel
     try {
       HttpClientRequest request = await userServer.putUrl(route);
       request.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
+      request.headers.contentType = ContentType.json;
+
       print(jsonEncode(user));
       request.write(jsonEncode(user));
       req = await request.close();

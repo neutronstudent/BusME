@@ -2,6 +2,7 @@ import 'package:bus_me/models/auth_model.dart';
 import 'package:bus_me/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:bus_me/views/login.dart';
+import '../models/bus_model.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -13,11 +14,39 @@ class _SettingsPageState extends State<SettingsPage> {
   bool isVibrationEnabled = false;
 
   UserModel _userModel = BusMEUserModel();
+  BusModel _busModel = BusModel();
+
+  late Future<List<BusRoute>> routesFuture;  // Store the future for bus routes
+
+  @override
+  void initState() {
+    super.initState();
+    routesFuture = _busModel.getRoutes(); // Fetch the routes
+
+    final user = _userModel.getUser();
+    if (user != null && user.settings != null) {
+      setState(() {
+        isAudioEnabled = user.settings?.audioNotifications ?? false;
+        isVibrationEnabled = user.settings?.vibrationNotifications ?? false;
+      });
+    } else {
+      setState(() {
+        isAudioEnabled = false;
+        isVibrationEnabled = false;
+      });
+    }
+  }
 
   _SettingsPageState()
   {
-    this.isAudioEnabled= _userModel.getUser()!.settings!.audioNotifications!;
-    this.isVibrationEnabled = _userModel.getUser()!.settings!.vibrationNotifications!;
+    final user = _userModel.getUser();
+    if (user != null && user.settings != null) {
+      this.isAudioEnabled = user.settings?.audioNotifications ?? false;
+      this.isVibrationEnabled = user.settings?.vibrationNotifications ?? false;
+    } else {
+      this.isAudioEnabled = false;
+      this.isVibrationEnabled = false;
+    }
   }
 
   @override
@@ -69,6 +98,35 @@ class _SettingsPageState extends State<SettingsPage> {
                 });
               },
             ),
+            // List of Bus Routes
+            Expanded(
+              child: FutureBuilder<List<BusRoute>>(
+                future: routesFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());  // Show loading indicator while data is being fetched
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Failed to load bus routes'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(child: Text('No bus routes available'));
+                  } else {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        final route = snapshot.data![index];
+                        return ListTile(
+                          title: Text(route.name),
+                          subtitle: Text(route.code),
+                          onTap: () {
+                            _handleRouteSelection(route.id);
+                          },
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
             // Spacer for aligning the Logout button to the bottom
             Spacer(),
             // Logout button
@@ -82,6 +140,26 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _handleRouteSelection(int routeId) async {
+    _userModel.getUser()!.settings?.route = routeId;
+    await _userModel.updateUser();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Route Selection'),
+          content: Text('The route has been added to your account successfully'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

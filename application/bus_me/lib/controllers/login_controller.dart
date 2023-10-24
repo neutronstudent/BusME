@@ -3,7 +3,7 @@ import 'package:bus_me/observable.dart';
 import 'package:bus_me/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:bus_me/views/admin_portal.dart';
-import 'package:bus_me/views/map_view.dart';
+import 'package:bus_me/views/mapView.dart';
 
 class LoginController implements Observer {
   static final LoginController _instance = LoginController._internal(BusMEAuth(), BusMEUserModel());
@@ -28,6 +28,9 @@ class LoginController implements Observer {
 
   Future<bool> createAccount(String username, String password, String name, String email, String phone) async {
     bool created = false;
+
+    //debug
+    print("createAccount method called");
 
     UserDetails userDetails = UserDetails(name, email, phone);
     UserRegistration userRegistration = UserRegistration(username, password, userDetails);
@@ -102,7 +105,7 @@ class LoginController implements Observer {
         ));
       } else {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => MapPage(),
+          builder: (context) => MapView(),
         ));
       }
     } else {

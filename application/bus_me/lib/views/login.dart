@@ -1,12 +1,14 @@
+import 'dart:collection';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../models/notification_model.dart';
 import 'create_account_screen.dart';
 import '../controllers/login_controller.dart';
-import '../views/mapView.dart';
+import 'mapView.dart';
+
 import '../views/UserDetailsPage.dart'; //testing purposes
 import '../models/user_model.dart'; //testing purposes
-
 
 import 'package:bus_me/views/map_view.dart';
 
@@ -50,23 +52,17 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: 24.0),
             Row(
 
-              // This is the new Row widget
-                mainAxisAlignment: MainAxisAlignment.center,
-                // Center the buttons
-                children: [
+              mainAxisAlignment: MainAxisAlignment.center, // Center the buttons
+              children: [
 
-                  ElevatedButton(
-                    onPressed: //() => _loginController.login(context, _usernameController, _passwordController),
-                        () {
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) =>
-                              UserDetailsPage(user: testUser())),);
-                    }, //only for testing purposes
-                    child: Text('Login'),
-                  ),
-                  SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: () => _loginController.login(context, _usernameController, _passwordController),
+                  //() { Navigator.push(context, MaterialPageRoute(builder: (context) => MapView()), ); }, //only for testing purposes
+                  child: Text('Login'),
+                ),
+                SizedBox(width: 20),
 
-                  ElevatedButton(
+                 ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,

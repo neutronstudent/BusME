@@ -10,9 +10,13 @@ import 'api_constants.dart';
 
 class BusModel
 {
+  static final BusModel _instance = BusModel._internal();
 
-  BusModel()
-  {
+  factory BusModel() {
+    return _instance;
+  }
+
+  BusModel._internal() {
     _client.badCertificateCallback = (X509Certificate cert, String host, int port) {
       if (kDebugMode)
       {
@@ -25,6 +29,7 @@ class BusModel
   final AuthModel _auth = BusMEAuth();
   final HttpClient _client = HttpClient(/*context: SecurityContext.defaultContext*/);
 
+  //returns a list of every route
   //Get list of all routes
   Future<List<BusRoute>> getRoutes() async {
     //get routes from api
@@ -59,12 +64,14 @@ class BusModel
     //add routes to array
     for (int i = 0; i < json.length; i ++)
     {
-      routes.add(BusRoute(json[i]['id'], json[i]['name'], json[i]['code'], []));
+      routes.add(BusRoute(json[i]['id'], json[i]['routeLongName'], json[i]['routeShortName'], []));
     }
 
     return routes;
   }
 
+
+  //Returns the route associated with a route id
   //For retrieving a route that is tied to a users account
   Future<BusRoute?> getRoute(int routeId) async {
 
@@ -106,21 +113,24 @@ class BusModel
       Map<String, dynamic> json = jsonDecode(
           await req.transform(utf8.decoder).join());
 
-      route.code = json['code'];
+      route.code = json['code'] ?? "";
       route.id = json['id'];
-      route.name = json['name'];
+      route.name = json['name'] ?? "";
 
       //load all trips registered to route
-      for (int i = 0; i < json['trips'].length; i++)
+      if (json['trips'] != null)
       {
+      for (int i = 0; i < json['trips'].length; i++) {
         route.trips.add(Trip(
             json['trips'][i]['id'],
             json['trips'][i]['name'],
             false,
             json['trips'][i]['lat'],
-            json['trips'][i]['long']
-          )
+            json['trips'][i]['long'],
+            json['trips'][i]['startTime']
+        )
         );
+      }
       }
 
     }
@@ -132,6 +142,8 @@ class BusModel
     return route;
   }
 
+
+  //Returns a list of routes associated with a route id
   //Get all trips associated with a routeID
   Future<List<Trip>> getTrips(int routeId) async {
 
@@ -179,10 +191,11 @@ class BusModel
       {
         trips.add(Trip(
             json[i]['id'],
-            json[i]['name'],
+            json[i]['busRoute']["routeShortName"] ?? "",
             false,
-            json[i]['lat'],
-            json[i]['long']
+            json[i]['lat'] ?? 0.0,
+            json[i]['long'] ?? 0.0,
+            json[i]['startTime']
         )
         );
       }
@@ -196,6 +209,7 @@ class BusModel
     return trips;
   }
 
+  //returns a trip
   //Get information about trip id
   Future<Trip?> getTrip(int id) async {
 
@@ -210,7 +224,7 @@ class BusModel
     HttpClientResponse req;
 
     //set request URI
-    Uri uriRoute = Uri.https(API_ROUTE,"/api/routes/trips/${id}");
+    Uri uriRoute = Uri.https(API_ROUTE,"/api/trips/${id}");
 
     try {
       HttpClientRequest request = await _client.getUrl(uriRoute);
@@ -238,10 +252,12 @@ class BusModel
       
         Trip trip = Trip(
           json['id'],
-          json['name'],
+          json['busRoute']["routeShortName"],
           false,
           json['lat'],
-          json['long']
+          json['long'],
+          json['startTime']
+
        );
 
         return trip;
@@ -252,6 +268,7 @@ class BusModel
     }
   }
 
+  //returns a list of stops associated with a trip
   //get all stop associated with a trip
   Future<List<Stop>> getStops(int tripId) async {
 
@@ -266,7 +283,7 @@ class BusModel
     HttpClientResponse req;
 
     //set request URI
-    Uri uriRoute = Uri.https(API_ROUTE,"/api/routes/trips/${tripId}/stops");
+    Uri uriRoute = Uri.https(API_ROUTE,"/api/trips/${tripId}/stops");
 
     try {
       HttpClientRequest request = await _client.getUrl(uriRoute);
@@ -301,7 +318,7 @@ class BusModel
             json[i]['id'],
             json[i]['lat'],
             json[i]['long'],
-            json[i]['name']
+            json[i]['stopName']
         )
         );
       }
@@ -324,20 +341,22 @@ class BusModel
 
 class Trip
 {
-  Trip(this.id, this.name, this.wheelchairSupport, this.lat, this.long);
+  Trip(this.id, this.name, this.wheelchairSupport, this.lat, this.long, this.startTime);
   int id = 0;
   String name = "";
   bool wheelchairSupport = false;
-  Float lat = 0 as Float;
-  Float long = 0 as Float;
+  double lat = 0.0 as double;
+  double long = 0.0 as double;
+  String startTime = "";
+
 }
 
 class Stop
 {
   Stop(this.id, this.lat, this.long, this.name);
   int id = 0;
-  Float lat = 0 as Float;
-  Float long = 0 as Float;
+  double lat = 0.0 as double;
+  double long = 0.0 as double;
   String name = "";
 }
 

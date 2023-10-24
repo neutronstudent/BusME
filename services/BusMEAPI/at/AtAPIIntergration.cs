@@ -291,7 +291,17 @@ namespace BusMEAPI
             //execute query 
             return await query.SingleOrDefaultAsync();
         }
+
+        public override async Task<BusTrip?> GetTrip(int trip)
+        {
+            var query = from r in _dbContext.BusTrips.Include("BusRoute") where r.Id.Equals(trip) select r;
+
+            //execute query 
+            return await query.SingleOrDefaultAsync();
+        }
+
         //api utility classes
+
 
 
         private class Route
