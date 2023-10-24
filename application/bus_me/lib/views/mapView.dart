@@ -208,12 +208,9 @@ class _MapViewState extends State<MapView> {
             ),
           );
         });
-        // Check if the bus is close
-        bool isBusClose = await _trackingModel.checkIfBusClose();
-        if (isBusClose) {
-          // Notify the user
-          _trackingModel.updateNotifs(context);
-        }
+
+        //check if any notifications need to be pushed to the user
+        _trackingModel.updateNotifs(context);
       }
     });
   }
