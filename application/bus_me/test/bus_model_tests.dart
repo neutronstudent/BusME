@@ -12,14 +12,15 @@ void main() {
   //bus model unit tests
   BusMEAuth().loginUser(testUsername, testPassword);
 
-  BusModel model = new BusModel();
+  BusModel model = BusModel();
   group('Bus Model', () {
       test("list of routes info should be returned", () async {
         List<BusRoute> routes = await model.getRoutes();
+        print(routes);
         expect(routes.length, greaterThanOrEqualTo(1));
       });
       test("spefiic route should be returned", () async {
-        BusRoute? route = await model.getRoute(1);
+        BusRoute? route = await model.getRoute(143);
         expect(route, isNotNull);
       });
       test("invalid route should be null", () async {

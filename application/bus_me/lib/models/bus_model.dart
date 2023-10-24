@@ -111,13 +111,14 @@ class BusModel
       Map<String, dynamic> json = jsonDecode(
           await req.transform(utf8.decoder).join());
 
-      route.code = json['code'];
+      route.code = json['code'] ?? "";
       route.id = json['id'];
-      route.name = json['name'];
+      route.name = json['name'] ?? "";
 
       //load all trips registered to route
-      for (int i = 0; i < json['trips'].length; i++)
+      if (json['trips'] != null)
       {
+      for (int i = 0; i < json['trips'].length; i++) {
         route.trips.add(Trip(
             json['trips'][i]['id'],
             json['trips'][i]['name'],
@@ -125,8 +126,9 @@ class BusModel
             json['trips'][i]['lat'],
             json['trips'][i]['long'],
             json['trips'][i]['startTime']
-          )
+        )
         );
+      }
       }
 
     }
