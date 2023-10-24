@@ -244,9 +244,19 @@ class User {
     {
       detailsObj = UserDetails("email", "phone", "name");
     }
+    DateTime time = DateTime.now();
 
+    if (sourceObj.containsKey("expiry"))
+      {
+        if (sourceObj["expiry"] != null)
+        {
+          DateTime.parse(sourceObj["expiry"] );
+
+        }
+
+      }
     return User(sourceObj["id"], sourceObj["username"], settingsObj, detailsObj,
-        sourceObj["type"], DateTime.parse(sourceObj['expiry']));
+        sourceObj["type"], time);
   }
 
   Map<String, dynamic> toJson() {

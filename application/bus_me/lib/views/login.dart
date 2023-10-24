@@ -52,8 +52,8 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
 
                 ElevatedButton(
-                  onPressed: //() => _loginController.login(context, _usernameController, _passwordController),
-                  () { Navigator.push(context, MaterialPageRoute(builder: (context) => MapView()), ); }, //only for testing purposes
+                  onPressed: () => _loginController.login(context, _usernameController, _passwordController),
+                  //() { Navigator.push(context, MaterialPageRoute(builder: (context) => MapView()), ); }, //only for testing purposes
                   child: Text('Login'),
                 ),
                 SizedBox(width: 20),

@@ -64,7 +64,7 @@ class BusModel
     //add routes to array
     for (int i = 0; i < json.length; i ++)
     {
-      routes.add(BusRoute(json[i]['id'], json[i]['name'], json[i]['code'], []));
+      routes.add(BusRoute(json[i]['id'], json[i]['routeLongName'], json[i]['routeShortName'], []));
     }
 
     return routes;
@@ -185,10 +185,10 @@ class BusModel
       {
         trips.add(Trip(
             json[i]['id'],
-            json[i]['name'],
+            json[i]['busRoute']["routeShortName"] ?? "",
             false,
-            json[i]['lat'],
-            json[i]['long'],
+            json[i]['lat'] ?? 0.0,
+            json[i]['long'] ?? 0.0,
             json[i]['startTime']
         )
         );
@@ -218,7 +218,7 @@ class BusModel
     HttpClientResponse req;
 
     //set request URI
-    Uri uriRoute = Uri.https(API_ROUTE,"/api/routes/trips/${id}");
+    Uri uriRoute = Uri.https(API_ROUTE,"/api/trips/${id}");
 
     try {
       HttpClientRequest request = await _client.getUrl(uriRoute);
@@ -246,7 +246,7 @@ class BusModel
       
         Trip trip = Trip(
           json['id'],
-          json['name'],
+          json['busRoute']["routeShortName"],
           false,
           json['lat'],
           json['long'],
@@ -276,7 +276,7 @@ class BusModel
     HttpClientResponse req;
 
     //set request URI
-    Uri uriRoute = Uri.https(API_ROUTE,"/api/routes/trips/${tripId}/stops");
+    Uri uriRoute = Uri.https(API_ROUTE,"/api/trips/${tripId}/stops");
 
     try {
       HttpClientRequest request = await _client.getUrl(uriRoute);
@@ -311,7 +311,7 @@ class BusModel
             json[i]['id'],
             json[i]['lat'],
             json[i]['long'],
-            json[i]['name']
+            json[i]['stopName']
         )
         );
       }
@@ -338,8 +338,8 @@ class Trip
   int id = 0;
   String name = "";
   bool wheelchairSupport = false;
-  Double lat = 0 as Double;
-  Double long = 0 as Double;
+  double lat = 0.0 as double;
+  double long = 0.0 as double;
   String startTime = "";
 
 }
@@ -348,8 +348,8 @@ class Stop
 {
   Stop(this.id, this.lat, this.long, this.name);
   int id = 0;
-  Double lat = 0 as Double;
-  Double long = 0 as Double;
+  double lat = 0.0 as double;
+  double long = 0.0 as double;
   String name = "";
 }
 

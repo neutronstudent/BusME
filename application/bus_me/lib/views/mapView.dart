@@ -155,13 +155,15 @@ class _MapViewState extends State<MapView> {
     final fetchedStops = await _busModel.getStops(tripId);
 
     //update the trip name and set the trip
-    _trackingModel.setTrip(tripId);
-    _trackingModel.setTrip(tripId);
-    Trip trip = _trackingModel.getTrip() as Trip;
+    _trackingModel.setTripId(tripId);
+    print(tripId);
+    print(_trackingModel.getTripId());
+    Trip? trip = await _busModel.getTrip(_trackingModel.getTripId());
+    print(trip);
 
     setState(() {  // You need to wrap the update inside setState
 
-      _tripName = trip.name;
+      _tripName = trip!.name;
 
       for (var stop in fetchedStops) {
 

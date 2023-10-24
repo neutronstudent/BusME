@@ -96,14 +96,14 @@ class TrackingModel
   }
 
   //Set the current trip
-  void setTrip(int tripId)
+  void setTripId(int tripId)
   {
     _notif = false;
     curTrip = tripId;
   }
 
   //return the current trip
-  int getTrip()
+  int getTripId()
   {
     return curTrip;
   }

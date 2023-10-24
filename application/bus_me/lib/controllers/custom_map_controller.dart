@@ -142,9 +142,7 @@ class BusController {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(trips[index].name),
-                  subtitle: trips[index].wheelchairSupport
-                      ? Text('Wheelchair Accessible')
-                      : Text('No Wheelchair Access'),
+                  subtitle: Text(trips[index].startTime),
                   onTap: () {
                     if (callback != null) {
                       callback(trips[index].id);
