@@ -125,7 +125,7 @@ namespace BusMEAPI
 
 
         [HttpGet]
-        [Route("/trips/{trip}/stops")]
+        [Route("/api/trips/{trip}/stops")]
         public async Task<ActionResult> GetStops(int trip)
         {
             //send route info to user
