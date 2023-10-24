@@ -31,9 +31,13 @@ class BusMEUserManagement extends UserManagementModel
 {
   final AuthModel _authModel;
 
-  HttpClient userServer = HttpClient(/*context: SecurityContext.defaultContext*/);
+  static final BusMEUserManagement _instance = BusMEUserManagement._internal(BusMEAuth());
 
-  BusMEUserManagement(this._authModel) {
+  factory BusMEUserManagement(AuthModel authModel) {
+    return _instance;
+  }
+
+  BusMEUserManagement._internal(this._authModel) {
     userServer.badCertificateCallback =
         (X509Certificate cert, String host, int port) {
       if (kDebugMode) {
@@ -42,6 +46,9 @@ class BusMEUserManagement extends UserManagementModel
       return false;
     };
   }
+
+  HttpClient userServer = HttpClient(/*context: SecurityContext.defaultContext*/);
+
 
   @override
   Future<int> createUser(UserRegistration user, int userType) async {
@@ -174,6 +181,8 @@ class BusMEUserManagement extends UserManagementModel
     try {
       HttpClientRequest request = await userServer.putUrl(route);
       request.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
+      request.headers.contentType = ContentType.json;
+
       print(jsonEncode(user));
       request.write(jsonEncode(user));
       req = await request.close();

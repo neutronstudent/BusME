@@ -72,7 +72,7 @@ namespace BusMEAPI
             SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddYears(1),
+                Expires = user.Expiry,
                 SigningCredentials = creds,
                 Audience = _audience,
                 Issuer = _issuer

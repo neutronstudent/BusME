@@ -13,5 +13,7 @@ namespace BusMEAPI
         public abstract Task<List<BusRoute>> GetRoutes();
 
         public abstract Task<BusRoute?> GetRoute(int route);
+        public abstract Task<BusTrip?> GetTrip(int route);
+
     }
 }

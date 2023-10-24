@@ -7,6 +7,7 @@ import 'package:bus_me/models/auth_model.dart';
 import 'package:flutter/foundation.dart';
 
 import 'api_constants.dart';
+import 'notification_model.dart';
 
 abstract class UserModel
 {
@@ -21,23 +22,23 @@ abstract class UserModel
   Future<int> updateUser();
 }
 
-class BusMeUserModel extends UserModel
-{
+class BusMEUserModel extends UserModel {
+  static final BusMEUserModel _instance = BusMEUserModel._internal(BusMEAuth());
+
+  factory BusMEUserModel() {
+    return _instance;
+  }
+
   User? _user;
   final AuthModel _authModel;
-
   HttpClient userServer = HttpClient(context: SecurityContext.defaultContext);
 
-
-  BusMeUserModel(this._authModel)
-  {
-    userServer.badCertificateCallback =  (X509Certificate cert, String host, int port) {
-      if (kDebugMode)
-      {
+  BusMEUserModel._internal(this._authModel) {
+    userServer.badCertificateCallback = (X509Certificate cert, String host, int port) {
+      if (kDebugMode) {
         return true;
       }
       return false;
-
     };
   }
 
@@ -82,6 +83,8 @@ class BusMeUserModel extends UserModel
       return 1;
     }
 
+    await _user?.testExpiry();
+
     //notify observers that i have fetched a user
     return 0;
   }
@@ -95,14 +98,15 @@ class BusMeUserModel extends UserModel
   Future<int> registerUser(UserRegistration user) async {
     Uri route = Uri.https(API_ROUTE,'/api/users/register');
     HttpClientRequest postReq = await userServer.postUrl(route);
-
+    postReq.headers.contentType = ContentType.json;
     //write user info to network
-    postReq.write(jsonEncode(user));
+    postReq.write(jsonEncode(user.toJson()));
 
     HttpClientResponse result = await postReq.close();
 
     if (result.statusCode != HttpStatus.created)
     {
+      print(jsonEncode(user.toJson()));
       return 1;
     }
 
@@ -125,6 +129,9 @@ class BusMeUserModel extends UserModel
 
     detailPut.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
     settingsPut.headers.add("Authorization", "Bearer ${_authModel.getToken()}");
+
+    detailPut.headers.contentType = ContentType.json;
+    settingsPut.headers.contentType = ContentType.json;
 
     detailPut.write(jsonEncode(_user!.details));
     settingsPut.write(jsonEncode(_user!.settings));
@@ -153,6 +160,15 @@ class UserRegistration {
 
   UserRegistration(this.username, this.password, this.details);
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': 0,
+      'username': username,
+      'password': password,
+      'details': details.toJson()
+    };
+  }
+
 }
 
 
@@ -176,6 +192,7 @@ class UserSettings {
 
 class UserDetails
 {
+  int id = 0;
   String name;
   String email;
   String phone;
@@ -184,6 +201,7 @@ class UserDetails
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
     'name': name,
     'email': email,
     'phone': phone,
@@ -197,10 +215,22 @@ class User {
   String username;
   int id;
   int type;
+  DateTime expiry;
 
 
 
-  User(this.id, this.username, this.settings, this.details, this.type);
+  User(this.id, this.username, this.settings, this.details, this.type, this.expiry)
+  {
+
+  }
+
+  Future<void> testExpiry() async
+  {
+    if (expiry.difference(DateTime.now()).inDays < 30)
+    {
+      await NotificationModel().sendNotification("Your account will expire soon, please contact an administrator", null);
+    }
+  }
 
   static User fromJson(dynamic sourceObj) {
     dynamic? settings = sourceObj["settings"];
@@ -229,9 +259,19 @@ class User {
     {
       detailsObj = UserDetails("email", "phone", "name");
     }
+    DateTime time = DateTime.now();
 
+    if (sourceObj.containsKey("expiry"))
+      {
+        if (sourceObj["expiry"] != null)
+        {
+          DateTime.parse(sourceObj["expiry"] );
+
+        }
+
+      }
     return User(sourceObj["id"], sourceObj["username"], settingsObj, detailsObj,
-        sourceObj["type"]);
+        sourceObj["type"], time);
   }
 
   Map<String, dynamic> toJson() {

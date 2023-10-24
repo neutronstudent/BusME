@@ -33,7 +33,7 @@ namespace BusMEAPI
         //type of user
         public UserType? Type { get; set; } = 0;
 
-
+        public DateTime? Expiry {get; set;} = DateTime.UtcNow.AddYears(1);
         //Password and salt sequences
         [JsonIgnore]
         public String Hash {get; set;} = "";
@@ -41,7 +41,8 @@ namespace BusMEAPI
         [JsonIgnore]
         public String Salt {get; set;} = "";
 
-        //public DateTime? ExpiryDate {get; set;} = DateTime.UtcNow.AddYears(1);
+        
+
     }
     
     public class UserSettings
