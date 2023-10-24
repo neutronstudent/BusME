@@ -21,7 +21,20 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    routesFuture = _busModel.getRoutes();  // Fetch the routes when widget is first loaded
+    routesFuture = _busModel.getRoutes(); // Fetch the routes
+
+    final user = _userModel.getUser();
+    if (user != null && user.settings != null) {
+      setState(() {
+        isAudioEnabled = user.settings?.audioNotifications ?? false;
+        isVibrationEnabled = user.settings?.vibrationNotifications ?? false;
+      });
+    } else {
+      setState(() {
+        isAudioEnabled = false;
+        isVibrationEnabled = false;
+      });
+    }
   }
 
   _SettingsPageState()
@@ -133,15 +146,20 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> _handleRouteSelection(int routeId) async {
     _userModel.getUser()!.settings?.route = routeId;
     await _userModel.updateUser();
-    AlertDialog(
-      title: Text('Route Selection'),
-      content: Text('The route has been added to your account successfully'),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text('OK'),
-        ),
-      ],
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Route Selection'),
+          content: Text('The route has been added to your account successfully'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
