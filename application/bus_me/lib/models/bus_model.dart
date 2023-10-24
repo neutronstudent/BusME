@@ -10,9 +10,13 @@ import 'api_constants.dart';
 
 class BusModel
 {
+  static final BusModel _instance = BusModel._internal();
 
-  BusModel()
-  {
+  factory BusModel() {
+    return _instance;
+  }
+
+  BusModel._internal() {
     _client.badCertificateCallback = (X509Certificate cert, String host, int port) {
       if (kDebugMode)
       {
@@ -25,6 +29,8 @@ class BusModel
   final AuthModel _auth = BusMEAuth();
   final HttpClient _client = HttpClient(/*context: SecurityContext.defaultContext*/);
 
+
+  //returns a list of every route
   Future<List<BusRoute>> getRoutes() async {
     //get routes from api
     _client.connectionTimeout = const Duration(seconds: 4);
@@ -64,6 +70,7 @@ class BusModel
     return routes;
   }
 
+  //Returns the route associated with a route id
   Future<BusRoute?> getRoute(int routeId) async {
 
     //error checking
@@ -130,6 +137,7 @@ class BusModel
     return route;
   }
 
+  //Returns a list of routes associated with a route id
   Future<List<Trip>> getTrips(int routeId) async {
 
     //error checking
@@ -193,6 +201,8 @@ class BusModel
     return trips;
   }
 
+
+  //returns a trip
   Future<Trip?> getTrip(int id) async {
 
     //error checking
@@ -248,6 +258,7 @@ class BusModel
     }
   }
 
+  //returns a list of stops associated with a trip
   Future<List<Stop>> getStops(int tripId) async {
 
     //error checking
